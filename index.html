@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Outfit Collection</title>
+<title>Outfits Gallery</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0f0f0f;
     color: white;
 }
@@ -30,11 +30,6 @@ h1 {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.03);
 }
 
 .card img {
@@ -44,11 +39,10 @@ h1 {
 }
 
 .card p {
-    margin: 10px;
-    font-size: 14px;
+    padding: 10px;
+    margin: 0;
 }
 
-/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -56,7 +50,6 @@ h1 {
     background: rgba(0,0,0,0.9);
     justify-content: center;
     align-items: center;
-    padding: 20px;
 }
 
 .modal-content {
@@ -64,7 +57,7 @@ h1 {
     padding: 20px;
     border-radius: 12px;
     max-width: 600px;
-    width: 100%;
+    width: 90%;
 }
 
 .modal img {
@@ -74,32 +67,19 @@ h1 {
 
 button {
     margin-top: 10px;
-    padding: 10px;
     width: 100%;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Outfit Collection</h1>
+<h1>Outfits Collection</h1>
 
-<div class="grid">
+<div class="grid" id="grid"></div>
 
-<div class="card" onclick="openModal(
-'https://raw.githubusercontent.com/mooxsy72-oss/collections-of-outfits/main/outfits/1.jpg',
-'Славянское платье 1',
-'Traditional Slavic dress in Russian folk style (a stylized sarafan or ceremonial embroidered tunic dress), maxi length, made from natural heavyweight fabric in a light shade with abundant red-and-white embroidery. Loose, straight silhouette, slightly widening toward the hem. Full maxi length, completely covering the legs and reaching the ankles. The waistline is high-set and emphasized with a wide fabric belt decorated with traditional ornamental patterns. High stand-up collar, closely fitted around the neck, adorned with delicate embroidery. Voluminous puff sleeves, loose throughout their entire length. The sleeves are gathered into narrow fitted cuffs at the wrists. A vertical ornamental band runs along the entire length of the garment, transitioning into a horizontal pattern across the shoulders. Material: Heavy natural textile (resembling handwoven linen, hemp cloth, or cotton). Color: Natural unbleached shade (milk white, ecru, or ivory). Texture: Matte, structured fabric with substantial weight, forming large, heavy folds. Embroidery and ornamentation: Traditional Slavic embroidery in cross-stitch or satin stitch, featuring geometric and floral motifs. Front panel: A wide central embroidered panel (proshva) extends from the collar to the hem, densely filled with intricate red ornamentation. Hem: The lower edge of the dress is decorated with a complex multi-tiered border consisting of a wide ornamental band complemented by several thinner decorative lines. Decorative color palette: Rich deep crimson red (kumach red) combined with white embroidered elements.')">
-<img src="https://raw.githubusercontent.com/mooxsy72-oss/collections-of-outfits/main/outfits/1.jpg">
-<p>Славянское платье</p>
-</div>
-
-</div>
-
-<div class="modal" id="modal" onclick="closeModal(event)">
+<div class="modal" id="modal" onclick="this.style.display='none'">
   <div class="modal-content" onclick="event.stopPropagation()">
     <img id="modalImg">
     <h2 id="modalTitle"></h2>
@@ -109,24 +89,47 @@ button {
 </div>
 
 <script>
-let currentPrompt = "";
 
-function openModal(img, title, prompt) {
-    document.getElementById("modal").style.display = "flex";
-    document.getElementById("modalImg").src = img;
-    document.getElementById("modalTitle").innerText = title;
-    document.getElementById("modalPrompt").innerText = prompt;
-    currentPrompt = prompt;
-}
+const outfits = [
+  {
+    img: "outfits/1.jpg",
+    title: "Outfit 1",
+    promptFile: "outfits/1.txt"
+  },
+  {
+    img: "outfits/2.jpg",
+    title: "Outfit 2",
+    promptFile: "outfits/2.txt"
+  }
+];
 
-function closeModal(e) {
-    document.getElementById("modal").style.display = "none";
+const grid = document.getElementById("grid");
+
+outfits.forEach(o => {
+    grid.innerHTML += `
+    <div class="card" onclick="openModal('${o.img}', '${o.title}', '${o.promptFile}')">
+        <img src="${o.img}">
+        <p>${o.title}</p>
+    </div>`;
+});
+
+function openModal(img, title, promptFile) {
+    fetch(promptFile)
+    .then(r => r.text())
+    .then(prompt => {
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("modalImg").src = img;
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalPrompt").innerText = prompt;
+        window.currentPrompt = prompt;
+    });
 }
 
 function copyPrompt() {
-    navigator.clipboard.writeText(currentPrompt);
-    alert("Prompt copied!");
+    navigator.clipboard.writeText(window.currentPrompt);
+    alert("Copied!");
 }
+
 </script>
 
 </body>
