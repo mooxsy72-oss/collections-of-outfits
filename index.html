@@ -1,27 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Outfits Gallery</title>
+  <title>Коллекция нарядов by Mooxsy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header>
-    <h1>✦ AI Outfits</h1>
-    <button class="dev-btn" id="devToggle">⚙ Dev Mode</button>
+    <h1>Коллекция нарядов <span>by Mooxsy</span></h1>
   </header>
-
-  <div class="dev-panel hidden" id="devPanel">
-    <strong>Add New Outfit</strong>
-    <input type="text" id="newTitle" placeholder="Outfit title" />
-    <input type="text" id="newImg" placeholder="Image URL (e.g. outfits/3.jpg)" />
-    <textarea id="newPrompt" placeholder="Paste your prompt here..."></textarea>
-    <button id="addOutfit">+ Add Card</button>
-    <p class="dev-note">Cards added here are temporary (page reload resets). To save permanently, copy the JSON output below into outfits.json.</p>
-    <textarea class="json-export" id="jsonExport" readonly placeholder="JSON will appear here after adding..."></textarea>
-  </div>
 
   <div class="gallery" id="gallery"></div>
 
@@ -34,7 +25,7 @@
         <div class="modal-text">
           <h2 id="modalTitle"></h2>
           <pre id="modalPrompt"></pre>
-          <button class="copy-btn" id="modalCopy">Copy Prompt</button>
+          <button class="copy-btn" id="modalCopy">Скопировать промпт</button>
         </div>
       </div>
     </div>
