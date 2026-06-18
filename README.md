@@ -1,2 +1,2 @@
-# collections-of-outfits
+# Гардероб
 Коллекции нарядов
