@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Crimson Witch",
+    "img": "outfits/1.jpg",
+    "prompt": "outfits/1.txt"
+  },
+  {
+    "id": 2,
+    "title": "Cyber Angel",
+    "img": "outfits/2.jpg",
+    "prompt": "outfits/2.txt"
+  }
+]
