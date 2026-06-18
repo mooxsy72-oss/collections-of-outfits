@@ -1,0 +1,48 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Outfits Gallery</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>✦ AI Outfits</h1>
+    <button id="devToggle" class="dev-btn">⚙ Dev Mode</button>
+  </header>
+
+  <!-- Dev mode: add outfit form -->
+  <div id="devPanel" class="dev-panel hidden">
+    <h3>Add New Outfit</h3>
+    <input id="newTitle" type="text" placeholder="Title" />
+    <input id="newImg" type="text" placeholder="Image path (outfits/3.jpg)" />
+    <textarea id="newPrompt" placeholder="Paste prompt text here..."></textarea>
+    <button id="addOutfit">+ Add Card</button>
+    <p class="dev-note">Cards added here are temporary (page reload resets). To save permanently, copy the JSON output below into outfits.json.</p>
+    <textarea id="jsonExport" class="json-export" readonly placeholder="JSON will appear here after adding..."></textarea>
+  </div>
+
+  <main id="gallery" class="gallery"></main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-content">
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-text">
+          <h2 id="modalTitle"></h2>
+          <pre id="modalPrompt"></pre>
+          <button class="copy-btn" id="modalCopy">Copy Prompt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
+```
