@@ -138,7 +138,7 @@ header h1 span {
   text-align: center;
 }
 
-.card-back h3 {
+.card-back h3 { { display: none; }
   font-family: 'Cinzel', serif;
   font-size: 0.82rem;
   font-weight: 600;
@@ -282,7 +282,7 @@ header h1 span {
   max-height: 90vh;
 }
 
-.modal-text h2 {
+.modal-text h2 { { display: none; }
   font-family: 'Cinzel', serif;
   font-size: 1.2rem;
   color: var(--accent-light);
