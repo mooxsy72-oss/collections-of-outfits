@@ -1,17 +1,114 @@
 [
   {
     "id": 1,
-    "title": "Славянская нежность",
+    "title": "",
     "img": "outfits/1.jpg",
     "prompt": "outfits/1.txt",
     "category": "folk"
   },
   {
     "id": 2,
-    "title": "Шотландская скромность",
+    "title": "",
     "img": "outfits/2.jpg",
     "prompt": "outfits/2.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 3,
+    "title": "",
+    "img": "outfits/3.jpg",
+    "prompt": "outfits/3.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 4,
+    "title": "",
+    "img": "outfits/4.jpg",
+    "prompt": "outfits/4.txt",
     "category": "folk"
-  }
+  },
+  {
+    "id": 5,
+    "title": "",
+    "img": "outfits/5.jpg",
+    "prompt": "outfits/5.txt",
+    "category": "folk"
+  },
+  {
+    "id": 6,
+    "title": "",
+    "img": "outfits/6.jpg",
+    "prompt": "outfits/6.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 7,
+    "title": "",
+    "img": "outfits/7.jpg",
+    "prompt": "outfits/7.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 8,
+    "title": "",
+    "img": "outfits/8.jpg",
+    "prompt": "outfits/8.txt",
+    "category": "folk"
+  },
+  {
+    "id": 9,
+    "title": "",
+    "img": "outfits/9.jpg",
+    "prompt": "outfits/9.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 10,
+    "title": "",
+    "img": "outfits/10.jpg",
+    "prompt": "outfits/10.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 11,
+    "title": "",
+    "img": "outfits/11.jpg",
+    "prompt": "outfits/11.txt",
+    "category": "folk"
+  },
+  {
+    "id": 12,
+    "title": "",
+    "img": "outfits/12.jpg",
+    "prompt": "outfits/12.txt",
+    "category": "folk"
+  },
+  {
+    "id": 13,
+    "title": "",
+    "img": "outfits/13.jpg",
+    "prompt": "outfits/13.txt",
+    "category": "folk"
+  },
+  {
+    "id": 14,
+    "title": "",
+    "img": "outfits/14.jpg",
+    "prompt": "outfits/14.txt",
+    "category": "folk"
+  },
+  {
+    "id": 15,
+    "title": "",
+    "img": "outfits/15.jpg",
+    "prompt": "outfits/15.txt",
+    "category": "fantasy"
+  },
+    {
+    "id": 16,
+    "title": "",
+    "img": "outfits/16.jpg",
+    "prompt": "outfits/16.txt",
+    "category": "folk"
+  },
 ]
-
