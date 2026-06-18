@@ -319,6 +319,40 @@ header h1 span {
 .copy-btn:hover { background: var(--accent-light); transform: translateY(-1px); }
 .copy-btn.copied { background: #2d8a4e; }
 
+/* ── Filters ── */
+.filters {
+  display: flex;
+  gap: 0.6rem;
+  padding: 1.25rem 2rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.filter-btn {
+  padding: 0.45rem 1.1rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent-light);
+  color: var(--accent-light);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 /* ── Mobile ── */
 @media (max-width: 600px) {
   .gallery { padding: 1rem; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
