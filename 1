@@ -1,0 +1,120 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Collections of Outfits</title>
+
+<style>
+body{
+    background:#111;
+    color:#eee;
+    font-family:Arial,sans-serif;
+    margin:40px;
+}
+
+h1{
+    text-align:center;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1c1c1c;
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.card img{
+    width:100%;
+    height:350px;
+    object-fit:cover;
+}
+
+.card h3{
+    padding:12px;
+    margin:0;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.9);
+    padding:40px;
+}
+
+.modal-content{
+    max-width:900px;
+    margin:auto;
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:30px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Collections of Outfits</h1>
+
+<div class="gallery">
+
+<div class="card" onclick="openCard(
+'images/dress1.jpg',
+'Emerald Tavern Dress',
+'traditional fantasy tavern dress, emerald green linen, detailed embroidery'
+)">
+<img src="https://picsum.photos/500/700?1">
+<h3>Emerald Tavern Dress</h3>
+</div>
+
+</div>
+
+<div id="modal" class="modal">
+<div class="modal-content">
+
+<span class="close" onclick="closeCard()">×</span>
+
+<img id="modalImage" style="width:100%;border-radius:10px;">
+
+<h2 id="modalTitle"></h2>
+
+<h3>Prompt</h3>
+<pre id="modalPrompt"></pre>
+
+</div>
+</div>
+
+<script>
+function openCard(img,title,prompt){
+document.getElementById('modal').style.display='block';
+document.getElementById('modalImage').src=img;
+document.getElementById('modalTitle').innerText=title;
+document.getElementById('modalPrompt').innerText=prompt;
+}
+
+function closeCard(){
+document.getElementById('modal').style.display='none';
+}
+</script>
+
+</body>
+</html>
+```
