@@ -8,26 +8,25 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <header>
     <h1>✦ AI Outfits</h1>
-    <button id="devToggle" class="dev-btn">⚙ Dev Mode</button>
+    <button class="dev-btn" id="devToggle">⚙ Dev Mode</button>
   </header>
 
-  <!-- Dev mode: add outfit form -->
-  <div id="devPanel" class="dev-panel hidden">
-    <h3>Add New Outfit</h3>
-    <input id="newTitle" type="text" placeholder="Title" />
-    <input id="newImg" type="text" placeholder="Image path (outfits/3.jpg)" />
-    <textarea id="newPrompt" placeholder="Paste prompt text here..."></textarea>
+  <div class="dev-panel hidden" id="devPanel">
+    <strong>Add New Outfit</strong>
+    <input type="text" id="newTitle" placeholder="Outfit title" />
+    <input type="text" id="newImg" placeholder="Image URL (e.g. outfits/3.jpg)" />
+    <textarea id="newPrompt" placeholder="Paste your prompt here..."></textarea>
     <button id="addOutfit">+ Add Card</button>
     <p class="dev-note">Cards added here are temporary (page reload resets). To save permanently, copy the JSON output below into outfits.json.</p>
-    <textarea id="jsonExport" class="json-export" readonly placeholder="JSON will appear here after adding..."></textarea>
+    <textarea class="json-export" id="jsonExport" readonly placeholder="JSON will appear here after adding..."></textarea>
   </div>
 
-  <main id="gallery" class="gallery"></main>
+  <div class="gallery" id="gallery"></div>
 
-  <!-- Modal -->
-  <div id="modal" class="modal hidden">
+  <div class="modal hidden" id="modal">
     <div class="modal-backdrop" id="modalBackdrop"></div>
     <div class="modal-box">
       <button class="modal-close" id="modalClose">✕</button>
