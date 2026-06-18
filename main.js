@@ -1,4 +1,3 @@
-```js
 let outfits = [];
 
 async function loadOutfits() {
@@ -125,4 +124,3 @@ document.getElementById('addOutfit').addEventListener('click', () => {
 });
 
 loadOutfits();
-```
