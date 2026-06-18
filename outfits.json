@@ -3,12 +3,15 @@
     "id": 1,
     "title": "Славянская нежность",
     "img": "outfits/1.jpg",
-    "prompt": "outfits/1.txt"
+    "prompt": "outfits/1.txt",
+    "category": "folk"
   },
   {
     "id": 2,
     "title": "Шотландская скромность",
     "img": "outfits/2.jpg",
-    "prompt": "outfits/2.txt"
+    "prompt": "outfits/2.txt",
+    "category": "folk"
   }
 ]
+
