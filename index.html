@@ -1,1 +1,133 @@
-<!DOCTYPE html> <html lang="ru"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Outfit Collection</title> <style> body { margin: 0; font-family: Arial, sans-serif; background: #0f0f0f; color: white; } h1 { text-align: center; padding: 20px; } .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; padding: 20px; } .card { background: #1c1c1c; border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.2s; } .card:hover { transform: scale(1.03); } .card img { width: 100%; height: 280px; object-fit: cover; } .card p { margin: 10px; font-size: 14px; } /* MODAL */ .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; padding: 20px; } .modal-content { background: #1c1c1c; padding: 20px; border-radius: 12px; max-width: 600px; width: 100%; } .modal img { width: 100%; border-radius: 10px; } button { margin-top: 10px; padding: 10px; width: 100%; border: none; border-radius: 8px; cursor: pointer; } </style> </head> <body> <h1>Outfit Collection</h1> <div class="grid"> <div class="card" onclick="openModal( 'https://images.unsplash.com/photo-1520975916090-3105956dac38', 'Emerald Tavern Dress', 'fantasy tavern dress, emerald green fabric, medieval embroidery' )"> <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38"> <p>Emerald Tavern Dress</p> </div> <div class="card" onclick="openModal( 'https://images.unsplash.com/photo-1520975661595-6453be3f7070', 'Gothic Noble Dress', 'gothic dark elegant dress, lace details, fantasy noble style' )"> <img src="https://images.unsplash.com/photo-1520975661595-6453be3f7070"> <p>Gothic Noble Dress</p> </div> </div> <!-- MODAL --> <div class="modal" id="modal" onclick="closeModal(event)"> <div class="modal-content" onclick="event.stopPropagation()"> <img id="modalImg"> <h2 id="modalTitle"></h2> <p id="modalPrompt"></p> <button onclick="copyPrompt()">Copy prompt</button> </div> </div> <script> let currentPrompt = ""; function openModal(img, title, prompt) { document.getElementById("modal").style.display = "flex"; document.getElementById("modalImg").src = img; document.getElementById("modalTitle").innerText = title; document.getElementById("modalPrompt").innerText = prompt; currentPrompt = prompt; } function closeModal(e) { document.getElementById("modal").style.display = "none"; } function copyPrompt() { navigator.clipboard.writeText(currentPrompt); alert("Prompt copied!"); } </script> </body> </html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outfit Collection</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background: #1c1c1c;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.card p {
+    margin: 10px;
+    font-size: 14px;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.modal img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Outfit Collection</h1>
+
+<div class="grid">
+
+<div class="card" onclick="openModal(
+'https://raw.githubusercontent.com/mooxsy72-oss/collections-of-outfits/main/outfits/1.jpg',
+'Славянское платье 1',
+'Traditional Slavic dress in Russian folk style (a stylized sarafan or ceremonial embroidered tunic dress), maxi length, made from natural heavyweight fabric in a light shade with abundant red-and-white embroidery. Loose, straight silhouette, slightly widening toward the hem. Full maxi length, completely covering the legs and reaching the ankles. The waistline is high-set and emphasized with a wide fabric belt decorated with traditional ornamental patterns. High stand-up collar, closely fitted around the neck, adorned with delicate embroidery. Voluminous puff sleeves, loose throughout their entire length. The sleeves are gathered into narrow fitted cuffs at the wrists. A vertical ornamental band runs along the entire length of the garment, transitioning into a horizontal pattern across the shoulders. Material: Heavy natural textile (resembling handwoven linen, hemp cloth, or cotton). Color: Natural unbleached shade (milk white, ecru, or ivory). Texture: Matte, structured fabric with substantial weight, forming large, heavy folds. Embroidery and ornamentation: Traditional Slavic embroidery in cross-stitch or satin stitch, featuring geometric and floral motifs. Front panel: A wide central embroidered panel (proshva) extends from the collar to the hem, densely filled with intricate red ornamentation. Hem: The lower edge of the dress is decorated with a complex multi-tiered border consisting of a wide ornamental band complemented by several thinner decorative lines. Decorative color palette: Rich deep crimson red (kumach red) combined with white embroidered elements.')">
+<img src="https://raw.githubusercontent.com/mooxsy72-oss/collections-of-outfits/main/outfits/1.jpg">
+<p>Славянское платье</p>
+</div>
+
+</div>
+
+<div class="modal" id="modal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <img id="modalImg">
+    <h2 id="modalTitle"></h2>
+    <p id="modalPrompt"></p>
+    <button onclick="copyPrompt()">Copy prompt</button>
+  </div>
+</div>
+
+<script>
+let currentPrompt = "";
+
+function openModal(img, title, prompt) {
+    document.getElementById("modal").style.display = "flex";
+    document.getElementById("modalImg").src = img;
+    document.getElementById("modalTitle").innerText = title;
+    document.getElementById("modalPrompt").innerText = prompt;
+    currentPrompt = prompt;
+}
+
+function closeModal(e) {
+    document.getElementById("modal").style.display = "none";
+}
+
+function copyPrompt() {
+    navigator.clipboard.writeText(currentPrompt);
+    alert("Prompt copied!");
+}
+</script>
+
+</body>
+</html>
