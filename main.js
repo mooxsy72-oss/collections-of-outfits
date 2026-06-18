@@ -34,18 +34,22 @@ function createCard(outfit, i) {
 
   const back = document.createElement('div');
   back.className = 'card-face card-back';
+
   const h3 = document.createElement('h3');
   h3.textContent = outfit.title;
-  const openBtn = document.createElement('button');
-  openBtn.className = 'btn btn-primary';
-  openBtn.textContent = 'Open Prompt';
-  const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-ghost';
-  copyBtn.textContent = 'Copy Prompt';
-  back.appendChild(h3);
-  back.appendChild(openBtn);
-  back.appendChild(copyBtn);
 
+  const preview = document.createElement('div');
+  preview.className = 'prompt-preview';
+  preview.textContent = 'Загрузка...';
+  getPromptText(outfit).then(t => preview.textContent = t);
+
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'btn btn-primary';
+  copyBtn.textContent = 'Скопировать';
+
+  back.appendChild(h3);
+  back.appendChild(preview);
+  back.appendChild(copyBtn);
   card.appendChild(front);
   card.appendChild(back);
   wrap.appendChild(card);
@@ -55,11 +59,11 @@ function createCard(outfit, i) {
     wrap.classList.toggle('flipped');
   });
 
-  openBtn.addEventListener('click', () => openModal(outfit));
   copyBtn.addEventListener('click', (e) => copyPrompt(outfit, e.currentTarget));
 
   gallery.appendChild(wrap);
 }
+
 
 async function getPromptText(outfit) {
   if (outfit._promptText) return outfit._promptText;
