@@ -5,7 +5,6 @@ async function loadOutfits() {
     const res = await fetch('outfits.json');
     outfits = await res.json();
   } catch {
-    // Fallback: inline data if JSON fetch fails (e.g. file:// local open)
     outfits = [];
   }
   renderGallery();
@@ -21,26 +20,43 @@ function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
   const wrap = document.createElement('div');
   wrap.className = 'card-wrap';
-  wrap.innerHTML = `
-    <div class="card">
-      <div class="card-face card-front">
-        <img src="${outfit.img}" alt="${outfit.title}" loading="lazy" />
-      </div>
-      <div class="card-face card-back">
-        <h3>${outfit.title}</h3>
-        <button class="btn btn-primary open-btn">Open Prompt</button>
-        <button class="btn btn-ghost copy-card-btn">Copy Prompt</button>
-      </div>
-    </div>`;
 
-  // Flip on click (mobile friendly), hover handled by CSS
-  wrap.querySelector('.card').addEventListener('click', (e) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const front = document.createElement('div');
+  front.className = 'card-face card-front';
+  const img = document.createElement('img');
+  img.src = outfit.img;
+  img.alt = outfit.title;
+  img.loading = 'lazy';
+  front.appendChild(img);
+
+  const back = document.createElement('div');
+  back.className = 'card-face card-back';
+  const h3 = document.createElement('h3');
+  h3.textContent = outfit.title;
+  const openBtn = document.createElement('button');
+  openBtn.className = 'btn btn-primary';
+  openBtn.textContent = 'Open Prompt';
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'btn btn-ghost';
+  copyBtn.textContent = 'Copy Prompt';
+  back.appendChild(h3);
+  back.appendChild(openBtn);
+  back.appendChild(copyBtn);
+
+  card.appendChild(front);
+  card.appendChild(back);
+  wrap.appendChild(card);
+
+  card.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') return;
     wrap.classList.toggle('flipped');
   });
 
-  wrap.querySelector('.open-btn').addEventListener('click', () => openModal(outfit));
-  wrap.querySelector('.copy-card-btn').addEventListener('click', (e) => copyPrompt(outfit, e.currentTarget));
+  openBtn.addEventListener('click', () => openModal(outfit));
+  copyBtn.addEventListener('click', (e) => copyPrompt(outfit, e.currentTarget));
 
   gallery.appendChild(wrap);
 }
@@ -89,12 +105,10 @@ function copyText(text, btn) {
   });
 }
 
-// Modal close
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalBackdrop').addEventListener('click', closeModal);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-// Dev mode
 const devToggle = document.getElementById('devToggle');
 const devPanel = document.getElementById('devPanel');
 
@@ -114,7 +128,6 @@ document.getElementById('addOutfit').addEventListener('click', () => {
   outfits.push(newOutfit);
   createCard(newOutfit, outfits.length - 1);
 
-  // Show JSON to copy into outfits.json
   const exportable = outfits.map(o => ({ id: o.id, title: o.title, img: o.img, prompt: o.prompt }));
   document.getElementById('jsonExport').value = JSON.stringify(exportable, null, 2);
 
