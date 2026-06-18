@@ -64,7 +64,6 @@ function createCard(outfit, i) {
   gallery.appendChild(wrap);
 }
 
-
 async function getPromptText(outfit) {
   if (outfit._promptText) return outfit._promptText;
   try {
@@ -104,7 +103,7 @@ function copyText(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
     btn.classList.add('copied');
     const original = btn.textContent;
-    btn.textContent = '✓ Copied!';
+    btn.textContent = '✓ Скопировано!';
     setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1800);
   });
 }
@@ -112,32 +111,5 @@ function copyText(text, btn) {
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalBackdrop').addEventListener('click', closeModal);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
-const devToggle = document.getElementById('devToggle');
-const devPanel = document.getElementById('devPanel');
-
-devToggle.addEventListener('click', () => {
-  devPanel.classList.toggle('hidden');
-  devToggle.classList.toggle('active');
-});
-
-document.getElementById('addOutfit').addEventListener('click', () => {
-  const title = document.getElementById('newTitle').value.trim();
-  const img = document.getElementById('newImg').value.trim();
-  const promptText = document.getElementById('newPrompt').value.trim();
-
-  if (!title || !img || !promptText) return alert('Fill in all fields.');
-
-  const newOutfit = { id: Date.now(), title, img, prompt: '', _promptText: promptText };
-  outfits.push(newOutfit);
-  createCard(newOutfit, outfits.length - 1);
-
-  const exportable = outfits.map(o => ({ id: o.id, title: o.title, img: o.img, prompt: o.prompt }));
-  document.getElementById('jsonExport').value = JSON.stringify(exportable, null, 2);
-
-  document.getElementById('newTitle').value = '';
-  document.getElementById('newImg').value = '';
-  document.getElementById('newPrompt').value = '';
-});
 
 loadOutfits();
