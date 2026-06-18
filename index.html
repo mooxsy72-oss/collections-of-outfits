@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Коллекция нарядов by Mooxsy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Коллекция нарядов <span>by Mooxsy</span></h1>
+  </header>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div class="modal hidden" id="modal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-content">
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-text">
+          <h2 id="modalTitle"></h2>
+          <pre id="modalPrompt"></pre>
+          <button class="copy-btn" id="modalCopy">Скопировать промпт</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
