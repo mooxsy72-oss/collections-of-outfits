@@ -12,29 +12,35 @@
 
   <header>
     <h1>Коллекция нарядов <span>by Mooxsy</span></h1>
+    <button class="themes-btn" id="themesBtn">Мои темы</button>
   </header>
-  
-<div class="filters">
-  <button class="filter-btn active" data-filter="all">Все наряды</button>
-  <button class="filter-btn" data-filter="modern">Современные</button>
-  <button class="filter-btn" data-filter="folk">Народные и исторические</button>
-  <button class="filter-btn" data-filter="fantasy">Фентези</button>
-</div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Все наряды</button>
+    <button class="filter-btn" data-filter="modern">Современные</button>
+    <button class="filter-btn" data-filter="folk">Народные и исторические</button>
+    <button class="filter-btn" data-filter="fantasy">Фентези</button>
+    <button class="filter-btn" data-filter="postapoc">Постапокалипсис</button>
+    <button class="filter-btn" data-filter="winx">Winx aesthetics</button>
+  </div>
 
   <div class="gallery" id="gallery"></div>
 
-  <div class="modal hidden" id="modal">
-    <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal-box">
-      <button class="modal-close" id="modalClose">✕</button>
-      <div class="modal-content">
-        <img id="modalImg" src="" alt="" />
-        <div class="modal-text">
-          <h2 id="modalTitle"></h2>
-          <pre id="modalPrompt"></pre>
-          <button class="copy-btn" id="modalCopy">Скопировать промпт</button>
-        </div>
+  <!-- Лайтбокс (увеличенное фото) -->
+  <div class="lightbox hidden" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
+  <!-- Панель тем -->
+  <div class="themes-panel" id="themesPanel">
+    <div class="themes-backdrop" id="themesBackdrop"></div>
+    <div class="themes-box">
+      <div class="themes-header">
+        <h2>Мои темы для SillyTavern</h2>
+        <button class="themes-close" id="themesClose">✕</button>
       </div>
+      <div class="themes-grid" id="themesGrid"></div>
     </div>
   </div>
 
