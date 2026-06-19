@@ -111,4 +111,242 @@
     "prompt": "outfits/16.txt",
     "category": "folk"
   }
+  {
+    "id": 17,
+    "title": "",
+    "img": "outfits/17.jpg",
+    "prompt": "outfits/17.txt",
+    "category": "modern"
+  },
+  {
+    "id": 18,
+    "title": "",
+    "img": "outfits/18.jpg",
+    "prompt": "outfits/18.txt",
+    "category": "folk"
+  },
+  {
+    "id": 19,
+    "title": "",
+    "img": "outfits/19.jpg",
+    "prompt": "outfits/19.txt",
+    "category": "folk"
+  },
+  {
+    "id": 20,
+    "title": "",
+    "img": "outfits/20.jpg",
+    "prompt": "outfits/20.txt",
+    "category": "folk"
+  },
+  {
+    "id": 21,
+    "title": "",
+    "img": "outfits/21.jpg",
+    "prompt": "outfits/21.txt",
+    "category": "folk"
+  },
+  {
+    "id": 22,
+    "title": "",
+    "img": "outfits/22.jpg",
+    "prompt": "outfits/22.txt",
+    "category": "folk"
+  },
+  {
+    "id": 23,
+    "title": "",
+    "img": "outfits/23.jpg",
+    "prompt": "outfits/23.txt",
+    "category": "folk"
+  },
+  {
+    "id": 24,
+    "title": "",
+    "img": "outfits/24.jpg",
+    "prompt": "outfits/24.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 25,
+    "title": "",
+    "img": "outfits/25.jpg",
+    "prompt": "outfits/25.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 26,
+    "title": "",
+    "img": "outfits/26.jpg",
+    "prompt": "outfits/26.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 27,
+    "title": "",
+    "img": "outfits/27.jpg",
+    "prompt": "outfits/27.txt",
+    "category": "modern"
+  },
+  {
+    "id": 28,
+    "title": "",
+    "img": "outfits/28.jpg",
+    "prompt": "outfits/28.txt",
+    "category": "modern"
+  },
+  {
+    "id": 29,
+    "title": "",
+    "img": "outfits/29.jpg",
+    "prompt": "outfits/29.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 30,
+    "title": "",
+    "img": "outfits/30.jpg",
+    "prompt": "outfits/30.txt",
+    "category": "modern"
+  },
+  {
+    "id": 31,
+    "title": "",
+    "img": "outfits/31.jpg",
+    "prompt": "outfits/31.txt",
+    "category": "modern"
+  },
+  {
+    "id": 32,
+    "title": "",
+    "img": "outfits/32.jpg",
+    "prompt": "outfits/32.txt",
+    "category": "modern"
+  },
+  {
+    "id": 33,
+    "title": "",
+    "img": "outfits/33.jpg",
+    "prompt": "outfits/33.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 34,
+    "title": "",
+    "img": "outfits/34.jpg",
+    "prompt": "outfits/34.txt",
+    "category": "modern"
+  },
+  {
+    "id": 35,
+    "title": "",
+    "img": "outfits/35.jpg",
+    "prompt": "outfits/35.txt",
+    "category": "modern"
+  },
+  {
+    "id": 36,
+    "title": "",
+    "img": "outfits/36.jpg",
+    "prompt": "outfits/36.txt",
+    "category": "modern"
+  },
+  {
+    "id": 37,
+    "title": "",
+    "img": "outfits/37.jpg",
+    "prompt": "outfits/37.txt",
+    "category": "modern"
+  },
+  {
+    "id": 38,
+    "title": "",
+    "img": "outfits/38.jpg",
+    "prompt": "outfits/38.txt",
+    "category": "modern"
+  },
+  {
+    "id": 39,
+    "title": "",
+    "img": "outfits/39.jpg",
+    "prompt": "outfits/39.txt",
+    "category": "modern"
+  },
+  {
+    "id": 40,
+    "title": "",
+    "img": "outfits/40.jpg",
+    "prompt": "outfits/40.txt",
+    "category": "modern"
+  },
+  {
+    "id": 41,
+    "title": "",
+    "img": "outfits/41.jpg",
+    "prompt": "outfits/41.txt",
+    "category": "modern"
+  },
+  {
+    "id": 42,
+    "title": "",
+    "img": "outfits/42.jpg",
+    "prompt": "outfits/42.txt",
+    "category": "modern"
+  },
+  {
+    "id": 43,
+    "title": "",
+    "img": "outfits/43.jpg",
+    "prompt": "outfits/43.txt",
+    "category": "modern"
+  },
+  {
+    "id": 44,
+    "title": "",
+    "img": "outfits/44.jpg",
+    "prompt": "outfits/44.txt",
+    "category": "modern"
+  },
+  {
+    "id": 45,
+    "title": "",
+    "img": "outfits/45.jpg",
+    "prompt": "outfits/45.txt",
+    "category": "modern"
+  },
+  {
+    "id": 46,
+    "title": "",
+    "img": "outfits/46.jpg",
+    "prompt": "outfits/46.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 47,
+    "title": "",
+    "img": "outfits/47.jpg",
+    "prompt": "outfits/47.txt",
+    "category": "winx"
+  },
+  {
+    "id": 48,
+    "title": "",
+    "img": "outfits/48.jpg",
+    "prompt": "outfits/48.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 49,
+    "title": "",
+    "img": "outfits/49.jpg",
+    "prompt": "outfits/49.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 50,
+    "title": "",
+    "img": "outfits/50.jpg",
+    "prompt": "outfits/50.txt",
+    "category": "postapoc"
+  }
 ]
