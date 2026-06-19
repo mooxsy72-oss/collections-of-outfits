@@ -265,7 +265,6 @@ header h1 span {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
   opacity: 0;
   transition: opacity 0.3s;
 }
