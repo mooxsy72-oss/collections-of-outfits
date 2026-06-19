@@ -2,14 +2,14 @@
 const themes = [
   { title: "Лунная призма", img: "themes/theme1.jpg", link: "https://t.me/mooxsy69/3" },
   { title: "Багровая призма", img: "themes/theme2.jpg", link: "https://t.me/mooxsy69/7" },
-  { title: "Розовая призма", img: "themes/theme3.jpg", link: "https://t.me/mooxsy69/3" },
-  { title: "Обсидиановая призма", img: "themes/theme4.jpg", link: "https://t.me/mooxsy69/3" },
+  { title: "Розовая призма", img: "themes/theme3.jpg", link: "https://t.me/mooxsy69/14?single" },
+  { title: "Обсидиановая призма", img: "themes/theme4.jpg", link: "https://t.me/mooxsy69/14?single" },
   { title: "Милитари", img: "themes/theme5.jpg", link: "https://t.me/mooxsy69/9" },
   { title: "Slavic vibe", img: "themes/theme6.jpg", link: "https://t.me/mooxsy69/16" },
   { title: "Rusreal vibe", img: "themes/theme7.jpg", link: "https://t.me/mooxsy69/17" },
-  { title: "Зеленое стекло", img: "themes/theme8.jpg", link: "https://t.me/mooxsy69/17" },
-  { title: "Оранжевое стекло", img: "themes/theme9.jpg", link: "https://t.me/mooxsy69/17" },
-  { title: "Медузки", img: "themes/theme10.jpg", link: "https://t.me/mooxsy69/17" }
+  { title: "Зеленое стекло", img: "themes/theme8.jpg", link: "https://t.me/mooxsy69/22?single" },
+  { title: "Оранжевое стекло", img: "themes/theme9.jpg", link: "https://t.me/mooxsy69/22?single" },
+  { title: "Медузки", img: "themes/theme10.jpg", link: "https://t.me/mooxsy69/18?single" }
 ];
 
 let outfits = [];
