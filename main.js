@@ -1,3 +1,9 @@
+// ── Твои темы SillyTavern (редактируй здесь) ──
+const themes = [
+  { title: "Тема 1", img: "themes/theme1.jpg", link: "https://ссылка-на-тему" },
+  { title: "Тема 2", img: "themes/theme2.jpg", link: "https://ссылка-на-тему" }
+];
+
 let outfits = [];
 let currentFilter = 'all';
 
@@ -47,22 +53,31 @@ function createCard(outfit, i) {
   preview.textContent = 'Загрузка...';
   getPromptText(outfit).then(t => preview.textContent = t);
 
+  const zoomBtn = document.createElement('button');
+  zoomBtn.className = 'btn btn-ghost';
+  zoomBtn.textContent = 'Увеличить фото';
+
   const copyBtn = document.createElement('button');
   copyBtn.className = 'btn btn-primary';
   copyBtn.textContent = 'Скопировать';
 
   back.appendChild(h3);
   back.appendChild(preview);
+  back.appendChild(zoomBtn);
   back.appendChild(copyBtn);
   card.appendChild(front);
   card.appendChild(back);
   wrap.appendChild(card);
 
+  // Переворот: закрываем все остальные, переворачиваем эту
   card.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') return;
-    wrap.classList.toggle('flipped');
+    const wasFlipped = wrap.classList.contains('flipped');
+    document.querySelectorAll('.card-wrap.flipped').forEach(w => w.classList.remove('flipped'));
+    if (!wasFlipped) wrap.classList.add('flipped');
   });
 
+  zoomBtn.addEventListener('click', () => openLightbox(outfit.img));
   copyBtn.addEventListener('click', (e) => copyPrompt(outfit, e.currentTarget));
 
   gallery.appendChild(wrap);
@@ -79,22 +94,14 @@ async function getPromptText(outfit) {
   return outfit._promptText;
 }
 
-async function openModal(outfit) {
-  const text = await getPromptText(outfit);
-  document.getElementById('modalImg').src = outfit.img;
-  document.getElementById('modalImg').alt = outfit.title;
-  document.getElementById('modalTitle').textContent = outfit.title;
-  document.getElementById('modalPrompt').textContent = text;
-
-  const copyBtn = document.getElementById('modalCopy');
-  copyBtn.onclick = () => copyText(text, copyBtn);
-
-  document.getElementById('modal').classList.remove('hidden');
+// ── Лайтбокс ──
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 }
-
-function closeModal() {
-  document.getElementById('modal').classList.add('hidden');
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
   document.body.style.overflow = '';
 }
 
@@ -112,9 +119,48 @@ function copyText(text, btn) {
   });
 }
 
-document.getElementById('modalClose').addEventListener('click', closeModal);
-document.getElementById('modalBackdrop').addEventListener('click', closeModal);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+// ── Панель тем ──
+function renderThemes() {
+  const grid = document.getElementById('themesGrid');
+  grid.innerHTML = '';
+  themes.forEach(t => {
+    const a = document.createElement('a');
+    a.className = 'theme-card';
+    a.href = t.link;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const img = document.createElement('img');
+    img.src = t.img;
+    img.alt = t.title;
+    img.loading = 'lazy';
+    const span = document.createElement('span');
+    span.textContent = t.title;
+    a.appendChild(img);
+    a.appendChild(span);
+    grid.appendChild(a);
+  });
+}
+
+function openThemes() {
+  document.getElementById('themesPanel').classList.add('open');
+}
+function closeThemes() {
+  document.getElementById('themesPanel').classList.remove('open');
+}
+
+// ── Обработчики ──
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if (e.target.id === 'lightbox') closeLightbox();
+});
+
+document.getElementById('themesBtn').addEventListener('click', openThemes);
+document.getElementById('themesClose').addEventListener('click', closeThemes);
+document.getElementById('themesBackdrop').addEventListener('click', closeThemes);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeLightbox(); closeThemes(); }
+});
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -125,4 +171,5 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
+renderThemes();
 loadOutfits();
