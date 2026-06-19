@@ -151,9 +151,12 @@ function renderThemes() {
 
 function openThemes() {
   document.getElementById('themesPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
+
 function closeThemes() {
   document.getElementById('themesPanel').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ── Обработчики ──
