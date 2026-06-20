@@ -348,5 +348,89 @@
     "img": "outfits/50.jpg",
     "prompt": "outfits/50.txt",
     "category": "postapoc"
+  },
+    {
+    "id": 51,
+    "title": "",
+    "img": "outfits/51.jpg",
+    "prompt": "outfits/51.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 52,
+    "title": "",
+    "img": "outfits/52.jpg",
+    "prompt": "outfits/52.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 53,
+    "title": "",
+    "img": "outfits/53.jpg",
+    "prompt": "outfits/53.txt",
+    "category": "folk"
+  },
+  {
+    "id": 54,
+    "title": "",
+    "img": "outfits/54.jpg",
+    "prompt": "outfits/54.txt",
+    "category": "winx"
+  },
+  {
+    "id": 55,
+    "title": "",
+    "img": "outfits/55.jpg",
+    "prompt": "outfits/55.txt",
+    "category": "modern"
+  },
+  {
+    "id": 56,
+    "title": "",
+    "img": "outfits/56.jpg",
+    "prompt": "outfits/56.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 57,
+    "title": "",
+    "img": "outfits/57.jpg",
+    "prompt": "outfits/57.txt",
+    "category": "modern"
+  },
+  {
+    "id": 58,
+    "title": "",
+    "img": "outfits/58.jpg",
+    "prompt": "outfits/58.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 59,
+    "title": "",
+    "img": "outfits/59.jpg",
+    "prompt": "outfits/59.txt",
+    "category": "fantasy"
+  },
+  {
+    "id": 60,
+    "title": "",
+    "img": "outfits/60.jpg",
+    "prompt": "outfits/60.txt",
+    "category": "modern"
+  },
+  {
+    "id": 61,
+    "title": "",
+    "img": "outfits/61.jpg",
+    "prompt": "outfits/61.txt",
+    "category": "postapoc"
+  },
+  {
+    "id": 62,
+    "title": "",
+    "img": "outfits/62.jpg",
+    "prompt": "outfits/62.txt",
+    "category": "postapoc"
   }
 ]
