@@ -1,436 +1,106 @@
 [
-  {
-    "id": 1,
-    "title": "",
-    "img": "outfits/1.jpg",
-    "prompt": "outfits/1.txt",
-    "category": "folk"
-  },
-  {
-    "id": 2,
-    "title": "",
-    "img": "outfits/2.jpg",
-    "prompt": "outfits/2.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 3,
-    "title": "",
-    "img": "outfits/3.jpg",
-    "prompt": "outfits/3.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 4,
-    "title": "",
-    "img": "outfits/4.jpg",
-    "prompt": "outfits/4.txt",
-    "category": "folk"
-  },
-  {
-    "id": 5,
-    "title": "",
-    "img": "outfits/5.jpg",
-    "prompt": "outfits/5.txt",
-    "category": "folk"
-  },
-  {
-    "id": 6,
-    "title": "",
-    "img": "outfits/6.jpg",
-    "prompt": "outfits/6.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 7,
-    "title": "",
-    "img": "outfits/7.jpg",
-    "prompt": "outfits/7.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 8,
-    "title": "",
-    "img": "outfits/8.jpg",
-    "prompt": "outfits/8.txt",
-    "category": "folk"
-  },
-  {
-    "id": 9,
-    "title": "",
-    "img": "outfits/9.jpg",
-    "prompt": "outfits/9.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 10,
-    "title": "",
-    "img": "outfits/10.jpg",
-    "prompt": "outfits/10.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 11,
-    "title": "",
-    "img": "outfits/11.jpg",
-    "prompt": "outfits/11.txt",
-    "category": "folk"
-  },
-  {
-    "id": 12,
-    "title": "",
-    "img": "outfits/12.jpg",
-    "prompt": "outfits/12.txt",
-    "category": "folk"
-  },
-  {
-    "id": 13,
-    "title": "",
-    "img": "outfits/13.jpg",
-    "prompt": "outfits/13.txt",
-    "category": "folk"
-  },
-  {
-    "id": 14,
-    "title": "",
-    "img": "outfits/14.jpg",
-    "prompt": "outfits/14.txt",
-    "category": "folk"
-  },
-  {
-    "id": 15,
-    "title": "",
-    "img": "outfits/15.jpg",
-    "prompt": "outfits/15.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 16,
-    "title": "",
-    "img": "outfits/16.jpg",
-    "prompt": "outfits/16.txt",
-    "category": "folk"
-  },
-  {
-    "id": 17,
-    "title": "",
-    "img": "outfits/17.jpg",
-    "prompt": "outfits/17.txt",
-    "category": "modern"
-  },
-  {
-    "id": 18,
-    "title": "",
-    "img": "outfits/18.jpg",
-    "prompt": "outfits/18.txt",
-    "category": "folk"
-  },
-  {
-    "id": 19,
-    "title": "",
-    "img": "outfits/19.jpg",
-    "prompt": "outfits/19.txt",
-    "category": "folk"
-  },
-  {
-    "id": 20,
-    "title": "",
-    "img": "outfits/20.jpg",
-    "prompt": "outfits/20.txt",
-    "category": "folk"
-  },
-  {
-    "id": 21,
-    "title": "",
-    "img": "outfits/21.jpg",
-    "prompt": "outfits/21.txt",
-    "category": "folk"
-  },
-  {
-    "id": 22,
-    "title": "",
-    "img": "outfits/22.jpg",
-    "prompt": "outfits/22.txt",
-    "category": "folk"
-  },
-  {
-    "id": 23,
-    "title": "",
-    "img": "outfits/23.jpg",
-    "prompt": "outfits/23.txt",
-    "category": "folk"
-  },
-  {
-    "id": 24,
-    "title": "",
-    "img": "outfits/24.jpg",
-    "prompt": "outfits/24.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 25,
-    "title": "",
-    "img": "outfits/25.jpg",
-    "prompt": "outfits/25.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 26,
-    "title": "",
-    "img": "outfits/26.jpg",
-    "prompt": "outfits/26.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 27,
-    "title": "",
-    "img": "outfits/27.jpg",
-    "prompt": "outfits/27.txt",
-    "category": "modern"
-  },
-  {
-    "id": 28,
-    "title": "",
-    "img": "outfits/28.jpg",
-    "prompt": "outfits/28.txt",
-    "category": "modern"
-  },
-  {
-    "id": 29,
-    "title": "",
-    "img": "outfits/29.jpg",
-    "prompt": "outfits/29.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 30,
-    "title": "",
-    "img": "outfits/30.jpg",
-    "prompt": "outfits/30.txt",
-    "category": "modern"
-  },
-  {
-    "id": 31,
-    "title": "",
-    "img": "outfits/31.jpg",
-    "prompt": "outfits/31.txt",
-    "category": "modern"
-  },
-  {
-    "id": 32,
-    "title": "",
-    "img": "outfits/32.jpg",
-    "prompt": "outfits/32.txt",
-    "category": "modern"
-  },
-  {
-    "id": 33,
-    "title": "",
-    "img": "outfits/33.jpg",
-    "prompt": "outfits/33.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 34,
-    "title": "",
-    "img": "outfits/34.jpg",
-    "prompt": "outfits/34.txt",
-    "category": "modern"
-  },
-  {
-    "id": 35,
-    "title": "",
-    "img": "outfits/35.jpg",
-    "prompt": "outfits/35.txt",
-    "category": "modern"
-  },
-  {
-    "id": 36,
-    "title": "",
-    "img": "outfits/36.jpg",
-    "prompt": "outfits/36.txt",
-    "category": "modern"
-  },
-  {
-    "id": 37,
-    "title": "",
-    "img": "outfits/37.jpg",
-    "prompt": "outfits/37.txt",
-    "category": "modern"
-  },
-  {
-    "id": 38,
-    "title": "",
-    "img": "outfits/38.jpg",
-    "prompt": "outfits/38.txt",
-    "category": "modern"
-  },
-  {
-    "id": 39,
-    "title": "",
-    "img": "outfits/39.jpg",
-    "prompt": "outfits/39.txt",
-    "category": "modern"
-  },
-  {
-    "id": 40,
-    "title": "",
-    "img": "outfits/40.jpg",
-    "prompt": "outfits/40.txt",
-    "category": "modern"
-  },
-  {
-    "id": 41,
-    "title": "",
-    "img": "outfits/41.jpg",
-    "prompt": "outfits/41.txt",
-    "category": "modern"
-  },
-  {
-    "id": 42,
-    "title": "",
-    "img": "outfits/42.jpg",
-    "prompt": "outfits/42.txt",
-    "category": "modern"
-  },
-  {
-    "id": 43,
-    "title": "",
-    "img": "outfits/43.jpg",
-    "prompt": "outfits/43.txt",
-    "category": "modern"
-  },
-  {
-    "id": 44,
-    "title": "",
-    "img": "outfits/44.jpg",
-    "prompt": "outfits/44.txt",
-    "category": "modern"
-  },
-  {
-    "id": 45,
-    "title": "",
-    "img": "outfits/45.jpg",
-    "prompt": "outfits/45.txt",
-    "category": "modern"
-  },
-  {
-    "id": 46,
-    "title": "",
-    "img": "outfits/46.jpg",
-    "prompt": "outfits/46.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 47,
-    "title": "",
-    "img": "outfits/47.jpg",
-    "prompt": "outfits/47.txt",
-    "category": "winx"
-  },
-  {
-    "id": 48,
-    "title": "",
-    "img": "outfits/48.jpg",
-    "prompt": "outfits/48.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 49,
-    "title": "",
-    "img": "outfits/49.jpg",
-    "prompt": "outfits/49.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 50,
-    "title": "",
-    "img": "outfits/50.jpg",
-    "prompt": "outfits/50.txt",
-    "category": "postapoc"
-  },
-    {
-    "id": 51,
-    "title": "",
-    "img": "outfits/51.jpg",
-    "prompt": "outfits/51.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 52,
-    "title": "",
-    "img": "outfits/52.jpg",
-    "prompt": "outfits/52.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 53,
-    "title": "",
-    "img": "outfits/53.jpg",
-    "prompt": "outfits/53.txt",
-    "category": "folk"
-  },
-  {
-    "id": 54,
-    "title": "",
-    "img": "outfits/54.jpg",
-    "prompt": "outfits/54.txt",
-    "category": "winx"
-  },
-  {
-    "id": 55,
-    "title": "",
-    "img": "outfits/55.jpg",
-    "prompt": "outfits/55.txt",
-    "category": "modern"
-  },
-  {
-    "id": 56,
-    "title": "",
-    "img": "outfits/56.jpg",
-    "prompt": "outfits/56.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 57,
-    "title": "",
-    "img": "outfits/57.jpg",
-    "prompt": "outfits/57.txt",
-    "category": "modern"
-  },
-  {
-    "id": 58,
-    "title": "",
-    "img": "outfits/58.jpg",
-    "prompt": "outfits/58.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 59,
-    "title": "",
-    "img": "outfits/59.jpg",
-    "prompt": "outfits/59.txt",
-    "category": "fantasy"
-  },
-  {
-    "id": 60,
-    "title": "",
-    "img": "outfits/60.jpg",
-    "prompt": "outfits/60.txt",
-    "category": "modern"
-  },
-  {
-    "id": 61,
-    "title": "",
-    "img": "outfits/61.jpg",
-    "prompt": "outfits/61.txt",
-    "category": "postapoc"
-  },
-  {
-    "id": 62,
-    "title": "",
-    "img": "outfits/62.jpg",
-    "prompt": "outfits/62.txt",
-    "category": "postapoc"
-  }
+  { "id": 1, "title": "", "img": "outfits/1.jpg", "prompt": "outfits/1.txt", "category": "folk", "gender": "female" },
+  { "id": 2, "title": "", "img": "outfits/2.jpg", "prompt": "outfits/2.txt", "category": "fantasy", "gender": "female" },
+  { "id": 3, "title": "", "img": "outfits/3.jpg", "prompt": "outfits/3.txt", "category": "fantasy", "gender": "female" },
+  { "id": 4, "title": "", "img": "outfits/4.jpg", "prompt": "outfits/4.txt", "category": "folk", "gender": "female" },
+  { "id": 5, "title": "", "img": "outfits/5.jpg", "prompt": "outfits/5.txt", "category": "folk", "gender": "female" },
+  { "id": 6, "title": "", "img": "outfits/6.jpg", "prompt": "outfits/6.txt", "category": "fantasy", "gender": "female" },
+  { "id": 7, "title": "", "img": "outfits/7.jpg", "prompt": "outfits/7.txt", "category": "fantasy", "gender": "female" },
+  { "id": 8, "title": "", "img": "outfits/8.jpg", "prompt": "outfits/8.txt", "category": "folk", "gender": "female" },
+  { "id": 9, "title": "", "img": "outfits/9.jpg", "prompt": "outfits/9.txt", "category": "fantasy", "gender": "female" },
+  { "id": 10, "title": "", "img": "outfits/10.jpg", "prompt": "outfits/10.txt", "category": "fantasy", "gender": "female" },
+  { "id": 11, "title": "", "img": "outfits/11.jpg", "prompt": "outfits/11.txt", "category": "folk", "gender": "female" },
+  { "id": 12, "title": "", "img": "outfits/12.jpg", "prompt": "outfits/12.txt", "category": "folk", "gender": "female" },
+  { "id": 13, "title": "", "img": "outfits/13.jpg", "prompt": "outfits/13.txt", "category": "folk", "gender": "female" },
+  { "id": 14, "title": "", "img": "outfits/14.jpg", "prompt": "outfits/14.txt", "category": "folk", "gender": "female" },
+  { "id": 15, "title": "", "img": "outfits/15.jpg", "prompt": "outfits/15.txt", "category": "fantasy", "gender": "female" },
+  { "id": 16, "title": "", "img": "outfits/16.jpg", "prompt": "outfits/16.txt", "category": "folk", "gender": "female" },
+  { "id": 17, "title": "", "img": "outfits/17.jpg", "prompt": "outfits/17.txt", "category": "modern", "gender": "female" },
+  { "id": 18, "title": "", "img": "outfits/18.jpg", "prompt": "outfits/18.txt", "category": "folk", "gender": "female" },
+  { "id": 19, "title": "", "img": "outfits/19.jpg", "prompt": "outfits/19.txt", "category": "folk", "gender": "female" },
+  { "id": 20, "title": "", "img": "outfits/20.jpg", "prompt": "outfits/20.txt", "category": "folk", "gender": "female" },
+  { "id": 21, "title": "", "img": "outfits/21.jpg", "prompt": "outfits/21.txt", "category": "folk", "gender": "female" },
+  { "id": 22, "title": "", "img": "outfits/22.jpg", "prompt": "outfits/22.txt", "category": "folk", "gender": "female" },
+  { "id": 23, "title": "", "img": "outfits/23.jpg", "prompt": "outfits/23.txt", "category": "folk", "gender": "female" },
+  { "id": 24, "title": "", "img": "outfits/24.jpg", "prompt": "outfits/24.txt", "category": "fantasy", "gender": "female" },
+  { "id": 25, "title": "", "img": "outfits/25.jpg", "prompt": "outfits/25.txt", "category": "fantasy", "gender": "female" },
+  { "id": 26, "title": "", "img": "outfits/26.jpg", "prompt": "outfits/26.txt", "category": "fantasy", "gender": "female" },
+  { "id": 27, "title": "", "img": "outfits/27.jpg", "prompt": "outfits/27.txt", "category": "modern", "gender": "female" },
+  { "id": 28, "title": "", "img": "outfits/28.jpg", "prompt": "outfits/28.txt", "category": "modern", "gender": "female" },
+  { "id": 29, "title": "", "img": "outfits/29.jpg", "prompt": "outfits/29.txt", "category": "fantasy", "gender": "female" },
+  { "id": 30, "title": "", "img": "outfits/30.jpg", "prompt": "outfits/30.txt", "category": "modern", "gender": "female" },
+  { "id": 31, "title": "", "img": "outfits/31.jpg", "prompt": "outfits/31.txt", "category": "modern", "gender": "female" },
+  { "id": 32, "title": "", "img": "outfits/32.jpg", "prompt": "outfits/32.txt", "category": "modern", "gender": "female" },
+  { "id": 33, "title": "", "img": "outfits/33.jpg", "prompt": "outfits/33.txt", "category": "fantasy", "gender": "female" },
+  { "id": 34, "title": "", "img": "outfits/34.jpg", "prompt": "outfits/34.txt", "category": "modern", "gender": "female" },
+  { "id": 35, "title": "", "img": "outfits/35.jpg", "prompt": "outfits/35.txt", "category": "modern", "gender": "female" },
+  { "id": 36, "title": "", "img": "outfits/36.jpg", "prompt": "outfits/36.txt", "category": "modern", "gender": "female" },
+  { "id": 37, "title": "", "img": "outfits/37.jpg", "prompt": "outfits/37.txt", "category": "modern", "gender": "female" },
+  { "id": 38, "title": "", "img": "outfits/38.jpg", "prompt": "outfits/38.txt", "category": "modern", "gender": "female" },
+  { "id": 39, "title": "", "img": "outfits/39.jpg", "prompt": "outfits/39.txt", "category": "modern", "gender": "female" },
+  { "id": 40, "title": "", "img": "outfits/40.jpg", "prompt": "outfits/40.txt", "category": "modern", "gender": "female" },
+  { "id": 41, "title": "", "img": "outfits/41.jpg", "prompt": "outfits/41.txt", "category": "modern", "gender": "female" },
+  { "id": 42, "title": "", "img": "outfits/42.jpg", "prompt": "outfits/42.txt", "category": "modern", "gender": "female" },
+  { "id": 43, "title": "", "img": "outfits/43.jpg", "prompt": "outfits/43.txt", "category": "modern", "gender": "female" },
+  { "id": 44, "title": "", "img": "outfits/44.jpg", "prompt": "outfits/44.txt", "category": "modern", "gender": "female" },
+  { "id": 45, "title": "", "img": "outfits/45.jpg", "prompt": "outfits/45.txt", "category": "modern", "gender": "female" },
+  { "id": 46, "title": "", "img": "outfits/46.jpg", "prompt": "outfits/46.txt", "category": "fantasy", "gender": "female" },
+  { "id": 47, "title": "", "img": "outfits/47.jpg", "prompt": "outfits/47.txt", "category": "winx", "gender": "female" },
+  { "id": 48, "title": "", "img": "outfits/48.jpg", "prompt": "outfits/48.txt", "category": "fantasy", "gender": "female" },
+  { "id": 49, "title": "", "img": "outfits/49.jpg", "prompt": "outfits/49.txt", "category": "fantasy", "gender": "female" },
+  { "id": 50, "title": "", "img": "outfits/50.jpg", "prompt": "outfits/50.txt", "category": "postapoc", "gender": "female" },
+  { "id": 51, "title": "", "img": "outfits/51.jpg", "prompt": "outfits/51.txt", "category": "fantasy", "gender": "female" },
+  { "id": 52, "title": "", "img": "outfits/52.jpg", "prompt": "outfits/52.txt", "category": "fantasy", "gender": "female" },
+  { "id": 53, "title": "", "img": "outfits/53.jpg", "prompt": "outfits/53.txt", "category": "folk", "gender": "female" },
+  { "id": 54, "title": "", "img": "outfits/54.jpg", "prompt": "outfits/54.txt", "category": "winx", "gender": "female" },
+  { "id": 55, "title": "", "img": "outfits/55.jpg", "prompt": "outfits/55.txt", "category": "modern", "gender": "female" },
+  { "id": 56, "title": "", "img": "outfits/56.jpg", "prompt": "outfits/56.txt", "category": "fantasy", "gender": "female" },
+  { "id": 57, "title": "", "img": "outfits/57.jpg", "prompt": "outfits/57.txt", "category": "modern", "gender": "female" },
+  { "id": 58, "title": "", "img": "outfits/58.jpg", "prompt": "outfits/58.txt", "category": "fantasy", "gender": "female" },
+  { "id": 59, "title": "", "img": "outfits/59.jpg", "prompt": "outfits/59.txt", "category": "fantasy", "gender": "female" },
+  { "id": 60, "title": "", "img": "outfits/60.jpg", "prompt": "outfits/60.txt", "category": "modern", "gender": "female" },
+  { "id": 61, "title": "", "img": "outfits/61.jpg", "prompt": "outfits/61.txt", "category": "postapoc", "gender": "female" },
+  { "id": 62, "title": "", "img": "outfits/62.jpg", "prompt": "outfits/62.txt", "category": "postapoc", "gender": "female" },
+  { "id": 63, "title": "", "img": "outfits/63.jpg", "prompt": "outfits/63.txt", "category": "folk", "gender": "female" },
+  { "id": 64, "title": "", "img": "outfits/64.jpg", "prompt": "outfits/64.txt", "category": "modern", "gender": "female" },
+  { "id": 65, "title": "", "img": "outfits/65.jpg", "prompt": "outfits/65.txt", "category": "modern", "gender": "female" },
+  { "id": 66, "title": "", "img": "outfits/66.jpg", "prompt": "outfits/66.txt", "category": "modern", "gender": "female" },
+  { "id": 67, "title": "", "img": "outfits/67.jpg", "prompt": "outfits/67.txt", "category": "modern", "gender": "female" },
+  { "id": 68, "title": "", "img": "outfits/68.jpg", "prompt": "outfits/68.txt", "category": "modern", "gender": "female" },
+  { "id": 69, "title": "", "img": "outfits/69.jpg", "prompt": "outfits/69.txt", "category": "modern", "gender": "female" },
+  { "id": 70, "title": "", "img": "outfits/70.jpg", "prompt": "outfits/70.txt", "category": "modern", "gender": "female" },
+  { "id": 71, "title": "", "img": "outfits/71.jpg", "prompt": "outfits/71.txt", "category": "modern", "gender": "female" },
+  { "id": 72, "title": "", "img": "outfits/72.jpg", "prompt": "outfits/72.txt", "category": "modern", "gender": "female" },
+  { "id": 73, "title": "", "img": "outfits/73.jpg", "prompt": "outfits/73.txt", "category": "modern", "gender": "female" },
+  { "id": 74, "title": "", "img": "outfits/74.jpg", "prompt": "outfits/74.txt", "category": "modern", "gender": "female" },
+  { "id": 75, "title": "", "img": "outfits/75.jpg", "prompt": "outfits/75.txt", "category": "modern", "gender": "female" },
+  { "id": 76, "title": "", "img": "outfits/76.jpg", "prompt": "outfits/76.txt", "category": "modern", "gender": "female" },
+  { "id": 77, "title": "", "img": "outfits/77.jpg", "prompt": "outfits/77.txt", "category": "modern", "gender": "female" },
+  { "id": 78, "title": "", "img": "outfits/78.jpg", "prompt": "outfits/78.txt", "category": "modern", "gender": "female" },
+  { "id": 79, "title": "", "img": "outfits/79.jpg", "prompt": "outfits/79.txt", "category": "modern", "gender": "female" },
+  { "id": 80, "title": "", "img": "outfits/80.jpg", "prompt": "outfits/80.txt", "category": "modern", "gender": "female" },
+  { "id": 81, "title": "", "img": "outfits/81.jpg", "prompt": "outfits/81.txt", "category": "modern", "gender": "female" },
+  { "id": 82, "title": "", "img": "outfits/82.jpg", "prompt": "outfits/82.txt", "category": "modern", "gender": "female" },
+  { "id": 83, "title": "", "img": "outfits/83.jpg", "prompt": "outfits/83.txt", "category": "modern", "gender": "female" },
+  { "id": 84, "title": "", "img": "outfits/84.jpg", "prompt": "outfits/84.txt", "category": "modern", "gender": "female" },
+  { "id": 85, "title": "", "img": "outfits/85.jpg", "prompt": "outfits/85.txt", "category": "modern", "gender": "female" },
+  { "id": 86, "title": "", "img": "outfits/86.jpg", "prompt": "outfits/86.txt", "category": "modern", "gender": "female" },
+  { "id": 87, "title": "", "img": "outfits/87.jpg", "prompt": "outfits/87.txt", "category": "modern", "gender": "female" },
+  { "id": 88, "title": "", "img": "outfits/88.jpg", "prompt": "outfits/88.txt", "category": "modern", "gender": "male" },
+  { "id": 89, "title": "", "img": "outfits/89.jpg", "prompt": "outfits/89.txt", "category": "modern", "gender": "male" },
+  { "id": 90, "title": "", "img": "outfits/90.jpg", "prompt": "outfits/90.txt", "category": "modern", "gender": "male" },
+  { "id": 91, "title": "", "img": "outfits/91.jpg", "prompt": "outfits/91.txt", "category": "modern", "gender": "male" },
+  { "id": 92, "title": "", "img": "outfits/92.jpg", "prompt": "outfits/92.txt", "category": "modern", "gender": "male" },
+  { "id": 93, "title": "", "img": "outfits/93.jpg", "prompt": "outfits/93.txt", "category": "modern", "gender": "male" },
+  { "id": 94, "title": "", "img": "outfits/94.jpg", "prompt": "outfits/94.txt", "category": "modern", "gender": "male" },
+  { "id": 95, "title": "", "img": "outfits/95.jpg", "prompt": "outfits/95.txt", "category": "modern", "gender": "male" },
+  { "id": 96, "title": "", "img": "outfits/96.jpg", "prompt": "outfits/96.txt", "category": "modern", "gender": "male" },
+  { "id": 97, "title": "", "img": "outfits/97.jpg", "prompt": "outfits/97.txt", "category": "modern", "gender": "male" },
+  { "id": 98, "title": "", "img": "outfits/98.jpg", "prompt": "outfits/98.txt", "category": "modern", "gender": "male" },
+  { "id": 99, "title": "", "img": "outfits/99.jpg", "prompt": "outfits/99.txt", "category": "modern", "gender": "male" },
+  { "id": 100, "title": "", "img": "outfits/100.jpg", "prompt": "outfits/100.txt", "category": "modern", "gender": "male" },
+  { "id": 101, "title": "", "img": "outfits/101.jpg", "prompt": "outfits/101.txt", "category": "modern", "gender": "male" },
+  { "id": 102, "title": "", "img": "outfits/102.jpg", "prompt": "outfits/102.txt", "category": "modern", "gender": "male" },
+  { "id": 103, "title": "", "img": "outfits/103.jpg", "prompt": "outfits/103.txt", "category": "modern", "gender": "male" },
+  { "id": 104, "title": "", "img": "outfits/104.jpg", "prompt": "outfits/104.txt", "category": "modern", "gender": "male" }
 ]
