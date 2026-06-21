@@ -14,6 +14,7 @@ const themes = [
 
 let outfits = [];
 let currentFilter = 'all';
+let currentGender = 'all';
 
 async function loadOutfits() {
   try {
@@ -28,9 +29,11 @@ async function loadOutfits() {
 function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
-  const filtered = currentFilter === 'all'
-    ? outfits
-    : outfits.filter(o => o.category === currentFilter);
+  const filtered = outfits.filter(o => {
+    const catOk = currentFilter === 'all' || o.category === currentFilter;
+    const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
+    return catOk && genderOk;
+  });
   filtered.forEach((outfit, i) => createCard(outfit, i));
 }
 
@@ -124,7 +127,26 @@ function copyText(text, btn) {
     const original = btn.textContent;
     btn.textContent = '✓ Скопировано!';
     setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1800);
+    showToast('Промпт скопирован в буфер обмена');
   });
+}
+
+// ── Тост-уведомление ──
+let toastTimer;
+function showToast(message) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  // перезапуск анимации появления
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
 // ── Панель тем ──
@@ -173,11 +195,22 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeLightbox(); closeThemes(); }
 });
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
+// Фильтр по категориям
+document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
+    renderGallery();
+  });
+});
+
+// Фильтр по полу
+document.querySelectorAll('.filter-btn[data-gender]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn[data-gender]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentGender = btn.dataset.gender;
     renderGallery();
   });
 });
