@@ -15,12 +15,22 @@ const themes = [
 let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
-let displayedCount = 30;
+let displayedCount = 40;
+
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 async function loadOutfits() {
   try {
     const res = await fetch('outfits.json');
     outfits = await res.json();
+    outfits = shuffleArray(outfits);
   } catch {
     outfits = [];
   }
@@ -31,11 +41,13 @@ function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
 
-  const filtered = outfits.filter(o => {
+  let filtered = outfits.filter(o => {
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
   });
+
+  filtered = shuffleArray(filtered);
 
   const toShow = filtered.slice(0, displayedCount);
   toShow.forEach((outfit, i) => createCard(outfit, i));
@@ -156,7 +168,7 @@ function closeThemes() {
 
 // ── Load More ──
 function loadMore() {
-  displayedCount += 30;
+  displayedCount += 40;
   renderGallery();
 }
 
@@ -183,7 +195,7 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
-    displayedCount = 30;
+    displayedCount = 40;
     renderGallery();
   });
 });
@@ -194,7 +206,7 @@ document.querySelectorAll('.filter-btn[data-gender]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-gender]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentGender = btn.dataset.gender;
-    displayedCount = 30;
+    displayedCount = 40;
     renderGallery();
   });
 });
