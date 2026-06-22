@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Коллекция нарядов by Mooxsy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <header>
-    <h1>Коллекция нарядов <span>by Mooxsy</span></h1>
-    <button class="themes-btn" id="themesBtn">Мои темы</button>
+    <h1>
+      Коллекция нарядов by Mooxsy
+      <span>Мои темы</span>
+    </h1>
+    <button id="themesBtn" class="themes-btn">Мои темы</button>
   </header>
 
   <div class="filters filters-gender">
-  <button class="filter-btn gender-btn active" data-gender="all">Все</button>
-  <button class="filter-btn gender-btn" data-gender="female">Женское</button>
-  <button class="filter-btn gender-btn" data-gender="male">Мужское</button>
+    <button class="filter-btn active" data-gender="all">Все</button>
+    <button class="filter-btn" data-gender="female">Женское</button>
+    <button class="filter-btn" data-gender="male">Мужское</button>
   </div>
 
   <div class="filters">
@@ -31,23 +31,38 @@
     <button class="filter-btn" data-filter="postapoc">Постапокалипсис</button>
   </div>
 
-  <div class="gallery" id="gallery"></div>
+  <div id="gallery" class="gallery"></div>
 
-  <!-- Лайтбокс (увеличенное фото) -->
-  <div class="lightbox hidden" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose">✕</button>
-    <img id="lightboxImg" src="" alt="" />
+  <div class="load-more-wrapper">
+    <button id="loadMoreBtn" class="btn-load-more">Загрузить ещё</button>
+  </div>
+
+  <!-- Модальное окно (Instagram-style) -->
+  <div id="modal" class="modal">
+    <button id="modalClose" class="modal-close">✕</button>
+    <div class="modal-content">
+      <div class="modal-left">
+        <img id="modalImg" src="" alt="outfit">
+      </div>
+      <div class="modal-right">
+        <div class="modal-header">Промпт</div>
+        <div id="modalPrompt" class="modal-body">Загрузка...</div>
+        <div class="modal-footer">
+          <button id="btnCopyModal" class="btn-copy-modal">Скопировать</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Панель тем -->
-  <div class="themes-panel" id="themesPanel">
-    <div class="themes-backdrop" id="themesBackdrop"></div>
+  <div id="themesPanel" class="themes-panel">
+    <div id="themesBackdrop" class="themes-backdrop"></div>
     <div class="themes-drawer">
       <div class="themes-drawer-head">
         <h2>Мои темы для SillyTavern</h2>
-        <button class="themes-close" id="themesClose">✕</button>
+        <button id="themesClose" class="themes-close">✕</button>
       </div>
-      <div class="themes-grid" id="themesGrid"></div>
+      <div id="themesGrid" class="themes-grid"></div>
     </div>
   </div>
 
