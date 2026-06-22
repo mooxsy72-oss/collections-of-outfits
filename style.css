@@ -15,6 +15,8 @@
   --accent-light: #cdcac4;
   --text: #d8d5cf;
   --muted: #8c8880;
+  --female: #c89fa3;
+  --male: #7da3b5;
   --radius: 14px;
 }
 
@@ -47,17 +49,6 @@ header h1 {
   letter-spacing: 0.06em;
   text-align: center;
   flex: 1;
-}
-
-header h1 span {
-  font-size: 0.88rem;
-  font-family: 'Neucha', sans-serif;
-  font-weight: 400;
-  color: var(--muted);
-  display: block;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-top: 0.3rem;
 }
 
 .themes-btn {
@@ -149,8 +140,8 @@ header h1 span {
 .modal-content {
   display: flex;
   width: 100%;
-  max-width: 1200px;
-  height: 90vh;
+  max-width: 1000px;
+  height: 80vh;
   margin: auto;
   background: var(--bg-2);
   border-radius: var(--radius);
@@ -169,60 +160,53 @@ header h1 span {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: var(--bg);
   position: relative;
   overflow: hidden;
 }
 
 .modal-left img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
 .modal-right {
-  width: 380px;
+  width: 360px;
   background: var(--surface);
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--border-soft);
+  padding: 1.5rem;
+  gap: 1rem;
 }
 
-.modal-header {
-  padding: 1.2rem;
-  border-bottom: 1px solid var(--border-soft);
-  font-family: 'Neucha', sans-serif;
-  font-size: 1rem;
-  color: var(--accent-light);
-  text-align: center;
-  letter-spacing: 0.05em;
-}
-
-.modal-body {
+.modal-prompt-box {
   flex: 1;
-  padding: 1.2rem;
+  padding: 1rem;
   overflow-y: auto;
   font-size: 0.88rem;
   line-height: 1.7;
   color: var(--text);
   font-family: 'Jost', sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .modal-footer {
-  padding: 1rem 1.2rem;
-  border-top: 1px solid var(--border-soft);
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .btn-copy-modal {
-  padding: 0.6rem 1.5rem;
+  padding: 0.55rem 1.3rem;
   border-radius: 8px;
   border: 1.5px solid var(--accent-deep);
   background: var(--accent);
   color: var(--bg);
   font-family: 'Neucha', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 400;
   cursor: pointer;
   transition: background 0.25s, transform 0.18s;
@@ -427,6 +411,9 @@ header h1 span {
   cursor: pointer;
   transition: all 0.25s ease;
   letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .filter-btn:hover {
@@ -437,6 +424,29 @@ header h1 span {
 .filter-btn.active {
   background: var(--accent);
   border-color: var(--accent);
+  color: var(--bg);
+}
+
+/* Гендерные кнопки */
+.filter-btn[data-gender="female"]:not(.active) {
+  border-color: var(--female);
+  color: var(--female);
+}
+
+.filter-btn[data-gender="female"].active {
+  background: var(--female);
+  border-color: var(--female);
+  color: var(--bg);
+}
+
+.filter-btn[data-gender="male"]:not(.active) {
+  border-color: var(--male);
+  color: var(--male);
+}
+
+.filter-btn[data-gender="male"].active {
+  background: var(--male);
+  border-color: var(--male);
   color: var(--bg);
 }
 
@@ -500,7 +510,6 @@ header h1 span {
 @media (max-width: 600px) {
   header { padding: 1.25rem 1rem; }
   header h1 { font-size: 1.4rem; }
-  header h1 span { font-size: 0.72rem; letter-spacing: 0.15em; }
   .themes-btn { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
 
   .gallery { padding: 1rem; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
