@@ -15,6 +15,7 @@ const themes = [
 let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
+let displayedCount = 30;
 
 async function loadOutfits() {
   try {
@@ -29,12 +30,22 @@ async function loadOutfits() {
 function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
+
   const filtered = outfits.filter(o => {
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
   });
-  filtered.forEach((outfit, i) => createCard(outfit, i));
+
+  const toShow = filtered.slice(0, displayedCount);
+  toShow.forEach((outfit, i) => createCard(outfit, i));
+
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  if (filtered.length > displayedCount) {
+    loadMoreBtn.classList.remove('hidden');
+  } else {
+    loadMoreBtn.classList.add('hidden');
+  }
 }
 
 function createCard(outfit, i) {
@@ -42,55 +53,13 @@ function createCard(outfit, i) {
   const wrap = document.createElement('div');
   wrap.className = 'card-wrap';
 
-  const card = document.createElement('div');
-  card.className = 'card';
-
-  const front = document.createElement('div');
-  front.className = 'card-face card-front';
   const img = document.createElement('img');
   img.src = outfit.img;
-  img.alt = outfit.title;
+  img.alt = outfit.title || 'outfit';
   img.loading = 'lazy';
-  front.appendChild(img);
 
-  const back = document.createElement('div');
-  back.className = 'card-face card-back';
-
-  const h3 = document.createElement('h3');
-  h3.textContent = outfit.title;
-
-  const preview = document.createElement('div');
-  preview.className = 'prompt-preview';
-  preview.textContent = 'Загрузка...';
-  getPromptText(outfit).then(t => preview.textContent = t);
-
-  const zoomBtn = document.createElement('button');
-  zoomBtn.className = 'btn btn-ghost';
-  zoomBtn.textContent = 'Увеличить фото';
-
-  const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-primary';
-  copyBtn.textContent = 'Скопировать';
-
-  back.appendChild(h3);
-  back.appendChild(preview);
-  back.appendChild(zoomBtn);
-  back.appendChild(copyBtn);
-  card.appendChild(front);
-  card.appendChild(back);
-  wrap.appendChild(card);
-
-  // Переворот: закрываем все остальные, переворачиваем эту
-  card.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') return;
-    const wasFlipped = wrap.classList.contains('flipped');
-    document.querySelectorAll('.card-wrap.flipped').forEach(w => w.classList.remove('flipped'));
-    if (!wasFlipped) wrap.classList.add('flipped');
-  });
-
-  zoomBtn.addEventListener('click', () => openLightbox(outfit.img));
-  copyBtn.addEventListener('click', (e) => copyPrompt(outfit, e.currentTarget));
-
+  wrap.appendChild(img);
+  wrap.addEventListener('click', () => openModal(outfit));
   gallery.appendChild(wrap);
 }
 
@@ -100,35 +69,40 @@ async function getPromptText(outfit) {
     const res = await fetch(outfit.prompt);
     outfit._promptText = await res.text();
   } catch {
-    outfit._promptText = outfit.prompt || '(no prompt)';
+    outfit._promptText = '(промпт недоступен)';
   }
   return outfit._promptText;
 }
 
-// ── Лайтбокс ──
-function openLightbox(src) {
-  document.getElementById('lightboxImg').src = src;
-  document.getElementById('lightbox').classList.remove('hidden');
+// ── Модальное окно ──
+async function openModal(outfit) {
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modalImg');
+  const modalPrompt = document.getElementById('modalPrompt');
+
+  modalImg.src = outfit.img;
+  modalPrompt.textContent = 'Загрузка...';
+
+  modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const promptText = await getPromptText(outfit);
+  modalPrompt.textContent = promptText;
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.add('hidden');
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('open');
   document.body.style.overflow = '';
 }
 
-async function copyPrompt(outfit, btn) {
-  const text = await getPromptText(outfit);
-  copyText(text, btn);
-}
-
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
-    btn.classList.add('copied');
-    const original = btn.textContent;
-    btn.textContent = '✓ Скопировано!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1800);
-    showToast('Промпт скопирован в буфер обмена');
-  });
+function copyModalPrompt() {
+  const text = document.getElementById('modalPrompt').textContent;
+  if (text && text !== 'Загрузка...') {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Промпт скопирован в буфер обмена');
+    });
+  }
 }
 
 // ── Тост-уведомление ──
@@ -142,7 +116,6 @@ function showToast(message) {
     document.body.appendChild(toast);
   }
   toast.textContent = message;
-  // перезапуск анимации появления
   void toast.offsetWidth;
   toast.classList.add('show');
   clearTimeout(toastTimer);
@@ -181,18 +154,27 @@ function closeThemes() {
   document.body.style.overflow = '';
 }
 
+// ── Load More ──
+function loadMore() {
+  displayedCount += 30;
+  renderGallery();
+}
+
 // ── Обработчики ──
-document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-document.getElementById('lightbox').addEventListener('click', (e) => {
-  if (e.target.id === 'lightbox') closeLightbox();
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
 });
+document.getElementById('btnCopyModal').addEventListener('click', copyModalPrompt);
 
 document.getElementById('themesBtn').addEventListener('click', openThemes);
 document.getElementById('themesClose').addEventListener('click', closeThemes);
 document.getElementById('themesBackdrop').addEventListener('click', closeThemes);
 
+document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeLightbox(); closeThemes(); }
+  if (e.key === 'Escape') { closeModal(); closeThemes(); }
 });
 
 // Фильтр по категориям
@@ -201,6 +183,7 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
+    displayedCount = 30;
     renderGallery();
   });
 });
@@ -211,6 +194,7 @@ document.querySelectorAll('.filter-btn[data-gender]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-gender]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentGender = btn.dataset.gender;
+    displayedCount = 30;
     renderGallery();
   });
 });
