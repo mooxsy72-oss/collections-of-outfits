@@ -112,7 +112,7 @@
 { "id": 111, "title": "", "img": "outfits/111.jpg", "prompt": "outfits/111.txt", "category": "modern", "gender": "male" },
 { "id": 112, "title": "", "img": "outfits/112.jpg", "prompt": "outfits/112.txt", "category": "modern", "gender": "male" },
 { "id": 113, "title": "", "img": "outfits/113.jpg", "prompt": "outfits/113.txt", "category": "fantasy", "gender": "male" },
-{ "id": 114, "title": "", "img": "outfits/114.jpg", "prompt": "outfits/114.txt", "category": "modern", "gender": "male" },
+{ "id": 114, "title": "", "img": "outfits/114.jpg", "prompt": "outfits/114.txt", "category": "fantasy", "gender": "male" },
 { "id": 115, "title": "", "img": "outfits/115.jpg", "prompt": "outfits/115.txt", "category": "folk", "gender": "male" },
 { "id": 116, "title": "", "img": "outfits/116.jpg", "prompt": "outfits/116.txt", "category": "fantasy", "gender": "male" },
 { "id": 117, "title": "", "img": "outfits/117.jpg", "prompt": "outfits/117.txt", "category": "postapoc", "gender": "male" },
