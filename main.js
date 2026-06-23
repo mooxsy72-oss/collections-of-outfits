@@ -17,13 +17,14 @@ let currentFilter = 'all';
 let currentGender = 'all';
 let displayedCount = 40;
 
-function shuffleArray(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+async function loadOutfits() {
+  try {
+    const res = await fetch('outfits.json');
+    outfits = await res.json();
+  } catch {
+    outfits = [];
   }
-  return arr;
+  renderGallery();
 }
 
 function renderGallery() {
@@ -46,7 +47,6 @@ function renderGallery() {
     loadMoreBtn.classList.add('hidden');
   }
 }
-
 
 function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
