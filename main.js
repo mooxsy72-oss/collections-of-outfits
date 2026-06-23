@@ -26,28 +26,15 @@ function shuffleArray(array) {
   return arr;
 }
 
-async function loadOutfits() {
-  try {
-    const res = await fetch('outfits.json');
-    outfits = await res.json();
-    outfits = shuffleArray(outfits);
-  } catch {
-    outfits = [];
-  }
-  renderGallery();
-}
-
 function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
 
-  let filtered = outfits.filter(o => {
+  const filtered = outfits.filter(o => {
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
   });
-
-  filtered = shuffleArray(filtered);
 
   const toShow = filtered.slice(0, displayedCount);
   toShow.forEach((outfit, i) => createCard(outfit, i));
@@ -59,6 +46,7 @@ function renderGallery() {
     loadMoreBtn.classList.add('hidden');
   }
 }
+
 
 function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
