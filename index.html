@@ -7,17 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- ── Header ── -->
   <header>
     <h1>Коллекция нарядов by Mooxsy</h1>
-    <button id="themesBtn" class="themes-btn">Мои темы</button>
+    <button class="themes-btn" id="themesBtn">Мои темы</button>
   </header>
 
+  <!-- ── Фильтр по полу ── -->
   <div class="filters filters-gender">
     <button class="filter-btn active" data-gender="all">Все</button>
     <button class="filter-btn" data-gender="female">♀ Женское</button>
     <button class="filter-btn" data-gender="male">♂ Мужское</button>
   </div>
 
+  <!-- ── Фильтр по категориям ── -->
   <div class="filters">
     <button class="filter-btn active" data-filter="all">Все наряды</button>
     <button class="filter-btn" data-filter="folk">Народные и исторические</button>
@@ -26,44 +30,52 @@
     <button class="filter-btn" data-filter="fantasy">Фэнтези</button>
     <button class="filter-btn" data-filter="winx">Winx</button>
     <button class="filter-btn" data-filter="postapoc">Постапокалипсис</button>
-    <button class="filter-btn" data-filter="knight">Knight core</button>
-    <button class="filter-btn" data-filter="rus">Rusreal</button>
+    <button class="filter-btn" data-filter="knightcore">Knight core</button>
+    <button class="filter-btn" data-filter="rusreal">Rusreal</button>
     <button class="filter-btn" data-filter="savage">Savage</button>
-    <button class="filter-btn" data-filter="strange">Зазеркалье</button>
-    <button class="filter-btn" data-filter="sci">sci-fi</button>
+    <button class="filter-btn" data-filter="zazerkalye">Зазеркалье</button>
+    <button class="filter-btn" data-filter="scifi">sci-fi</button>
   </div>
 
-  <div id="gallery" class="gallery"></div>
+  <!-- ── Галерея ── -->
+  <div class="gallery" id="gallery"></div>
 
+  <!-- ── Кнопка "Загрузить ещё" ── -->
   <div class="load-more-wrapper">
-    <button id="loadMoreBtn" class="btn-load-more">Загрузить ещё</button>
+    <button class="btn-load-more hidden" id="loadMoreBtn">Загрузить ещё</button>
   </div>
 
-  <!-- Модальное окно (Instagram-style) -->
-  <div id="modal" class="modal">
-    <button id="modalClose" class="modal-close">✕</button>
+  <!-- ── Модальное окно ── -->
+  <div class="modal" id="modal">
     <div class="modal-content">
+      <button class="modal-close" id="modalClose">✕</button>
+
       <div class="modal-left">
-        <img id="modalImg" src="" alt="outfit">
+        <button class="modal-nav modal-nav-prev" id="modalNavPrev">‹</button>
+        <div class="modal-img-wrapper" id="modalImgWrapper">
+          <img id="modalImg" src="" alt="наряд">
+        </div>
+        <button class="modal-nav modal-nav-next" id="modalNavNext">›</button>
       </div>
+
       <div class="modal-right">
-        <div id="modalPrompt" class="modal-prompt-box">Загрузка...</div>
+        <div class="modal-prompt-box" id="modalPrompt">Загрузка...</div>
         <div class="modal-footer">
-          <button id="btnCopyModal" class="btn-copy-modal">Скопировать</button>
+          <button class="btn-copy-modal" id="btnCopyModal"><span>Скопировать</span></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Панель тем -->
-  <div id="themesPanel" class="themes-panel">
-    <div id="themesBackdrop" class="themes-backdrop"></div>
+  <!-- ── Панель тем ── -->
+  <div class="themes-panel" id="themesPanel">
+    <div class="themes-backdrop" id="themesBackdrop"></div>
     <div class="themes-drawer">
       <div class="themes-drawer-head">
         <h2>Мои темы для SillyTavern</h2>
-        <button id="themesClose" class="themes-close">✕</button>
+        <button class="themes-close" id="themesClose">✕</button>
       </div>
-      <div id="themesGrid" class="themes-grid"></div>
+      <div class="themes-grid" id="themesGrid"></div>
     </div>
   </div>
 
