@@ -16,6 +16,8 @@ let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
 let displayedCount = 40;
+let currentModalIndex = 0;
+let filteredOutfits = [];
 
 async function loadOutfits() {
   try {
@@ -31,17 +33,17 @@ function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
 
-  const filtered = outfits.filter(o => {
+  filteredOutfits = outfits.filter(o => {
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
   });
 
-  const toShow = filtered.slice(0, displayedCount);
+  const toShow = filteredOutfits.slice(0, displayedCount);
   toShow.forEach((outfit, i) => createCard(outfit, i));
 
   const loadMoreBtn = document.getElementById('loadMoreBtn');
-  if (filtered.length > displayedCount) {
+  if (filteredOutfits.length > displayedCount) {
     loadMoreBtn.classList.remove('hidden');
   } else {
     loadMoreBtn.classList.add('hidden');
@@ -59,7 +61,10 @@ function createCard(outfit, i) {
   img.loading = 'lazy';
 
   wrap.appendChild(img);
-  wrap.addEventListener('click', () => openModal(outfit));
+  wrap.addEventListener('click', () => {
+    currentModalIndex = filteredOutfits.indexOf(outfit);
+    openModal(outfit);
+  });
   gallery.appendChild(wrap);
 }
 
@@ -79,6 +84,10 @@ async function openModal(outfit) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modalImg');
   const modalPrompt = document.getElementById('modalPrompt');
+  const wrapper = document.getElementById('modalImgWrapper');
+
+  // сброс зума при открытии нового фото
+  wrapper.classList.remove('zoomed');
 
   modalImg.src = outfit.img;
   modalPrompt.textContent = 'Загрузка...';
@@ -94,6 +103,38 @@ function closeModal() {
   const modal = document.getElementById('modal');
   modal.classList.remove('open');
   document.body.style.overflow = '';
+  document.getElementById('modalImgWrapper').classList.remove('zoomed');
+}
+
+// ── Навигация по нарядам (вперёд/назад) ──
+function showPrev() {
+  if (filteredOutfits.length === 0) return;
+  currentModalIndex = (currentModalIndex - 1 + filteredOutfits.length) % filteredOutfits.length;
+  openModal(filteredOutfits[currentModalIndex]);
+}
+
+function showNext() {
+  if (filteredOutfits.length === 0) return;
+  currentModalIndex = (currentModalIndex + 1) % filteredOutfits.length;
+  openModal(filteredOutfits[currentModalIndex]);
+}
+
+// ── Зум фото по клику ──
+function toggleZoom(e) {
+  const wrapper = document.getElementById('modalImgWrapper');
+  const img = document.getElementById('modalImg');
+
+  if (wrapper.classList.contains('zoomed')) {
+    wrapper.classList.remove('zoomed');
+    img.style.transformOrigin = 'center';
+  } else {
+    // зум к точке клика
+    const rect = wrapper.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    img.style.transformOrigin = `${x}% ${y}%`;
+    wrapper.classList.add('zoomed');
+  }
 }
 
 function copyModalPrompt() {
@@ -166,6 +207,9 @@ document.getElementById('modal').addEventListener('click', (e) => {
   if (e.target.id === 'modal') closeModal();
 });
 document.getElementById('btnCopyModal').addEventListener('click', copyModalPrompt);
+document.getElementById('modalImgWrapper').addEventListener('click', toggleZoom);
+document.getElementById('modalNavPrev').addEventListener('click', showPrev);
+document.getElementById('modalNavNext').addEventListener('click', showNext);
 
 document.getElementById('themesBtn').addEventListener('click', openThemes);
 document.getElementById('themesClose').addEventListener('click', closeThemes);
@@ -175,6 +219,10 @@ document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeModal(); closeThemes(); }
+  if (document.getElementById('modal').classList.contains('open')) {
+    if (e.key === 'ArrowLeft') showPrev();
+    if (e.key === 'ArrowRight') showNext();
+  }
 });
 
 // Фильтр по категориям
