@@ -23,7 +23,7 @@
   { "id": 22, "title": "", "img": "outfits/22.jpg", "prompt": "outfits/22.txt", "category": "folk", "gender": "female" },
   { "id": 23, "title": "", "img": "outfits/23.jpg", "prompt": "outfits/23.txt", "category": "folk", "gender": "female" },
   { "id": 24, "title": "", "img": "outfits/24.jpg", "prompt": "outfits/24.txt", "category": "elegant", "gender": "female" },
-  { "id": 25, "title": "", "img": "outfits/25.jpg", "prompt": "outfits/25.txt", "category": "folk", "gender": "female" },
+  { "id": 25, "title": "", "img": "outfits/25.jpg", "prompt": "outfits/25.txt", "category": "fantasy", "gender": "female" },
   { "id": 26, "title": "", "img": "outfits/26.jpg", "prompt": "outfits/26.txt", "category": "fantasy", "gender": "female" },
   { "id": 27, "title": "", "img": "outfits/27.jpg", "prompt": "outfits/27.txt", "category": "modern", "gender": "female" },
   { "id": 28, "title": "", "img": "outfits/28.jpg", "prompt": "outfits/28.txt", "category": "elegant", "gender": "female" },
