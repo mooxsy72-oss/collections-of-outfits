@@ -93,7 +93,7 @@
   { "id": 92, "title": "", "img": "outfits/92.jpg", "prompt": "outfits/92.txt", "category": "elegant", "gender": "male" },
   { "id": 93, "title": "", "img": "outfits/93.jpg", "prompt": "outfits/93.txt", "category": "elegant", "gender": "male" },
   { "id": 94, "title": "", "img": "outfits/94.jpg", "prompt": "outfits/94.txt", "category": "folk", "gender": "male" },
-  { "id": 95, "title": "", "img": "outfits/95.jpg", "prompt": "outfits/95.txt", "category": "fantasy", "gender": "male" },
+  { "id": 95, "title": "", "img": "outfits/95.jpg", "prompt": "outfits/95.txt", "category": "winx", "gender": "female" },
   { "id": 96, "title": "", "img": "outfits/96.jpg", "prompt": "outfits/96.txt", "category": "fantasy", "gender": "male" },
   { "id": 97, "title": "", "img": "outfits/97.jpg", "prompt": "outfits/97.txt", "category": "folk", "gender": "male" },
   { "id": 98, "title": "", "img": "outfits/98.jpg", "prompt": "outfits/98.txt", "category": "elegant", "gender": "male" },
