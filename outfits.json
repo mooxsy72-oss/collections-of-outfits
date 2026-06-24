@@ -169,6 +169,5 @@
 { "id": 168, "title": "", "img": "outfits/168.jpg", "prompt": "outfits/168.txt", "category": "winx", "gender": "female" },
 { "id": 169, "title": "", "img": "outfits/169.jpg", "prompt": "outfits/169.txt", "category": "winx", "gender": "female" },
 { "id": 170, "title": "", "img": "outfits/170.jpg", "prompt": "outfits/170.txt", "category": "winx", "gender": "female" },
-{ "id": 171, "title": "", "img": "outfits/171.jpg", "prompt": "outfits/171.txt", "category": "folk", "gender": "female" },
-{ "id": 250, "title": "", "img": "outfits/250.jpg", "prompt": "outfits/250.txt", "category": "folk", "gender": "female" }
+{ "id": 171, "title": "", "img": "outfits/171.jpg", "prompt": "outfits/171.txt", "category": "winx", "gender": "female" }
 ]
