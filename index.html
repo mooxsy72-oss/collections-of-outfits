@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a1d">
   <title>Коллекция нарядов by Mooxsy</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -48,15 +52,17 @@
 
   <!-- ── Модальное окно ── -->
   <div class="modal" id="modal">
+    <!-- стрелки вынесены наружу контента, ближе к краям экрана -->
+    <button class="modal-nav modal-nav-prev" id="modalNavPrev">‹</button>
+    <button class="modal-nav modal-nav-next" id="modalNavNext">›</button>
+
     <div class="modal-content">
       <button class="modal-close" id="modalClose">✕</button>
 
       <div class="modal-left">
-        <button class="modal-nav modal-nav-prev" id="modalNavPrev">‹</button>
         <div class="modal-img-wrapper" id="modalImgWrapper">
           <img id="modalImg" src="" alt="наряд">
         </div>
-        <button class="modal-nav modal-nav-next" id="modalNavNext">›</button>
       </div>
 
       <div class="modal-right">
