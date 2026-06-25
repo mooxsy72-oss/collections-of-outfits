@@ -196,7 +196,10 @@
 { "id": 195, "title": "", "img": "outfits/195.jpg", "prompt": "outfits/195.txt", "category": "knightcore", "gender": "female" },
 { "id": 196, "title": "", "img": "outfits/196.jpg", "prompt": "outfits/196.txt", "category": "knightcore", "gender": "female" },
 { "id": 197, "title": "", "img": "outfits/197.jpg", "prompt": "outfits/197.txt", "category": "rusreal", "gender": "male" },
-{ "id": 198, "title": "", "img": "outfits/198.jpg", "prompt": "outfits/198.txt", "category": "folk", "gender": "female" },
-{ "id": 199, "title": "", "img": "outfits/199.jpg", "prompt": "outfits/199.txt", "category": "folk", "gender": "female" },
-{ "id": 200, "title": "", "img": "outfits/200.jpg", "prompt": "outfits/200.txt", "category": "folk", "gender": "female" }
+{ "id": 198, "title": "", "img": "outfits/198.jpg", "prompt": "outfits/198.txt", "category": "knightcore", "gender": "male" },
+{ "id": 199, "title": "", "img": "outfits/199.jpg", "prompt": "outfits/199.txt", "category": "knightcore", "gender": "male" },
+{ "id": 200, "title": "", "img": "outfits/200.jpg", "prompt": "outfits/200.txt", "category": "fantasy", "gender": "male" },
+{ "id": 201, "title": "", "img": "outfits/201.jpg", "prompt": "outfits/201.txt", "category": "savage", "gender": "male" },
+{ "id": 202, "title": "", "img": "outfits/202.jpg", "prompt": "outfits/202.txt", "category": "zazerkalye", "gender": "male" },
+{ "id": 203, "title": "", "img": "outfits/203.jpg", "prompt": "outfits/203.txt", "category": "fantasy", "gender": "male" }
 ]
