@@ -221,5 +221,18 @@
 { "id": 220, "title": "", "img": "outfits/220.jpg", "prompt": "outfits/220.txt", "category": "modern", "gender": "male" },
 { "id": 221, "title": "", "img": "outfits/221.jpg", "prompt": "outfits/221.txt", "category": "modern", "gender": "male" },
 { "id": 222, "title": "", "img": "outfits/222.jpg", "prompt": "outfits/222.txt", "category": "modern", "gender": "male" },
-{ "id": 223, "title": "", "img": "outfits/223.jpg", "prompt": "outfits/223.txt", "category": "modern", "gender": "male" }
+{ "id": 223, "title": "", "img": "outfits/223.jpg", "prompt": "outfits/223.txt", "category": "modern", "gender": "male" },
+{ "id": 224, "title": "", "img": "outfits/224.jpg", "prompt": "outfits/224.txt", "category": "modern", "gender": "male" },
+{ "id": 225, "title": "", "img": "outfits/225.jpg", "prompt": "outfits/225.txt", "category": "modern", "gender": "male" },
+{ "id": 226, "title": "", "img": "outfits/226.jpg", "prompt": "outfits/226.txt", "category": "modern", "gender": "male" },
+{ "id": 227, "title": "", "img": "outfits/227.jpg", "prompt": "outfits/227.txt", "category": "modern", "gender": "male" },
+{ "id": 228, "title": "", "img": "outfits/228.jpg", "prompt": "outfits/228.txt", "category": "modern", "gender": "male" },
+{ "id": 229, "title": "", "img": "outfits/229.jpg", "prompt": "outfits/229.txt", "category": "modern", "gender": "male" },
+{ "id": 230, "title": "", "img": "outfits/230.jpg", "prompt": "outfits/230.txt", "category": "modern", "gender": "male" },
+{ "id": 231, "title": "", "img": "outfits/231.jpg", "prompt": "outfits/231.txt", "category": "savage", "gender": "male" },
+{ "id": 232, "title": "", "img": "outfits/232.jpg", "prompt": "outfits/232.txt", "category": "savage", "gender": "male" },
+{ "id": 233, "title": "", "img": "outfits/233.jpg", "prompt": "outfits/233.txt", "category": "savage", "gender": "male" },
+{ "id": 234, "title": "", "img": "outfits/234.jpg", "prompt": "outfits/234.txt", "category": "savage", "gender": "male" },
+{ "id": 235, "title": "", "img": "outfits/235.jpg", "prompt": "outfits/235.txt", "category": "savage", "gender": "male" },
+{ "id": 236, "title": "", "img": "outfits/236.jpg", "prompt": "outfits/236.txt", "category": "savage", "gender": "female" }
 ]
