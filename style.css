@@ -292,6 +292,7 @@ header h1 {
 .modal-prompt-box {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   font-size: 0.88rem;
   line-height: 1.8;
   color: var(--text);
@@ -300,6 +301,7 @@ header h1 {
   border-radius: 6px;
   background: rgba(0,0,0,0.2);
 }
+
 
 .modal-footer { display: flex; justify-content: flex-end; }
 
@@ -558,6 +560,17 @@ header h1 {
   .modal-nav-prev { left: 0.3rem; }
   .modal-nav-next { right: 0.3rem; }
   .modal-close { top: 0.7rem; right: 0.7rem; }
-  .modal-right { padding: 1.2rem; }
-  .toast { font-size: 0.82rem; }
+.modal-right {
+  padding: 1.2rem;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.modal-prompt-box {
+  max-height: none;
+  overflow-y: scroll;
+}
+
+.toast { font-size: 0.82rem; }
+
 }
