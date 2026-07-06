@@ -254,7 +254,7 @@
 { "id": 253, "title": "", "img": "outfits/253.jpg", "prompt": "outfits/253.txt", "category": "zazerkalye", "gender": "female" },
 { "id": 254, "title": "", "img": "outfits/254.jpg", "prompt": "outfits/254.txt", "category": "elegant", "gender": "female" },
 { "id": 255, "title": "", "img": "outfits/255.jpg", "prompt": "outfits/255.txt", "category": "fantasy", "gender": "female" },
-{ "id": 256, "title": "", "img": "outfits/256.jpg", "prompt": "outfits/256.txt", "category": "fantasy", "gender":"female" },
+{ "id": 256, "title": "", "img": "outfits/256.jpg", "prompt": "outfits/256.txt", "category": "fantasy", "gender": "female" },
 { "id": 257, "title": "", "img": "outfits/257.jpg", "prompt": "outfits/257.txt", "category": "fantasy", "gender": "female" },
 { "id": 258, "title": "", "img": "outfits/258.jpg", "prompt": "outfits/258.txt", "category": "postapoc", "gender": "male" },
 { "id": 259, "title": "", "img": "outfits/259.jpg", "prompt": "outfits/259.txt", "category": "elegant", "gender": "female" },
