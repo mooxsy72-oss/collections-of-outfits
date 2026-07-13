@@ -213,7 +213,7 @@
 { "id": 212, "title": "", "img": "outfits/212.jpg", "prompt": "outfits/212.txt", "category": "fantasy", "gender": "female" },
 { "id": 213, "title": "", "img": "outfits/213.jpg", "prompt": "outfits/213.txt", "category": "elegant", "gender": "female" },
 { "id": 214, "title": "", "img": "outfits/214.jpg", "prompt": "outfits/214.txt", "category": "kawaii", "gender": "female" },
-{ "id": 215, "title": "", "img": "outfits/215.jpg", "prompt": "outfits/215.txt", "category": "modern", "gender": "female" },
+{ "id": 215, "title": "", "img": "outfits/215.jpg", "prompt": "outfits/215.txt", "category": "sexy", "gender": "female" },
 { "id": 216, "title": "", "img": "outfits/216.jpg", "prompt": "outfits/216.txt", "category": "kawaii", "gender": "female" },
 { "id": 217, "title": "", "img": "outfits/217.jpg", "prompt": "outfits/217.txt", "category": "kawaii", "gender": "female" },
 { "id": 218, "title": "", "img": "outfits/218.jpg", "prompt": "outfits/218.txt", "category": "elegant", "gender": "female" },
@@ -235,7 +235,7 @@
 { "id": 234, "title": "", "img": "outfits/234.jpg", "prompt": "outfits/234.txt", "category": "savage", "gender": "male" },
 { "id": 235, "title": "", "img": "outfits/235.jpg", "prompt": "outfits/235.txt", "category": "zazerkalye", "gender": "male" },
 { "id": 236, "title": "", "img": "outfits/236.jpg", "prompt": "outfits/236.txt", "category": "savage", "gender": "female" },
-{ "id": 237, "title": "", "img": "outfits/237.jpg", "prompt": "outfits/237.txt", "category": "fantasy", "gender": "female" },
+{ "id": 237, "title": "", "img": "outfits/237.jpg", "prompt": "outfits/237.txt", "category": "sexy", "gender": "female" },
 { "id": 238, "title": "", "img": "outfits/238.jpg", "prompt": "outfits/238.txt", "category": "kawaii", "gender": "female" },
 { "id": 239, "title": "", "img": "outfits/239.jpg", "prompt": "outfits/239.txt", "category": "elegant", "gender": "female" },
 { "id": 240, "title": "", "img": "outfits/240.jpg", "prompt": "outfits/240.txt", "category": "modern", "gender": "female" },
@@ -353,5 +353,6 @@
 { "id": 352, "title": "", "img": "outfits/352.jpg", "prompt": "outfits/352.txt", "category": "modern", "gender": "female" },
 { "id": 353, "title": "", "img": "outfits/353.jpg", "prompt": "outfits/353.txt", "category": "folk", "gender": "female" },
 { "id": 354, "title": "", "img": "outfits/354.jpg", "prompt": "outfits/354.txt", "category": "folk", "gender": "female" },
-{ "id": 355, "title": "", "img": "outfits/355.jpg", "prompt": "outfits/355.txt", "category": "witch", "gender": "female" }
+{ "id": 355, "title": "", "img": "outfits/355.jpg", "prompt": "outfits/355.txt", "category": "witch", "gender": "female" },
+{ "id": 356, "title": "", "img": "outfits/356.jpg", "prompt": "outfits/356.txt", "category": "zazerkalye", "gender": "female" }
 ]
