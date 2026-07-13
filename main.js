@@ -60,7 +60,18 @@ function createCard(outfit, i) {
   img.alt = outfit.title || 'outfit';
   img.loading = 'lazy';
 
+  // кнопка «скопировать промпт» прямо на карточке
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'card-copy-btn';
+  copyBtn.type = 'button';
+  copyBtn.textContent = 'Скопировать промпт';
+  copyBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // чтобы не открывалось большое окно
+    copyPrompt(outfit);
+  });
+
   wrap.appendChild(img);
+  wrap.appendChild(copyBtn);
   wrap.addEventListener('click', () => {
     currentModalIndex = filteredOutfits.indexOf(outfit);
     openModal(outfit);
@@ -79,6 +90,21 @@ async function getPromptText(outfit) {
   return outfit._promptText;
 }
 
+// копирование промпта любого наряда (с карточки)
+async function copyPrompt(outfit) {
+  const text = await getPromptText(outfit);
+  if (!text || text === '(промпт недоступен)') {
+    showToast('Промпт недоступен');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('Промпт скопирован');
+  } catch {
+    showToast('Не удалось скопировать');
+  }
+}
+
 // ── Модальное окно ──
 async function openModal(outfit) {
   const modal = document.getElementById('modal');
@@ -89,7 +115,12 @@ async function openModal(outfit) {
   // сброс зума при открытии нового фото
   wrapper.classList.remove('zoomed');
 
+  // плавное появление картинки после загрузки
+  modalImg.classList.remove('loaded');
+  modalImg.onload = () => modalImg.classList.add('loaded');
   modalImg.src = outfit.img;
+  if (modalImg.complete) modalImg.classList.add('loaded');
+
   modalPrompt.textContent = 'Загрузка...';
 
   modal.classList.add('open');
@@ -141,7 +172,7 @@ function copyModalPrompt() {
   const text = document.getElementById('modalPrompt').textContent;
   if (text && text !== 'Загрузка...') {
     navigator.clipboard.writeText(text).then(() => {
-      showToast('Промпт скопирован в буфер обмена');
+      showToast('Промпт скопирован');
     });
   }
 }
@@ -236,10 +267,10 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
   });
 });
 
-// Фильтр по полу
-document.querySelectorAll('.filter-btn[data-gender]').forEach(btn => {
+// Фильтр по полу (круглые значки в шапке)
+document.querySelectorAll('.gender-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn[data-gender]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentGender = btn.dataset.gender;
     displayedCount = 40;
