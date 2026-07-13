@@ -341,7 +341,7 @@
 { "id": 340, "title": "", "img": "outfits/340.jpg", "prompt": "outfits/340.txt", "category": "folk", "gender": "female" },
 { "id": 341, "title": "", "img": "outfits/341.jpg", "prompt": "outfits/341.txt", "category": "modern", "modern": "female" },
 { "id": 342, "title": "", "img": "outfits/342.jpg", "prompt": "outfits/342.txt", "category": "slavic", "gender": "female" },
-{ "id": 343, "title": "", "img": "outfits/343.jpg", "prompt": "outfits/343.txt", "category": "fantasy", "gender": "female" },
+{ "id": 343, "title": "", "img": "outfits/343.jpg", "prompt": "outfits/343.txt", "category": "witch", "gender": "female" },
 { "id": 344, "title": "", "img": "outfits/344.jpg", "prompt": "outfits/344.txt", "category": "sexy", "gender": "female" },
 { "id": 345, "title": "", "img": "outfits/345.jpg", "prompt": "outfits/345.txt", "category": "elegant", "gender": "female" },
 { "id": 346, "title": "", "img": "outfits/346.jpg", "prompt": "outfits/346.txt", "category": "modern", "gender": "female" },
