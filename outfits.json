@@ -318,5 +318,11 @@
 { "id": 317, "title": "", "img": "outfits/317.jpg", "prompt": "outfits/317.txt", "category": "modern", "gender": "female" },
 { "id": 318, "title": "", "img": "outfits/318.jpg", "prompt": "outfits/318.txt", "category": "modern", "gender": "female" },
 { "id": 319, "title": "", "img": "outfits/319.jpg", "prompt": "outfits/319.txt", "category": "modern", "gender": "female" },
-{ "id": 320, "title": "", "img": "outfits/320.jpg", "prompt": "outfits/320.txt", "category": "modern", "gender": "female" }
+{ "id": 320, "title": "", "img": "outfits/320.jpg", "prompt": "outfits/320.txt", "category": "modern", "gender": "female" },
+  { "id": 321, "title": "", "img": "outfits/321.jpg", "prompt": "outfits/321.txt", "category": "ball", "gender": "female" },
+  { "id": 322, "title": "", "img": "outfits/322.jpg", "prompt": "outfits/322.txt", "category": "ball", "gender": "female" },
+  { "id": 323, "title": "", "img": "outfits/323.jpg", "prompt": "outfits/323.txt", "category": "ball", "gender": "female" },
+  { "id": 324, "title": "", "img": "outfits/324.jpg", "prompt": "outfits/324.txt", "category": "ball", "gender": "female" },
+  { "id": 325, "title": "", "img": "outfits/325.jpg", "prompt": "outfits/325.txt", "category": "ball", "gender": "female" },
+  { "id": 326, "title": "", "img": "outfits/326.jpg", "prompt": "outfits/326.txt", "category": "ball", "gender": "female" }
 ]
