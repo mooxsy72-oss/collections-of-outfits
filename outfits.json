@@ -280,7 +280,7 @@
 { "id": 279, "title": "", "img": "outfits/279.jpg", "prompt": "outfits/279.txt", "category": "modern", "gender": "female" },
 { "id": 280, "title": "", "img": "outfits/280.jpg", "prompt": "outfits/280.txt", "category": "modern", "gender": "female" },
 { "id": 281, "title": "", "img": "outfits/281.jpg", "prompt": "outfits/281.txt", "category": "elegant", "gender": "female" },
-{ "id": 282, "title": "", "img": "outfits/282.jpg", "prompt": "outfits/282.txt", "category": "fantasy", "gender": "female" },
+{ "id": 282, "title": "", "img": "outfits/282.jpg", "prompt": "outfits/282.txt", "category": "witch", "gender": "female" },
 { "id": 283, "title": "", "img": "outfits/283.jpg", "prompt": "outfits/283.txt", "category": "elegant", "gender": "female" },
 { "id": 284, "title": "", "img": "outfits/284.jpg", "prompt": "outfits/284.txt", "category": "elegant", "gender": "female" },
 { "id": 285, "title": "", "img": "outfits/285.jpg", "prompt": "outfits/285.txt", "category": "modern", "gender": "male" },
