@@ -263,7 +263,7 @@
 { "id": 262, "title": "", "img": "outfits/262.jpg", "prompt": "outfits/262.txt", "category": "rusreal", "gender": "male" },
 { "id": 263, "title": "", "img": "outfits/263.jpg", "prompt": "outfits/263.txt", "category": "winx", "gender": "male" },
 { "id": 264, "title": "", "img": "outfits/264.jpg", "prompt": "outfits/264.txt", "category": "modern", "gender": "male" },
-{ "id": 265, "title": "", "img": "outfits/265.jpg", "prompt": "outfits/265.txt", "category": "folk", "gender": "female" },
+{ "id": 265, "title": "", "img": "outfits/265.jpg", "prompt": "outfits/265.txt", "category": "fantasy", "gender": "female" },
 { "id": 266, "title": "", "img": "outfits/266.jpg", "prompt": "outfits/266.txt", "category": "modern", "gender": "male" },
 { "id": 267, "title": "", "img": "outfits/267.jpg", "prompt": "outfits/267.txt", "category": "elegant", "gender": "male" },
 { "id": 268, "title": "", "img": "outfits/268.jpg", "prompt": "outfits/268.txt", "category": "modern", "gender": "male" },
