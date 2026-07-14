@@ -360,5 +360,19 @@
 { "id": 359, "title": "", "img": "outfits/359.jpg", "prompt": "outfits/359.txt", "category": "folk", "gender": "female" },
 { "id": 360, "title": "", "img": "outfits/360.jpg", "prompt": "outfits/360.txt", "category": "ball", "gender": "female" },
 { "id": 361, "title": "", "img": "outfits/361.jpg", "prompt": "outfits/361.txt", "category": "ball", "gender": "female" },
-{ "id": 362, "title": "", "img": "outfits/362.jpg", "prompt": "outfits/362.txt", "category": "folk", "gender": "female" }
+{ "id": 362, "title": "", "img": "outfits/362.jpg", "prompt": "outfits/362.txt", "category": "folk", "gender": "female" },
+{ "id": 363, "title": "", "img": "outfits/363.jpg", "prompt": "outfits/363.txt", "category": "elegant", "gender": "female" },
+{ "id": 364, "title": "", "img": "outfits/364.jpg", "prompt": "outfits/364.txt", "category": "winx", "gender": "female" },
+{ "id": 365, "title": "", "img": "outfits/365.jpg", "prompt": "outfits/365.txt", "category": "folk", "gender": "female" },
+{ "id": 366, "title": "", "img": "outfits/366.jpg", "prompt": "outfits/366.txt", "category": "ball", "gender": "female" },
+{ "id": 367, "title": "", "img": "outfits/367.jpg", "prompt": "outfits/367.txt", "category": "folk", "gender": "female" },
+{ "id": 368, "title": "", "img": "outfits/368.jpg", "prompt": "outfits/368.txt", "category": "ball", "gender": "female" },
+{ "id": 369, "title": "", "img": "outfits/369.jpg", "prompt": "outfits/369.txt", "category": "elegant", "gender": "female" },
+{ "id": 370, "title": "", "img": "outfits/370.jpg", "prompt": "outfits/370.txt", "category": "ball", "gender": "male" },
+{ "id": 371, "title": "", "img": "outfits/371.jpg", "prompt": "outfits/371.txt", "category": "ball", "gender": "male" },
+{ "id": 372, "title": "", "img": "outfits/372.jpg", "prompt": "outfits/372.txt", "category": "folk", "gender": "male" },
+{ "id": 373, "title": "", "img": "outfits/373.jpg", "prompt": "outfits/373.txt", "category": "folk", "gender": "male" },
+{ "id": 374, "title": "", "img": "outfits/374.jpg", "prompt": "outfits/374.txt", "category": "folk", "gender": "male" },
+{ "id": 375, "title": "", "img": "outfits/375.jpg", "prompt": "outfits/375.txt", "category": "ball", "gender": "male" },
+{ "id": 376, "title": "", "img": "outfits/376.jpg", "prompt": "outfits/376.txt", "category": "elegant", "gender": "male" }
 ]
