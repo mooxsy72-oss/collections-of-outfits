@@ -208,5 +208,205 @@
     send();
 })();
 </script>
+  <style>
+@media (max-width: 760px) {
+    .nw-tags-wrap {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 7px !important;
+        max-height: 32px;
+        overflow: hidden;
+        padding: 0 8px !important;
+        transition: max-height 0.3s ease;
+    }
+
+    .nw-tags-wrap.nw-tags-open {
+        max-height: 46vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nw-tags-wrap > * {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 30px !important;
+        padding: 0 13px !important;
+        font-size: 11.5px !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+        flex: 0 0 auto !important;
+    }
+
+    .nw-tags-wrap > [data-nw-active] {
+        order: -1 !important;
+    }
+
+    .nw-tags-more {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: fit-content;
+        margin: 8px auto 4px;
+        padding: 6px 16px;
+        font-size: 11px;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: currentColor;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        opacity: 0.82;
+        transition: opacity 0.18s ease, background 0.18s ease;
+    }
+
+    .nw-tags-more:active {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .nw-tags-more::after {
+        content: '▾';
+        font-size: 10px;
+        transition: transform 0.24s ease;
+    }
+
+    .nw-tags-more.nw-tags-more-open::after {
+        transform: rotate(180deg);
+    }
+}
+
+@media (min-width: 761px) {
+    .nw-tags-more {
+        display: none !important;
+    }
+}
+</style>
+
+<script>
+(function () {
+    'use strict';
+
+    var ACTIVE_HINTS = ['active', 'selected', 'current', 'is-active', 'on'];
+
+    function findRow() {
+        var all = document.querySelectorAll('button, a, div, span, li');
+        for (var i = 0; i < all.length; i++) {
+            var el = all[i];
+            if (el.children.length) continue;
+            var t = (el.textContent || '').trim().toLowerCase();
+            if (t !== 'все наряды') continue;
+            var p = el;
+            for (var up = 0; up < 4 && p; up++) {
+                p = p.parentElement;
+                if (p && p.children.length >= 5) return p;
+            }
+        }
+        return null;
+    }
+
+    function looksActive(el) {
+        var cls = (el.className || '').toString().toLowerCase();
+        for (var i = 0; i < ACTIVE_HINTS.length; i++) {
+            if (cls.indexOf(ACTIVE_HINTS[i]) !== -1) return true;
+        }
+        return el.getAttribute('aria-selected') === 'true';
+    }
+
+    function init() {
+        var row = findRow();
+        if (!row || row.classList.contains('nw-tags-wrap')) return !!row;
+
+        row.classList.add('nw-tags-wrap');
+
+        var more = document.createElement('div');
+        more.className = 'nw-tags-more';
+        more.setAttribute('role', 'button');
+        more.setAttribute('data-nw-skip', '1');
+        row.parentNode.insertBefore(more, row.nextSibling);
+
+        function count() {
+            var n = 0;
+            for (var i = 0; i < row.children.length; i++) {
+                if (row.children[i].offsetParent !== null || true) n++;
+            }
+            return n;
+        }
+
+        function label() {
+            more.textContent = row.classList.contains('nw-tags-open')
+                ? 'Свернуть'
+                : 'Ещё ' + Math.max(0, count() - 3);
+        }
+
+        function markActive() {
+            var found = null;
+            for (var i = 0; i < row.children.length; i++) {
+                var c = row.children[i];
+                c.removeAttribute('data-nw-active');
+                if (!found && looksActive(c)) found = c;
+            }
+            if (found) found.setAttribute('data-nw-active', '1');
+        }
+
+        more.addEventListener('click', function (e) {
+            e.stopPropagation();
+            row.classList.toggle('nw-tags-open');
+            more.classList.toggle('nw-tags-more-open', row.classList.contains('nw-tags-open'));
+            label();
+        });
+
+        row.addEventListener('click', function (e) {
+            var chip = e.target;
+            while (chip && chip.parentElement !== row) chip = chip.parentElement;
+            if (!chip) return;
+            for (var i = 0; i < row.children.length; i++) {
+                row.children[i].removeAttribute('data-nw-active');
+            }
+            chip.setAttribute('data-nw-active', '1');
+            setTimeout(function () {
+                row.classList.remove('nw-tags-open');
+                more.classList.remove('nw-tags-more-open');
+                label();
+            }, 140);
+        });
+
+        markActive();
+        label();
+
+        // теги могут дорисоваться позже — следим за составом ряда
+        if (window.MutationObserver) {
+            new MutationObserver(function () {
+                markActive();
+                label();
+            }).observe(row, { childList: true, attributes: true, subtree: true });
+        }
+
+        window.addEventListener('resize', label);
+        return true;
+    }
+
+    function boot() {
+        if (init()) return;
+        var tries = 0;
+        var iv = setInterval(function () {
+            if (init() || ++tries > 40) clearInterval(iv);
+        }, 250);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+    } else {
+        boot();
+    }
+})();
+</script>
 </body>
 </html>
