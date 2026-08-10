@@ -92,122 +92,88 @@
   <script src="main.js"></script>
 <script>
 (function () {
-    if (window.parent === window) return; // прямое открытие сайта — скрипт молчит
+  if (window.parent === window) return; // открыт напрямую — молчим
 
-    var moreClicks = 0;
-    var restoring  = false;
+  var restoring = false;
 
-    // ищем активный тег: сначала по классу/атрибуту, иначе по последнему клику
-    var lastTagText = '';
+  function readState() {
+    var s = { filter: 'all', gender: 'all', count: 40, scroll: 0 };
+    try { s.filter = currentFilter; } catch (e) {}
+    try { s.gender = currentGender; } catch (e) {}
+    try { s.count  = displayedCount; } catch (e) {}
+    s.scroll = window.scrollY || document.documentElement.scrollTop || 0;
+    return s;
+  }
 
-    function findActiveTag() {
-        var sel = [
-            '.tag.active', '.tag.selected', '.tag.is-active',
-            '.filter.active', '.filter-btn.active',
-            '[data-tag].active', '[data-tag][aria-selected="true"]',
-            'button.active', '.chip.active'
-        ];
-        for (var i = 0; i < sel.length; i++) {
-            var el = document.querySelector(sel[i]);
-            if (el && el.textContent.trim()) return el.textContent.trim();
-        }
-        return lastTagText;
+  function send() {
+    if (restoring) return;
+    var s = readState();
+    s.nwOutfits = true;
+    try { window.parent.postMessage(s, '*'); } catch (e) {}
+  }
+
+  var t = null;
+  function sendLater(ms) {
+    clearTimeout(t);
+    t = setTimeout(send, ms || 260);
+  }
+
+  window.addEventListener('scroll', function () { sendLater(300); }, { passive: true });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    if (e.target.closest('[data-nw-skip]')) return;
+    if (e.target.closest('.filter-btn, .gender-btn, #loadMoreBtn')) sendLater(220);
+  }, true);
+
+  function syncButtons(state) {
+    var f = document.querySelectorAll('.filter-btn[data-filter]');
+    for (var i = 0; i < f.length; i++) {
+      f[i].classList.toggle('active', f[i].dataset.filter === state.filter);
     }
-
-    function findMoreBtn() {
-        var all = document.querySelectorAll('button, a, div, span');
-        for (var i = 0; i < all.length; i++) {
-            var t = all[i].textContent.trim();
-            if (t === 'Загрузить ещё' || t === 'Загрузить еще') return all[i];
-        }
-        return null;
+    var g = document.querySelectorAll('.gender-btn');
+    for (var j = 0; j < g.length; j++) {
+      g[j].classList.toggle('active', g[j].dataset.gender === state.gender);
     }
+  }
 
-    function send() {
-        if (restoring) return;
-        try {
-            window.parent.postMessage({
-                nwOutfits: true,
-                hash:   location.hash || '',
-                search: location.search || '',
-                scroll: window.scrollY || document.documentElement.scrollTop || 0,
-                tag:    findActiveTag(),
-                more:   moreClicks
-            }, '*');
-        } catch (e) { /* пофиг */ }
-    }
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || d.nwOutfitsRestore !== true) return;
 
-    var t = null;
-    function sendLater(ms) {
-        clearTimeout(t);
-        t = setTimeout(send, ms || 250);
-    }
+    restoring = true;
 
-    window.addEventListener('scroll', function () { sendLater(280); }, { passive: true });
-    window.addEventListener('hashchange', function () { sendLater(80); });
+    var apply = function () {
+      try {
+        if (typeof d.filter === 'string') currentFilter = d.filter;
+        if (typeof d.gender === 'string') currentGender = d.gender;
+        if (typeof d.count  === 'number') displayedCount = Math.max(40, d.count);
+        renderGallery();
+        syncButtons(d);
+      } catch (err) { /* глобалы недоступны — просто вернём скролл */ }
 
-    document.addEventListener('click', function (e) {
-        var el = e.target.closest('button, a, [data-tag], .tag, .chip, .filter, li');
-        if (!el) return;
-        var txt = el.textContent.trim();
+      var y = typeof d.scroll === 'number' ? d.scroll : 0;
+      // высота документа уже верная: у карточек задан aspect-ratio
+      window.scrollTo(0, y);
+      setTimeout(function () { window.scrollTo(0, y); }, 90);
+      setTimeout(function () { window.scrollTo(0, y); }, 400);
+      setTimeout(function () { restoring = false; }, 700);
+    };
 
-        if (txt === 'Загрузить ещё' || txt === 'Загрузить еще') {
-            moreClicks++;
-        } else if (txt && txt.length < 40) {
-            lastTagText = txt;
-            moreClicks = 0; // сменила тег — счётчик подгрузок обнуляем
-        }
-        sendLater(200);
-    }, true);
+    // ждём, пока outfits.json подгрузится
+    var tries = 0;
+    (function wait() {
+      var ready = false;
+      try { ready = Array.isArray(outfits) && outfits.length > 0; } catch (err) { ready = true; }
+      if (ready || ++tries > 40) apply();
+      else setTimeout(wait, 100);
+    })();
+  });
 
-    /* ---- восстановление по команде из расширения ---- */
-
-    window.addEventListener('message', function (e) {
-        var d = e.data;
-        if (!d || d.nwOutfitsRestore !== true) return;
-
-        restoring = true;
-        moreClicks = 0;
-
-        // 1) тег
-        if (d.tag) {
-            var cands = document.querySelectorAll('button, a, [data-tag], .tag, .chip, .filter, li');
-            for (var i = 0; i < cands.length; i++) {
-                if (cands[i].textContent.trim() === d.tag) {
-                    cands[i].click();
-                    lastTagText = d.tag;
-                    break;
-                }
-            }
-        }
-
-        // 2) подгрузка порциями, потом скролл
-        var need = typeof d.more === 'number' ? d.more : 0;
-        var done = 0;
-
-        function step() {
-            if (done < need) {
-                var btn = findMoreBtn();
-                if (btn) {
-                    btn.click();
-                    done++;
-                    moreClicks++;
-                    setTimeout(step, 220);
-                    return;
-                }
-            }
-            var y = typeof d.scroll === 'number' ? d.scroll : 0;
-            setTimeout(function () { window.scrollTo(0, y); }, 120);
-            setTimeout(function () { window.scrollTo(0, y); }, 600);
-            setTimeout(function () { restoring = false; }, 900);
-        }
-
-        setTimeout(step, d.tag ? 320 : 60);
-    });
-
-    send();
+  send();
 })();
 </script>
+
 <script>
 (function () {
   'use strict';
