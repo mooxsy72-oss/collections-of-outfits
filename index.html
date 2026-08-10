@@ -208,204 +208,100 @@
     send();
 })();
 </script>
-  <style>
-@media (max-width: 760px) {
-    .nw-tags-wrap {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 7px !important;
-        max-height: 32px;
-        overflow: hidden;
-        padding: 0 8px !important;
-        transition: max-height 0.3s ease;
-    }
-
-    .nw-tags-wrap.nw-tags-open {
-        max-height: 46vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nw-tags-wrap > * {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-height: 30px !important;
-        padding: 0 13px !important;
-        font-size: 11.5px !important;
-        line-height: 1 !important;
-        white-space: nowrap !important;
-        flex: 0 0 auto !important;
-    }
-
-    .nw-tags-wrap > [data-nw-active] {
-        order: -1 !important;
-    }
-
-    .nw-tags-more {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        width: fit-content;
-        margin: 8px auto 4px;
-        padding: 6px 16px;
-        font-size: 11px;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        color: currentColor;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 999px;
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-tap-highlight-color: transparent;
-        opacity: 0.82;
-        transition: opacity 0.18s ease, background 0.18s ease;
-    }
-
-    .nw-tags-more:active {
-        opacity: 1;
-        background: rgba(255, 255, 255, 0.12);
-    }
-
-    .nw-tags-more::after {
-        content: '▾';
-        font-size: 10px;
-        transition: transform 0.24s ease;
-    }
-
-    .nw-tags-more.nw-tags-more-open::after {
-        transform: rotate(180deg);
-    }
-}
-
-@media (min-width: 761px) {
-    .nw-tags-more {
-        display: none !important;
-    }
-}
-</style>
-
 <script>
 (function () {
-    'use strict';
+  'use strict';
 
-    var ACTIVE_HINTS = ['active', 'selected', 'current', 'is-active', 'on'];
+  var VISIBLE = 3;
 
-    function findRow() {
-        var all = document.querySelectorAll('button, a, div, span, li');
-        for (var i = 0; i < all.length; i++) {
-            var el = all[i];
-            if (el.children.length) continue;
-            var t = (el.textContent || '').trim().toLowerCase();
-            if (t !== 'все наряды') continue;
-            var p = el;
-            for (var up = 0; up < 4 && p; up++) {
-                p = p.parentElement;
-                if (p && p.children.length >= 5) return p;
-            }
+  var css = ''
+    + '.nw-tags-more{display:none;align-items:center;justify-content:center;gap:.4rem;'
+    + 'width:fit-content;margin:.55rem auto .15rem;padding:.42rem 1.15rem;border-radius:999px;'
+    + 'border:1px solid rgba(201,168,76,.3);background:transparent;color:var(--gold);'
+    + "font-family:'Jost',sans-serif;font-size:.66rem;text-transform:uppercase;letter-spacing:.12em;"
+    + 'cursor:pointer;-webkit-tap-highlight-color:transparent;'
+    + 'transition:background .25s ease,color .25s ease,border-color .25s ease}'
+    + ".nw-tags-more::after{content:'\\25BE';font-size:.6rem;line-height:1;transition:transform .25s ease}"
+    + '.nw-tags-more.nw-open::after{transform:rotate(180deg)}'
+    + '.nw-tags-more:active{background:var(--gold);color:var(--bg-deep);border-color:var(--gold)}'
+    + '@media (max-width:760px){'
+    + '.nw-tags-more{display:inline-flex}'
+    + '.filters{padding:.85rem .6rem .15rem;gap:.4rem;border-bottom:none}'
+    + '.nw-tags-more-wrap{padding-bottom:.6rem;border-bottom:1px solid var(--border-soft);text-align:center}'
+    + '.filters .filter-btn{padding:.38rem .78rem;font-size:.65rem;letter-spacing:.05em;line-height:1.15}'
+    + '.filters .filter-btn.active{order:-1}'
+    + '.filters.nw-collapsed .filter-btn[data-nw-hide]{display:none}'
+    + '}';
+
+  var st = document.createElement('style');
+  st.textContent = css;
+  document.head.appendChild(st);
+
+  function init() {
+    var row = document.querySelector('.filters');
+    if (!row || row.dataset.nwReady) return;
+    row.dataset.nwReady = '1';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'nw-tags-more-wrap';
+
+    var more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'nw-tags-more';
+    more.setAttribute('data-nw-skip', '1');
+
+    wrap.appendChild(more);
+    row.parentNode.insertBefore(wrap, row.nextSibling);
+
+    function apply() {
+      var list = row.querySelectorAll('.filter-btn');
+      var shown = 0, hidden = 0;
+
+      for (var i = 0; i < list.length; i++) {
+        var chip = list[i];
+        if (chip.classList.contains('active') || shown < VISIBLE) {
+          shown++;
+          chip.removeAttribute('data-nw-hide');
+        } else {
+          hidden++;
+          chip.setAttribute('data-nw-hide', '1');
         }
-        return null;
+      }
+
+      var collapsed = row.classList.contains('nw-collapsed');
+      more.textContent = collapsed ? ('Ещё ' + hidden) : 'Свернуть';
+      more.classList.toggle('nw-open', !collapsed);
+      wrap.style.display = (list.length > VISIBLE) ? '' : 'none';
     }
 
-    function looksActive(el) {
-        var cls = (el.className || '').toString().toLowerCase();
-        for (var i = 0; i < ACTIVE_HINTS.length; i++) {
-            if (cls.indexOf(ACTIVE_HINTS[i]) !== -1) return true;
-        }
-        return el.getAttribute('aria-selected') === 'true';
-    }
+    more.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      row.classList.toggle('nw-collapsed');
+      apply();
+    });
 
-    function init() {
-        var row = findRow();
-        if (!row || row.classList.contains('nw-tags-wrap')) return !!row;
+    row.addEventListener('click', function (e) {
+      if (!e.target.closest || !e.target.closest('.filter-btn')) return;
+      row.classList.add('nw-collapsed');
+      setTimeout(apply, 0);
+    });
 
-        row.classList.add('nw-tags-wrap');
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(apply, 140);
+    });
 
-        var more = document.createElement('div');
-        more.className = 'nw-tags-more';
-        more.setAttribute('role', 'button');
-        more.setAttribute('data-nw-skip', '1');
-        row.parentNode.insertBefore(more, row.nextSibling);
+    row.classList.add('nw-collapsed');
+    apply();
+  }
 
-        function count() {
-            var n = 0;
-            for (var i = 0; i < row.children.length; i++) {
-                if (row.children[i].offsetParent !== null || true) n++;
-            }
-            return n;
-        }
-
-        function label() {
-            more.textContent = row.classList.contains('nw-tags-open')
-                ? 'Свернуть'
-                : 'Ещё ' + Math.max(0, count() - 3);
-        }
-
-        function markActive() {
-            var found = null;
-            for (var i = 0; i < row.children.length; i++) {
-                var c = row.children[i];
-                c.removeAttribute('data-nw-active');
-                if (!found && looksActive(c)) found = c;
-            }
-            if (found) found.setAttribute('data-nw-active', '1');
-        }
-
-        more.addEventListener('click', function (e) {
-            e.stopPropagation();
-            row.classList.toggle('nw-tags-open');
-            more.classList.toggle('nw-tags-more-open', row.classList.contains('nw-tags-open'));
-            label();
-        });
-
-        row.addEventListener('click', function (e) {
-            var chip = e.target;
-            while (chip && chip.parentElement !== row) chip = chip.parentElement;
-            if (!chip) return;
-            for (var i = 0; i < row.children.length; i++) {
-                row.children[i].removeAttribute('data-nw-active');
-            }
-            chip.setAttribute('data-nw-active', '1');
-            setTimeout(function () {
-                row.classList.remove('nw-tags-open');
-                more.classList.remove('nw-tags-more-open');
-                label();
-            }, 140);
-        });
-
-        markActive();
-        label();
-
-        // теги могут дорисоваться позже — следим за составом ряда
-        if (window.MutationObserver) {
-            new MutationObserver(function () {
-                markActive();
-                label();
-            }).observe(row, { childList: true, attributes: true, subtree: true });
-        }
-
-        window.addEventListener('resize', label);
-        return true;
-    }
-
-    function boot() {
-        if (init()) return;
-        var tries = 0;
-        var iv = setInterval(function () {
-            if (init() || ++tries > 40) clearInterval(iv);
-        }, 250);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', boot);
-    } else {
-        boot();
-    }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 </body>
