@@ -90,5 +90,41 @@
   </div>
 
   <script src="main.js"></script>
+  <script>
+(function () {
+    if (window.parent === window) return; // работаем только внутри iframe
+
+    var send = function () {
+        try {
+            window.parent.postMessage({
+                nwOutfits: true,
+                hash: location.hash || '',
+                search: location.search || '',
+                scroll: window.scrollY || document.documentElement.scrollTop || 0
+            }, '*');
+        } catch (e) { /* пофиг */ }
+    };
+
+    var t = null;
+    window.addEventListener('scroll', function () {
+        clearTimeout(t);
+        t = setTimeout(send, 250);
+    }, { passive: true });
+
+    window.addEventListener('hashchange', send);
+    window.addEventListener('click', function () { setTimeout(send, 150); }, true);
+
+    window.addEventListener('message', function (e) {
+        var d = e.data;
+        if (!d || d.nwOutfitsRestore !== true) return;
+        if (typeof d.scroll !== 'number') return;
+        // два раза: сразу и после подгрузки картинок
+        setTimeout(function () { window.scrollTo(0, d.scroll); }, 60);
+        setTimeout(function () { window.scrollTo(0, d.scroll); }, 500);
+    });
+
+    send();
+})();
+</script>
 </body>
 </html>
