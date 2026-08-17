@@ -1,23 +1,11 @@
-// ── Твои темы SillyTavern (редактируй здесь) ──
-const themes = [
-  { title: "Лунная призма", img: "themes/theme1.jpg", link: "https://t.me/mooxsy69/3" },
-  { title: "Багровая призма", img: "themes/theme2.jpg", link: "https://t.me/mooxsy69/7" },
-  { title: "Розовая призма", img: "themes/theme3.jpg", link: "https://t.me/mooxsy69/14?single" },
-  { title: "Обсидиановая призма", img: "themes/theme4.jpg", link: "https://t.me/mooxsy69/14?single" },
-  { title: "Милитари", img: "themes/theme5.jpg", link: "https://t.me/mooxsy69/9" },
-  { title: "Slavic vibe", img: "themes/theme6.jpg", link: "https://t.me/mooxsy69/16" },
-  { title: "Rusreal vibe", img: "themes/theme7.jpg", link: "https://t.me/mooxsy69/17" },
-  { title: "Зеленое стекло", img: "themes/theme8.jpg", link: "https://t.me/mooxsy69/22?single" },
-  { title: "Оранжевое стекло", img: "themes/theme9.jpg", link: "https://t.me/mooxsy69/22?single" },
-  { title: "Медузки", img: "themes/theme10.jpg", link: "https://t.me/mooxsy69/18?single" }
-];
-
 let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
+let currentSort = 'default';
 let displayedCount = 40;
 let currentModalIndex = 0;
 let filteredOutfits = [];
+let newThreshold = Infinity; // с какого id считать наряд новинкой
 
 async function loadOutfits() {
   try {
@@ -26,6 +14,9 @@ async function loadOutfits() {
   } catch {
     outfits = [];
   }
+  // последние 12 по id получают бейдж NEW
+  const maxId = outfits.reduce((m, o) => Math.max(m, Number(o.id) || 0), 0);
+  newThreshold = maxId > 0 ? maxId - 11 : Infinity;
   renderGallery();
 }
 
@@ -38,6 +29,10 @@ function renderGallery() {
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
   });
+
+  if (currentSort === 'new') {
+    filteredOutfits.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
+  }
 
   const toShow = filteredOutfits.slice(0, displayedCount);
   toShow.forEach((outfit, i) => createCard(outfit, i));
@@ -72,6 +67,13 @@ function createCard(outfit, i) {
 
   wrap.appendChild(img);
   wrap.appendChild(copyBtn);
+
+  if ((Number(outfit.id) || 0) >= newThreshold) {
+    const badge = document.createElement('span');
+    badge.className = 'card-new-badge';
+    badge.textContent = 'New';
+    wrap.appendChild(badge);
+  }
   wrap.addEventListener('click', () => {
     currentModalIndex = filteredOutfits.indexOf(outfit);
     openModal(outfit);
@@ -194,38 +196,6 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
-// ── Панель тем ──
-function renderThemes() {
-  const grid = document.getElementById('themesGrid');
-  grid.innerHTML = '';
-  themes.forEach(t => {
-    const a = document.createElement('a');
-    a.className = 'theme-card';
-    a.href = t.link;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    const img = document.createElement('img');
-    img.src = t.img;
-    img.alt = t.title;
-    img.loading = 'lazy';
-    const span = document.createElement('span');
-    span.textContent = t.title;
-    a.appendChild(img);
-    a.appendChild(span);
-    grid.appendChild(a);
-  });
-}
-
-function openThemes() {
-  document.getElementById('themesPanel').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeThemes() {
-  document.getElementById('themesPanel').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
 // ── Load More ──
 function loadMore() {
   displayedCount += 40;
@@ -242,14 +212,10 @@ document.getElementById('modalImgWrapper').addEventListener('click', toggleZoom)
 document.getElementById('modalNavPrev').addEventListener('click', showPrev);
 document.getElementById('modalNavNext').addEventListener('click', showNext);
 
-document.getElementById('themesBtn').addEventListener('click', openThemes);
-document.getElementById('themesClose').addEventListener('click', closeThemes);
-document.getElementById('themesBackdrop').addEventListener('click', closeThemes);
-
 document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeModal(); closeThemes(); }
+  if (e.key === 'Escape') { closeModal(); }
   if (document.getElementById('modal').classList.contains('open')) {
     if (e.key === 'ArrowLeft') showPrev();
     if (e.key === 'ArrowRight') showNext();
@@ -278,5 +244,33 @@ document.querySelectorAll('.gender-btn').forEach(btn => {
   });
 });
 
-renderThemes();
+// ── Сортировка «Новинки» ──
+const sortNewBtn = document.getElementById('sortNewBtn');
+if (sortNewBtn) {
+  sortNewBtn.addEventListener('click', () => {
+    currentSort = currentSort === 'new' ? 'default' : 'new';
+    sortNewBtn.classList.toggle('active', currentSort === 'new');
+    displayedCount = 40;
+    renderGallery();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ── Теги: обёртка для затемнений + доводка активного тега в центр ──
+(function initFiltersScroll() {
+  const filters = document.querySelector('.filters');
+  if (!filters || filters.parentElement.classList.contains('filters-scroll')) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'filters-scroll';
+  filters.parentNode.insertBefore(wrap, filters);
+  wrap.appendChild(filters);
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  });
+})();
+
 loadOutfits();
