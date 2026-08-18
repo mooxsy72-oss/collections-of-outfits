@@ -1,7 +1,7 @@
 let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
-let currentSort = 'default';
+let currentSort = 'new';
 let displayedCount = 40;
 let currentModalIndex = 0;
 let filteredOutfits = [];
@@ -247,6 +247,9 @@ document.querySelectorAll('.gender-btn').forEach(btn => {
 // ── Сортировка «Новинки» ──
 const sortNewBtn = document.getElementById('sortNewBtn');
 if (sortNewBtn) {
+  // подсветка кнопки при загрузке страницы — сортировка включена по умолчанию
+  sortNewBtn.classList.toggle('active', currentSort === 'new');
+
   sortNewBtn.addEventListener('click', () => {
     currentSort = currentSort === 'new' ? 'default' : 'new';
     sortNewBtn.classList.toggle('active', currentSort === 'new');
