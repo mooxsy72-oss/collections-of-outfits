@@ -500,5 +500,5 @@
 { "id": 499, "title": "", "img": "outfits/499.jpg", "prompt": "outfits/499.txt", "category": "dacha", "gender": "male" },
 { "id": 500, "title": "", "img": "outfits/500.jpg", "prompt": "outfits/500.txt", "category": "dacha", "gender": "male" },
 { "id": 501, "title": "", "img": "outfits/501.jpg", "prompt": "outfits/501.txt", "category": "dacha", "gender": "male" },
-{ "id": 502, "title": "", "img": "outfits/502.jpg", "prompt": "outfits/502.txt", "category": "dacha", "gender": "male" }
+{ "id": 502, "title": "", "img": "outfits/502.jpg", "prompt": "outfits/502.txt", "category": "elegant", "gender": "male" }
 ]
