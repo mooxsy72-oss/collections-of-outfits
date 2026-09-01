@@ -272,7 +272,7 @@
 { "id": 271, "title": "", "img": "outfits/271.jpg", "prompt": "outfits/271.txt", "category": "modern", "gender": "male" },
 { "id": 272, "title": "", "img": "outfits/272.jpg", "prompt": "outfits/272.txt", "category": "rusreal", "gender": "male" },
 { "id": 273, "title": "", "img": "outfits/273.jpg", "prompt": "outfits/273.txt", "category": "elegant", "gender": "female" },
-{ "id": 274, "title": "", "img": "outfits/274.jpg", "prompt": "outfits/274.txt", "category": "modern", "gender": "female" },
+{ "id": 274, "title": "", "img": "outfits/274.jpg", "prompt": "outfits/274.txt", "category": "summer", "gender": "female" },
 { "id": 275, "title": "", "img": "outfits/275.jpg", "prompt": "outfits/275.txt", "category": "elegant", "gender": "female" },
 { "id": 276, "title": "", "img": "outfits/276.jpg", "prompt": "outfits/276.txt", "category": "elegant", "gender": "female" },
 { "id": 277, "title": "", "img": "outfits/277.jpg", "prompt": "outfits/277.txt", "category": "ball", "gender": "female" },
