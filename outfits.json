@@ -393,7 +393,7 @@
 { "id": 392, "title": "", "img": "outfits/392.jpg", "prompt": "outfits/392.txt", "category": "slavic", "gender": "male" },
 { "id": 393, "title": "", "img": "outfits/393.jpg", "prompt": "outfits/393.txt", "category": "slavic", "gender": "male" },
 { "id": 394, "title": "", "img": "outfits/394.png", "prompt": "outfits/394.txt", "category": "modern", "gender": "male" },
-{ "id": 395, "title": "", "img": "outfits/395.jpg", "prompt": "outfits/395.txt", "category": "modern", "gender": "male" },
+{ "id": 395, "title": "", "img": "outfits/395.png", "prompt": "outfits/395.txt", "category": "modern", "gender": "male" },
 { "id": 396, "title": "", "img": "outfits/396.png", "prompt": "outfits/396.txt", "category": "elegant", "gender": "female" },
 { "id": 397, "title": "", "img": "outfits/397.png", "prompt": "outfits/397.txt", "category": "modern", "gender": "female" },
 { "id": 398, "title": "", "img": "outfits/398.png", "prompt": "outfits/398.txt", "category": "elegant", "gender": "female" },
