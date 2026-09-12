@@ -590,13 +590,13 @@
 { "id": 589, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/589.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/589.txt", "category": "pyjamas", "gender": "male" },
 { "id": 590, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/590.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/590.txt", "category": "pyjamas", "gender": "male" },
 { "id": 591, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/591.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/591.txt", "category": "pyjamas", "gender": "male" },
-{ "id": 592, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/592.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/592.txt", "category": "modern", "gender": "male" },
-{ "id": 593, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/593.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/593.txt", "category": "modern", "gender": "male" },
-{ "id": 594, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/594.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/594.txt", "category": "modern", "gender": "male" },
-{ "id": 595, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/595.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/595.txt", "category": "modern", "gender": "male" },
-{ "id": 596, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/596.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/596.txt", "category": "modern", "gender": "male" },
-{ "id": 597, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/597.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/597.txt", "category": "modern", "gender": "male" },
-{ "id": 598, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/598.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/598.txt", "category": "modern", "gender": "male" },
-{ "id": 599, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/599.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/599.txt", "category": "modern", "gender": "male" },
-{ "id": 600, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/600.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/600.txt", "category": "modern", "gender": "male" }
+{ "id": 592, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/592.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/592.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 593, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/593.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/593.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 594, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/594.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/594.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 595, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/595.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/595.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 596, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/596.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/596.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 597, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/597.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/597.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 598, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/598.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/598.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 599, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/599.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/599.txt", "category": "pyjamas", "gender": "male" },
+{ "id": 600, "title": "", "img": "https://mooxsy72-oss.github.io/outfits-images/images/600.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/600.txt", "category": "pyjamas", "gender": "male" }
 ]
