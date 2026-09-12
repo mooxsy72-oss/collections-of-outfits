@@ -462,7 +462,7 @@
 { "id": 461, "title": "", "img": "outfits/461.jpg", "prompt": "outfits/461.txt", "category": "osen", "gender": "female" },
 { "id": 462, "title": "", "img": "outfits/462.png", "prompt": "outfits/462.txt", "category": "sport", "gender": "female" },
 { "id": 463, "title": "", "img": "outfits/463.jpg", "prompt": "outfits/463.txt", "category": "sport", "gender": "female" },
-{ "id": 464, "title": "", "img": "outfits/464.jpg", "prompt": "outfits/464.txt", "category": "elegant", "gender": "female" },
+{ "id": 464, "title": "", "img": "outfits/464.jpg", "prompt": "outfits/464.txt", "category": "osen", "gender": "female" },
 { "id": 465, "title": "", "img": "outfits/465.jpg", "prompt": "outfits/465.txt", "category": "osen", "gender": "female" },
 { "id": 466, "title": "", "img": "outfits/466.jpg", "prompt": "outfits/466.txt", "category": "osen", "gender": "female" },
 { "id": 467, "title": "", "img": "outfits/467.png", "prompt": "outfits/467.txt", "category": "osen", "gender": "female" },
