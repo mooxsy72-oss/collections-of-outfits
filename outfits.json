@@ -316,7 +316,7 @@
 { "id": 315, "title": "", "img": "outfits/315.png", "prompt": "outfits/315.txt", "category": "modern", "gender": "female" },
 { "id": 316, "title": "", "img": "outfits/316.jpg", "prompt": "outfits/316.txt", "category": "modern", "gender": "female" },
 { "id": 317, "title": "", "img": "outfits/317.jpg", "prompt": "outfits/317.txt", "category": "sport", "gender": "female" },
-{ "id": 318, "title": "", "img": "outfits/318.jpg", "prompt": "outfits/318.txt", "category": "modern", "gender": "female" },
+{ "id": 318, "title": "", "img": "outfits/318.png", "prompt": "outfits/318.txt", "category": "osen", "gender": "female" },
 { "id": 319, "title": "", "img": "outfits/319.jpg", "prompt": "outfits/319.txt", "category": "modern", "gender": "female" },
 { "id": 320, "title": "", "img": "outfits/320.jpg", "prompt": "outfits/320.txt", "category": "modern", "gender": "female" },
 { "id": 321, "title": "", "img": "outfits/321.jpg", "prompt": "outfits/321.txt", "category": "ball", "gender": "female" },
