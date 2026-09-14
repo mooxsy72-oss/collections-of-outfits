@@ -248,7 +248,7 @@
 { "id": 247, "title": "", "img": "outfits/247.jpg", "prompt": "outfits/247.txt", "category": "fantasy", "gender": "female" },
 { "id": 248, "title": "", "img": "outfits/248.jpg", "prompt": "outfits/248.txt", "category": "fantasy", "gender": "male" },
 { "id": 249, "title": "", "img": "outfits/249.jpg", "prompt": "outfits/249.txt", "category": "sport", "gender": "male" },
-{ "id": 250, "title": "", "img": "outfits/250.jpg", "prompt": "outfits/250.txt", "category": "sport", "gender": "male" },
+{ "id": 250, "title": "", "img": "outfits/250.png", "prompt": "outfits/250.txt", "category": "sport", "gender": "male" },
 { "id": 251, "title": "", "img": "outfits/251.jpg", "prompt": "outfits/251.txt", "category": "fantasy", "gender": "female" },
 { "id": 252, "title": "", "img": "outfits/252.jpg", "prompt": "outfits/252.txt", "category": "fantasy", "gender": "female" },
 { "id": 253, "title": "", "img": "outfits/253.jpg", "prompt": "outfits/253.txt", "category": "fantasy", "gender": "female" },
