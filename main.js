@@ -17,8 +17,6 @@ const UNDRESS_ICON = `
   </svg>`;
 
 async function loadOutfits() {
-  // Основная база и дополнительные версии загружаются независимо.
-  // Если undressed.json отсутствует, обычная галерея всё равно работает.
   try {
     const res = await fetch('outfits.json');
     outfits = await res.json();
@@ -30,16 +28,25 @@ async function loadOutfits() {
     const res = await fetch('undressed.json');
     if (!res.ok) throw new Error('undressed.json unavailable');
     const undressed = await res.json();
-    undressedById = new Map(undressed.map(item => [String(item.id), item]));
+    undressedById = new Map();
+    undressed.forEach(item => {
+      // Поддерживаются два формата записи:
+      // новый  — { id, stages: [ {img, prompt}, {img, prompt} ] }
+      // старый — { id, img, prompt }  (одна дополнительная ступень)
+      const stages = Array.isArray(item.stages)
+        ? item.stages.filter(s => s && s.img)
+        : (item.img ? [{ img: item.img, prompt: item.prompt }] : []);
+      if (stages.length) undressedById.set(String(item.id), stages);
+    });
   } catch {
     undressedById = new Map();
   }
 
-  // последние 12 по id получают бейдж NEW
   const maxId = outfits.reduce((m, o) => Math.max(m, Number(o.id) || 0), 0);
   newThreshold = maxId > 0 ? maxId - 11 : Infinity;
   renderGallery();
 }
+
 
 function renderGallery() {
   const gallery = document.getElementById('gallery');
@@ -58,6 +65,7 @@ function renderGallery() {
 
   const toShow = filteredOutfits.slice(0, displayedCount);
   toShow.forEach((outfit, i) => createCard(outfit, i));
+  preloadStageAssets(toShow);
 
   const loadMoreBtn = document.getElementById('loadMoreBtn');
   if (filteredOutfits.length > displayedCount) {
@@ -67,22 +75,66 @@ function renderGallery() {
   }
 }
 
-function getDisplayData(outfit) {
-  const alternate = undressedById.get(String(outfit.id));
-  return outfit._undressed && alternate ? alternate : outfit;
+// ── Ступени раздетости ──
+// Ступень 0 — исходный наряд из outfits.json.
+// Ступени 1, 2, ... — записи из массива stages в undressed.json.
+function getStages(outfit) {
+  return undressedById.get(String(outfit.id)) || [];
 }
 
-// Обновляет вид кнопки (подсветка + подсказка)
-function updateUndressBtn(btn, isUndressed) {
+function stageCount(outfit) {
+  return getStages(outfit).length + 1;
+}
+
+function getStageData(outfit, stage = outfit._stage || 0) {
+  if (stage === 0) return outfit;
+  return getStages(outfit)[stage - 1] || outfit;
+}
+
+// Заранее подгружаем картинки и промпты всех ступеней,
+// чтобы переключение было мгновенным и без ожидания.
+function preloadStageAssets(list) {
+  list.forEach(outfit => {
+    getStages(outfit).forEach((s, i) => {
+      if (s.img) {
+        const im = new Image();
+        im.decoding = 'async';
+        im.src = s.img;
+      }
+      getPromptText(outfit, i + 1);
+    });
+  });
+}
+
+function updateUndressBtn(btn, outfit) {
   if (!btn) return;
-  btn.classList.toggle('active', isUndressed);
-  const label = isUndressed ? 'Вернуть наряд' : 'Раздеть';
+  const stage = outfit._stage || 0;
+  const total = stageCount(outfit);
+  btn.classList.toggle('active', stage > 0);
+
+  const label = stage === 0
+    ? 'Раздеть'
+    : (stage === total - 1 ? 'Вернуть наряд' : 'Раздеть дальше');
   btn.title = label;
   btn.setAttribute('aria-label', label);
-  btn.setAttribute('aria-pressed', isUndressed ? 'true' : 'false');
+  btn.setAttribute('aria-pressed', stage > 0 ? 'true' : 'false');
 }
 
-// Короткий «пшик» самой кнопки при нажатии
+// Точки-индикаторы под кнопкой. Показываются только если ступеней больше двух.
+function renderDots(dotsEl, outfit) {
+  if (!dotsEl) return;
+  const total = stageCount(outfit);
+  const stage = outfit._stage || 0;
+
+  dotsEl.style.display = total > 2 ? '' : 'none';
+  if (dotsEl.childElementCount !== total) {
+    dotsEl.innerHTML = '';
+    for (let i = 0; i < total; i++) dotsEl.appendChild(document.createElement('span'));
+  }
+  Array.from(dotsEl.children).forEach((d, i) => d.classList.toggle('on', i === stage));
+  dotsEl.classList.toggle('lit', stage > 0);
+}
+
 function playPulse(btn) {
   if (!btn) return;
   btn.classList.remove('pulse');
@@ -90,37 +142,53 @@ function playPulse(btn) {
   btn.classList.add('pulse');
 }
 
-// Плавная подмена картинки: сначала догружаем новую, потом проявляем.
-// Так нет мигания белым и переход хорошо заметен.
-function swapImage(imgEl, src, onShown) {
-  if (!imgEl) return;
+// Настоящий кроссфейд: старая картинка живёт в слое-призраке,
+// новая проявляется поверх. Чёрных вспышек нет.
+function crossfade(imgEl, newSrc, fitMode) {
+  if (!imgEl || !newSrc) return;
+  const oldSrc = imgEl.currentSrc || imgEl.src;
+  if (oldSrc === newSrc) return;
 
-  const show = () => {
+  const host = imgEl.parentElement;
+  if (!host) { imgEl.src = newSrc; return; }
+
+  let ghost = host.querySelector('.img-ghost');
+  if (!ghost) {
+    ghost = document.createElement('div');
+    ghost.className = 'img-ghost';
+    host.insertBefore(ghost, imgEl);
+  }
+  ghost.style.backgroundImage = `url("${oldSrc}")`;
+  ghost.style.backgroundSize = fitMode;
+  ghost.classList.add('visible');
+
+  const start = () => {
     imgEl.classList.remove('img-swap');
     void imgEl.offsetWidth;
-    imgEl.src = src;
-    imgEl.classList.add('img-swap');
-    if (onShown) onShown();
+    imgEl.classList.add('img-swap', 'loaded');
+    clearTimeout(ghost._hideTimer);
+    ghost._hideTimer = setTimeout(() => ghost.classList.remove('visible'), 430);
   };
 
-  imgEl.classList.add('img-fading');
-  const pre = new Image();
-  pre.onload = pre.onerror = () => {
-    imgEl.classList.remove('img-fading');
-    show();
-  };
-  pre.src = src;
+  imgEl.src = newSrc;
+  if (imgEl.complete) start();
+  else {
+    imgEl.addEventListener('load', start, { once: true });
+    imgEl.addEventListener('error', start, { once: true });
+  }
 }
 
-// Единая точка переключения: обновляет и карточку, и открытую модалку
-function setUndressed(outfit, value) {
-  outfit._undressed = value;
-  const data = getDisplayData(outfit);
+// Единая точка переключения ступени: обновляет карточку и открытую модалку
+function setStage(outfit, stage) {
+  const total = stageCount(outfit);
+  outfit._stage = ((stage % total) + total) % total;
+  const data = getStageData(outfit);
 
   const ref = cardRefs.get(outfit);
   if (ref) {
-    swapImage(ref.img, data.img);
-    updateUndressBtn(ref.btn, value);
+    crossfade(ref.img, data.img, 'cover');
+    updateUndressBtn(ref.btn, outfit);
+    renderDots(ref.dots, outfit);
     playPulse(ref.btn);
   }
 
@@ -133,15 +201,16 @@ function setUndressed(outfit, value) {
   const modalPrompt = document.getElementById('modalPrompt');
   const modalBtn = document.getElementById('modalUndressBtn');
 
-  swapImage(modalImg, data.img, () => modalImg.classList.add('loaded'));
-  updateUndressBtn(modalBtn, value);
+  crossfade(modalImg, data.img, 'contain');
+  updateUndressBtn(modalBtn, outfit);
+  renderDots(document.getElementById('modalUndressDots'), outfit);
   playPulse(modalBtn);
 
-  modalPrompt.textContent = 'Загрузка...';
   getPromptText(outfit).then(text => {
     if (filteredOutfits[currentModalIndex] === outfit) modalPrompt.textContent = text;
   });
 }
+
 
 function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
@@ -150,25 +219,30 @@ function createCard(outfit, i) {
   wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '');
 
   const img = document.createElement('img');
-  img.src = getDisplayData(outfit).img;
+  img.src = getStageData(outfit).img;
   img.alt = outfit.title || 'outfit';
   img.loading = 'lazy';
 
-  // Кнопка создаётся только для нарядов, которые есть в undressed.json
   let undressBtn = null;
+  let dots = null;
   if (hasUndressed) {
     undressBtn = document.createElement('button');
     undressBtn.className = 'card-undress-btn';
     undressBtn.type = 'button';
     undressBtn.innerHTML = UNDRESS_ICON;
-    updateUndressBtn(undressBtn, !!outfit._undressed);
+    updateUndressBtn(undressBtn, outfit);
 
     undressBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      setUndressed(outfit, !outfit._undressed);
+      setStage(outfit, (outfit._stage || 0) + 1);
     });
 
+    dots = document.createElement('div');
+    dots.className = 'undress-dots';
+    renderDots(dots, outfit);
+
     wrap.appendChild(undressBtn);
+    wrap.appendChild(dots);
   }
 
   const copyBtn = document.createElement('button');
@@ -195,20 +269,23 @@ function createCard(outfit, i) {
     openModal(outfit);
   });
 
-  cardRefs.set(outfit, { img, btn: undressBtn });
+  cardRefs.set(outfit, { img, btn: undressBtn, dots });
   gallery.appendChild(wrap);
 }
 
-async function getPromptText(outfit) {
-  const data = getDisplayData(outfit);
-  const cacheKey = outfit._undressed && undressedById.has(String(outfit.id))
-    ? '_undressedPromptText'
-    : '_promptText';
-
+async function getPromptText(outfit, stage = outfit._stage || 0) {
+  const cacheKey = '_promptText_' + stage;
   if (outfit[cacheKey]) return outfit[cacheKey];
+
+  const data = getStageData(outfit, stage);
+  if (!data.prompt) {
+    outfit[cacheKey] = '(промпт недоступен)';
+    return outfit[cacheKey];
+  }
 
   try {
     const res = await fetch(data.prompt);
+    if (!res.ok) throw new Error('bad response');
     outfit[cacheKey] = await res.text();
   } catch {
     outfit[cacheKey] = '(промпт недоступен)';
@@ -231,11 +308,11 @@ async function copyPrompt(outfit) {
   }
 }
 
-// ── Модальное окно ──
-// Кнопка «раздеть» внутри модалки создаётся один раз и переиспользуется
 function ensureModalUndressBtn() {
   let btn = document.getElementById('modalUndressBtn');
   if (btn) return btn;
+
+  const wrapper = document.getElementById('modalImgWrapper');
 
   btn = document.createElement('button');
   btn.id = 'modalUndressBtn';
@@ -245,10 +322,16 @@ function ensureModalUndressBtn() {
   btn.addEventListener('click', (e) => {
     e.stopPropagation(); // чтобы не срабатывал зум
     const outfit = filteredOutfits[currentModalIndex];
-    if (outfit) setUndressed(outfit, !outfit._undressed);
+    if (outfit) setStage(outfit, (outfit._stage || 0) + 1);
   });
 
-  document.getElementById('modalImgWrapper').appendChild(btn);
+  const dots = document.createElement('div');
+  dots.id = 'modalUndressDots';
+  dots.className = 'undress-dots modal-undress-dots';
+  dots.addEventListener('click', (e) => e.stopPropagation());
+
+  wrapper.appendChild(btn);
+  wrapper.appendChild(dots);
   return btn;
 }
 
@@ -258,22 +341,26 @@ async function openModal(outfit) {
   const modalPrompt = document.getElementById('modalPrompt');
   const wrapper = document.getElementById('modalImgWrapper');
 
-  // сброс зума при открытии нового фото
   wrapper.classList.remove('zoomed');
   modalImg.style.transformOrigin = 'center';
 
-  const data = getDisplayData(outfit);
+  const data = getStageData(outfit);
   const hasUndressed = undressedById.has(String(outfit.id));
 
-  // плавное появление картинки после загрузки
-  modalImg.classList.remove('loaded', 'img-swap', 'img-fading');
+  const ghost = wrapper.querySelector('.img-ghost');
+  if (ghost) ghost.classList.remove('visible');
+
+  modalImg.classList.remove('loaded', 'img-swap');
   modalImg.onload = () => modalImg.classList.add('loaded');
   modalImg.src = data.img;
   if (modalImg.complete) modalImg.classList.add('loaded');
 
   const modalBtn = ensureModalUndressBtn();
+  const modalDots = document.getElementById('modalUndressDots');
   modalBtn.style.display = hasUndressed ? '' : 'none';
-  updateUndressBtn(modalBtn, !!outfit._undressed);
+  modalDots.style.visibility = hasUndressed ? '' : 'hidden';
+  updateUndressBtn(modalBtn, outfit);
+  renderDots(modalDots, outfit);
 
   modalPrompt.textContent = 'Загрузка...';
   modal.classList.add('open');
