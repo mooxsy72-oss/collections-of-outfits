@@ -28,16 +28,27 @@ async function loadOutfits() {
     const res = await fetch('undressed.json');
     if (!res.ok) throw new Error('undressed.json unavailable');
     const undressed = await res.json();
-    undressedById = new Map();
+
+    // Группируем по id. Старый формат с повторяющимися id автоматически объединяется в stages.
+    const grouped = new Map();
     undressed.forEach(item => {
-      // Поддерживаются два формата записи:
-      // новый  — { id, stages: [ {img, prompt}, {img, prompt} ] }
-      // старый — { id, img, prompt }  (одна дополнительная ступень)
-      const stages = Array.isArray(item.stages)
-        ? item.stages.filter(s => s && s.img)
-        : (item.img ? [{ img: item.img, prompt: item.prompt }] : []);
-      if (stages.length) undressedById.set(String(item.id), stages);
+      const id = String(item.id);
+
+      // Новый формат с явным массивом stages
+      if (Array.isArray(item.stages)) {
+        const stages = item.stages.filter(s => s && s.img);
+        if (stages.length) grouped.set(id, stages);
+        return;
+      }
+
+      // Старый плоский формат — собираем в массив
+      if (item.img) {
+        if (!grouped.has(id)) grouped.set(id, []);
+        grouped.get(id).push({ img: item.img, prompt: item.prompt });
+      }
     });
+
+    undressedById = grouped;
   } catch {
     undressedById = new Map();
   }
@@ -499,7 +510,7 @@ if (sortNewBtn) {
   });
 }
 
-// ── Теги: обёртка для затемнений + доводка активного тега в центр ──
+// ── Теги: обёртка для затемнений ──
 (function initFiltersScroll() {
   const filters = document.querySelector('.filters');
   if (!filters || filters.parentElement.classList.contains('filters-scroll')) return;
@@ -508,12 +519,6 @@ if (sortNewBtn) {
   wrap.className = 'filters-scroll';
   filters.parentNode.insertBefore(wrap, filters);
   wrap.appendChild(filters);
-
-  filters.addEventListener('click', (e) => {
-    const btn = e.target.closest('.filter-btn');
-    if (!btn) return;
-    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  });
 })();
 
 loadOutfits();
