@@ -9,11 +9,11 @@ let newThreshold = Infinity; // с какого id считать наряд н�
 let undressedById = new Map();
 let cardRefs = new Map(); // наряд -> { img, btn } для синхронизации карточки и модалки
 
-// Иконка кнопки «раздеть». Меняешь разметку здесь — меняется сразу везде.
+// Иконка футболки (Font Awesome free, solid «shirt»).
+// Меняешь разметку здесь — меняется сразу и на карточке, и в модалке.
 const UNDRESS_ICON = `
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M6 5.5 8.5 4h7L18 5.5l-1.5 5.2c-.5 1.8-1.7 3.1-4.5 3.1s-4-1.3-4.5-3.1L6 5.5Z"/>
-    <path d="M8.5 4 9 7.5M15.5 4 15 7.5M8.2 13.2 6.7 20M15.8 13.2l1.5 6.8"/>
+  <svg viewBox="0 0 640 512" aria-hidden="true">
+    <path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0c2.6 0 5.2 .5 7.6 1.5L620.5 79.4c15.9 6.8 22.4 25.8 13.6 40.7L568.5 232.5c-6.4 10.9-19.7 15.3-31.2 10.4L500 227v244c0 22.1-17.9 40-40 40H180c-22.1 0-40-17.9-40-40V227l-37.3 15.9c-11.5 4.9-24.8 .5-31.2-10.4L5.9 120.1C-2.9 105.2 3.6 86.2 19.5 79.4L204.2 1.5c2.4-1 5-1.5 7.6-1.5z"/>
   </svg>`;
 
 async function loadOutfits() {
@@ -79,6 +79,37 @@ function updateUndressBtn(btn, isUndressed) {
   const label = isUndressed ? 'Вернуть наряд' : 'Раздеть';
   btn.title = label;
   btn.setAttribute('aria-label', label);
+  btn.setAttribute('aria-pressed', isUndressed ? 'true' : 'false');
+}
+
+// Короткий «пшик» самой кнопки при нажатии
+function playPulse(btn) {
+  if (!btn) return;
+  btn.classList.remove('pulse');
+  void btn.offsetWidth;
+  btn.classList.add('pulse');
+}
+
+// Плавная подмена картинки: сначала догружаем новую, потом проявляем.
+// Так нет мигания белым и переход хорошо заметен.
+function swapImage(imgEl, src, onShown) {
+  if (!imgEl) return;
+
+  const show = () => {
+    imgEl.classList.remove('img-swap');
+    void imgEl.offsetWidth;
+    imgEl.src = src;
+    imgEl.classList.add('img-swap');
+    if (onShown) onShown();
+  };
+
+  imgEl.classList.add('img-fading');
+  const pre = new Image();
+  pre.onload = pre.onerror = () => {
+    imgEl.classList.remove('img-fading');
+    show();
+  };
+  pre.src = src;
 }
 
 // Единая точка переключения: обновляет и карточку, и открытую модалку
@@ -88,8 +119,9 @@ function setUndressed(outfit, value) {
 
   const ref = cardRefs.get(outfit);
   if (ref) {
-    ref.img.src = data.img;
+    swapImage(ref.img, data.img);
     updateUndressBtn(ref.btn, value);
+    playPulse(ref.btn);
   }
 
   const modal = document.getElementById('modal');
@@ -99,13 +131,11 @@ function setUndressed(outfit, value) {
 
   const modalImg = document.getElementById('modalImg');
   const modalPrompt = document.getElementById('modalPrompt');
+  const modalBtn = document.getElementById('modalUndressBtn');
 
-  modalImg.classList.remove('loaded');
-  modalImg.onload = () => modalImg.classList.add('loaded');
-  modalImg.src = data.img;
-  if (modalImg.complete) modalImg.classList.add('loaded');
-
-  updateUndressBtn(document.getElementById('modalUndressBtn'), value);
+  swapImage(modalImg, data.img, () => modalImg.classList.add('loaded'));
+  updateUndressBtn(modalBtn, value);
+  playPulse(modalBtn);
 
   modalPrompt.textContent = 'Загрузка...';
   getPromptText(outfit).then(text => {
@@ -168,7 +198,6 @@ function createCard(outfit, i) {
   cardRefs.set(outfit, { img, btn: undressBtn });
   gallery.appendChild(wrap);
 }
-
 
 async function getPromptText(outfit) {
   const data = getDisplayData(outfit);
@@ -237,7 +266,7 @@ async function openModal(outfit) {
   const hasUndressed = undressedById.has(String(outfit.id));
 
   // плавное появление картинки после загрузки
-  modalImg.classList.remove('loaded');
+  modalImg.classList.remove('loaded', 'img-swap', 'img-fading');
   modalImg.onload = () => modalImg.classList.add('loaded');
   modalImg.src = data.img;
   if (modalImg.complete) modalImg.classList.add('loaded');
