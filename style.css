@@ -864,48 +864,92 @@ header h1 {
   transform: translateY(0) scale(1);
 }
 
-.modal-undress-btn.card-undress-btn:hover {
-  transform: translateY(0) scale(1.08);
+.modal-undress-btn.card-undress-btn:hover { transform: translateY(0) scale(1.08); }
+.modal-undress-btn.card-undress-btn:active { transform: translateY(0) scale(0.94); }
+
+/* ── Точки-индикаторы ступеней ── */
+.undress-dots {
+  position: absolute;
+  top: 3.05rem;
+  right: 0.6rem;
+  z-index: 4;
+  display: flex;
+  gap: 0.28rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(9, 9, 11, 0.7);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
 }
 
-.modal-undress-btn.card-undress-btn:active {
-  transform: translateY(0) scale(0.94);
+.undress-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.32);
+  transition: background 0.25s ease, transform 0.25s ease;
 }
 
-/* ── Плавная смена картинки при переключении ── */
-.card-wrap img.img-fading,
-.modal-left img.img-fading {
-  opacity: 0.25;
-  transition: opacity 0.18s ease;
+.undress-dots span.on {
+  background: var(--gold-light);
+  transform: scale(1.4);
 }
 
-.card-wrap img.img-swap {
-  animation: imgSwapIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+.card-wrap:hover .undress-dots,
+.undress-dots.lit { opacity: 1; }
+
+.modal-undress-dots {
+  top: 3.5rem;
+  right: 1rem;
+  z-index: 6;
+  opacity: 1;
 }
 
-.modal-left img.img-swap {
-  animation: imgSwapIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+@media (hover: none) {
+  .undress-dots { opacity: 1; }
 }
+
+/* ── Кроссфейд картинки при смене ступени ── */
+.card-wrap img,
+.modal-left img {
+  position: relative;
+  z-index: 1;
+}
+
+.img-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.img-ghost.visible { opacity: 1; }
+
+.card-wrap:hover .img-ghost { transform: scale(1.05); }
+
+img.img-swap { animation: imgSwapIn 0.4s ease; }
 
 @keyframes imgSwapIn {
-  0%   { opacity: 0; transform: scale(1.04); }
-  100% { opacity: 1; transform: scale(1); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* при зуме анимацию не запускаем, чтобы не спорила с масштабом */
 .modal-img-wrapper.zoomed img.img-swap { animation: none; }
+.modal-img-wrapper.zoomed .img-ghost { display: none; }
 
-/* на планшетах и телефонах модалка складывается в столбик —
-   уводим кнопку левее крестика, чтобы не наезжали */
+/* модалка на планшетах и телефонах — уводим от крестика */
 @media (max-width: 900px) {
-  .modal-undress-btn.card-undress-btn {
-    right: 3.6rem;
-  }
+  .modal-undress-btn.card-undress-btn { right: 3.6rem; }
+  .modal-undress-dots { right: 3.6rem; }
 }
 
 @media (max-width: 600px) {
-  .modal-undress-btn.card-undress-btn {
-    top: 0.7rem;
-    right: 3.2rem;
-  }
+  .modal-undress-btn.card-undress-btn { top: 0.7rem; right: 3.2rem; }
+  .modal-undress-dots { top: 3.1rem; right: 3.2rem; }
 }
