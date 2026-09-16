@@ -1,5 +1,4 @@
 let outfits = [];
-let undressedMap = new Map();
 let currentFilter = 'all';
 let currentGender = 'all';
 let currentSort = 'new';
@@ -8,38 +7,30 @@ let currentModalIndex = 0;
 let filteredOutfits = [];
 let newThreshold = Infinity; // с какого id считать наряд новинкой
 let undressedById = new Map();
-let undressedById = new Map();
+let cardRefs = new Map(); // наряд -> { img, btn } для синхронизации карточки и модалки
+
+// Иконка кнопки «раздеть». Меняешь разметку здесь — меняется сразу везде.
+const UNDRESS_ICON = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 5.5 8.5 4h7L18 5.5l-1.5 5.2c-.5 1.8-1.7 3.1-4.5 3.1s-4-1.3-4.5-3.1L6 5.5Z"/>
+    <path d="M8.5 4 9 7.5M15.5 4 15 7.5M8.2 13.2 6.7 20M15.8 13.2l1.5 6.8"/>
+  </svg>`;
 
 async function loadOutfits() {
+  // Основная база и дополнительные версии загружаются независимо.
+  // Если undressed.json отсутствует, обычная галерея всё равно работает.
   try {
-    const [outfitsRes, undressedRes] = await Promise.all([
-      fetch('outfits.json'),
-      fetch('undressed.json')
-    ]);
-
-    outfits = await outfitsRes.json();
-
-    if (undressedRes.ok) {
-      const undressed = await undressedRes.json();
-      undressedMap = new Map(undressed.map(item => [String(item.id), item]));
-    } else {
-      undressedMap = new Map();
-    }
+    const res = await fetch('outfits.json');
+    outfits = await res.json();
   } catch {
-    // Если undressed.json отсутствует или недоступен, обычная галерея всё равно работает.
-    try {
-      const res = await fetch('outfits.json');
-      outfits = await res.json();
-    } catch {
-      outfits = [];
-    }
-    undressedMap = new Map();
+    outfits = [];
   }
-  // Дополнительные версии нарядов (раздетые варианты)
+
   try {
-    const undressedRes = await fetch('undressed.json');
-    const undressedData = await undressedRes.json();
-    undressedById = new Map(undressedData.map(item => [String(item.id), item]));
+    const res = await fetch('undressed.json');
+    if (!res.ok) throw new Error('undressed.json unavailable');
+    const undressed = await res.json();
+    undressedById = new Map(undressed.map(item => [String(item.id), item]));
   } catch {
     undressedById = new Map();
   }
@@ -53,6 +44,7 @@ async function loadOutfits() {
 function renderGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
+  cardRefs.clear();
 
   filteredOutfits = outfits.filter(o => {
     const catOk = currentFilter === 'all' || o.category === currentFilter;
@@ -77,8 +69,48 @@ function renderGallery() {
 
 function getDisplayData(outfit) {
   const alternate = undressedById.get(String(outfit.id));
-  if (outfit._undressed && alternate) return alternate;
-  return outfit;
+  return outfit._undressed && alternate ? alternate : outfit;
+}
+
+// Обновляет вид кнопки (подсветка + подсказка)
+function updateUndressBtn(btn, isUndressed) {
+  if (!btn) return;
+  btn.classList.toggle('active', isUndressed);
+  const label = isUndressed ? 'Вернуть наряд' : 'Раздеть';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+}
+
+// Единая точка переключения: обновляет и карточку, и открытую модалку
+function setUndressed(outfit, value) {
+  outfit._undressed = value;
+  const data = getDisplayData(outfit);
+
+  const ref = cardRefs.get(outfit);
+  if (ref) {
+    ref.img.src = data.img;
+    updateUndressBtn(ref.btn, value);
+  }
+
+  const modal = document.getElementById('modal');
+  const isThisOpen = modal.classList.contains('open')
+    && filteredOutfits[currentModalIndex] === outfit;
+  if (!isThisOpen) return;
+
+  const modalImg = document.getElementById('modalImg');
+  const modalPrompt = document.getElementById('modalPrompt');
+
+  modalImg.classList.remove('loaded');
+  modalImg.onload = () => modalImg.classList.add('loaded');
+  modalImg.src = data.img;
+  if (modalImg.complete) modalImg.classList.add('loaded');
+
+  updateUndressBtn(document.getElementById('modalUndressBtn'), value);
+
+  modalPrompt.textContent = 'Загрузка...';
+  getPromptText(outfit).then(text => {
+    if (filteredOutfits[currentModalIndex] === outfit) modalPrompt.textContent = text;
+  });
 }
 
 function createCard(outfit, i) {
@@ -86,95 +118,40 @@ function createCard(outfit, i) {
   const wrap = document.createElement('div');
   const hasUndressed = undressedById.has(String(outfit.id));
   wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '');
-  const alternate = undressedById.get(String(outfit.id));
-  if (alternate) wrap.classList.add('has-undressed');
 
   const img = document.createElement('img');
-  const displayData = getDisplayData(outfit);
-  img.src = displayData.img;
+  img.src = getDisplayData(outfit).img;
   img.alt = outfit.title || 'outfit';
   img.loading = 'lazy';
 
-  // кнопка «раздевалки» — появляется только у нарядов с альтернативной версией
-  const undressed = undressedMap.get(String(outfit.id));
-  if (undressed) {
-    const undressedBtn = document.createElement('button');
-    undressedBtn.className = 'card-undressed-btn';
-    undressedBtn.type = 'button';
-    undressedBtn.title = outfit._undressedActive ? 'Вернуть наряд' : 'Раздеть';
-    undressedBtn.setAttribute('aria-label', outfit._undressedActive ? 'Вернуть наряд' : 'Раздеть');
-    undressedBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 5.5c1.3-1.1 2.7-1.7 5-1.7s3.7.6 5 1.7l2.2 2.1-2.4 2.6-1.5-1.2v8.2H8.7V9.3L7.2 10.5 4.8 7.9 7 5.5Z"/>
-        <path d="M8.7 17.2h6.6"/>
-      </svg>`;
+  // Кнопка создаётся только для нарядов, которые есть в undressed.json
+  let undressBtn = null;
+  if (hasUndressed) {
+    undressBtn = document.createElement('button');
+    undressBtn.className = 'card-undress-btn';
+    undressBtn.type = 'button';
+    undressBtn.innerHTML = UNDRESS_ICON;
+    updateUndressBtn(undressBtn, !!outfit._undressed);
 
-    undressedBtn.addEventListener('click', (e) => {
+    undressBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      outfit._undressedActive = !outfit._undressedActive;
-      outfit._promptText = undefined;
-      img.src = outfit._undressedActive ? undressed.img : outfit.img;
-      undressedBtn.classList.toggle('active', outfit._undressedActive);
-      undressedBtn.title = outfit._undressedActive ? 'Вернуть наряд' : 'Раздеть';
-      undressedBtn.setAttribute('aria-label', outfit._undressedActive ? 'Вернуть наряд' : 'Раздеть');
+      setUndressed(outfit, !outfit._undressed);
     });
 
-    if (outfit._undressedActive) undressedBtn.classList.add('active');
-    wrap.appendChild(undressedBtn);
+    wrap.appendChild(undressBtn);
   }
 
-  // кнопка «скопировать промпт» прямо на карточке
   const copyBtn = document.createElement('button');
   copyBtn.className = 'card-copy-btn';
   copyBtn.type = 'button';
   copyBtn.textContent = 'Скопировать промпт';
   copyBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // чтобы не открывалось большое окно
+    e.stopPropagation();
     copyPrompt(outfit);
   });
 
   wrap.appendChild(img);
-
-  if (alternate) {
-    const undressBtn = document.createElement('button');
-    undressBtn.className = 'card-undress-btn';
-    undressBtn.type = 'button';
-    undressBtn.title = 'Сменить версию наряда';
-    undressBtn.setAttribute('aria-label', 'Сменить версию наряда');
-    undressBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 5.5 8.5 4h7L18 5.5l-1.5 5.2c-.5 1.8-1.7 3.1-4.5 3.1s-4-1.3-4.5-3.1L6 5.5Z"/>
-        <path d="M8.5 4 9 7.5M15.5 4 15 7.5M8.2 13.2 6.7 20M15.8 13.2l1.5 6.8"/>
-      </svg>`;
-    if (outfit._undressed) undressBtn.classList.add('active');
-    undressBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      outfit._undressed = !outfit._undressed;
-      const data = getDisplayData(outfit);
-      img.src = data.img;
-      undressBtn.classList.toggle('active', outfit._undressed);
-    });
-    wrap.appendChild(undressBtn);
-  }
-
   wrap.appendChild(copyBtn);
-
-  // кнопка переключения на альтернативную версию
-  if (hasUndressed) {
-    const undressBtn = document.createElement('button');
-    undressBtn.className = 'card-undress-btn';
-    undressBtn.type = 'button';
-    undressBtn.title = 'Переключить версию наряда';
-    undressBtn.setAttribute('aria-label', 'Переключить версию наряда');
-    undressBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.5c1.2 1 2.4 1.5 5 1.5s3.8-.5 5-1.5l1.5 4.2c.2.6-.1 1.2-.7 1.5l-2.1 1.1c-.5.3-.8.8-.8 1.4v4.8H9.1v-4.8c0-.6-.3-1.1-.8-1.4l-2.1-1.1c-.6-.3-.9-.9-.7-1.5L7 5.5Z"/><path d="M9.1 18.5h5.8"/></svg>';
-    undressBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      outfit._undressed = !outfit._undressed;
-      img.src = getDisplayData(outfit).img;
-      undressBtn.classList.toggle('active', outfit._undressed);
-    });
-    wrap.appendChild(undressBtn);
-  }
 
   if ((Number(outfit.id) || 0) >= newThreshold) {
     const badge = document.createElement('span');
@@ -182,27 +159,27 @@ function createCard(outfit, i) {
     badge.textContent = 'New';
     wrap.appendChild(badge);
   }
+
   wrap.addEventListener('click', () => {
     currentModalIndex = filteredOutfits.indexOf(outfit);
     openModal(outfit);
   });
+
+  cardRefs.set(outfit, { img, btn: undressBtn });
   gallery.appendChild(wrap);
 }
 
-function getDisplayData(outfit) {
-  const alt = undressedById.get(String(outfit.id));
-  if (outfit._undressed && alt) return alt;
-  return outfit;
-}
 
 async function getPromptText(outfit) {
-  const undressed = undressedMap.get(String(outfit.id));
-  const promptUrl = outfit._undressedActive && undressed ? undressed.prompt : outfit.prompt;
-  const cacheKey = outfit._undressedActive ? '_undressedPromptText' : '_promptText';
+  const data = getDisplayData(outfit);
+  const cacheKey = outfit._undressed && undressedById.has(String(outfit.id))
+    ? '_undressedPromptText'
+    : '_promptText';
 
   if (outfit[cacheKey]) return outfit[cacheKey];
+
   try {
-    const res = await fetch(promptUrl);
+    const res = await fetch(data.prompt);
     outfit[cacheKey] = await res.text();
   } catch {
     outfit[cacheKey] = '(промпт недоступен)';
@@ -226,6 +203,26 @@ async function copyPrompt(outfit) {
 }
 
 // ── Модальное окно ──
+// Кнопка «раздеть» внутри модалки создаётся один раз и переиспользуется
+function ensureModalUndressBtn() {
+  let btn = document.getElementById('modalUndressBtn');
+  if (btn) return btn;
+
+  btn = document.createElement('button');
+  btn.id = 'modalUndressBtn';
+  btn.className = 'card-undress-btn modal-undress-btn';
+  btn.type = 'button';
+  btn.innerHTML = UNDRESS_ICON;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // чтобы не срабатывал зум
+    const outfit = filteredOutfits[currentModalIndex];
+    if (outfit) setUndressed(outfit, !outfit._undressed);
+  });
+
+  document.getElementById('modalImgWrapper').appendChild(btn);
+  return btn;
+}
+
 async function openModal(outfit) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modalImg');
@@ -234,21 +231,29 @@ async function openModal(outfit) {
 
   // сброс зума при открытии нового фото
   wrapper.classList.remove('zoomed');
+  modalImg.style.transformOrigin = 'center';
+
+  const data = getDisplayData(outfit);
+  const hasUndressed = undressedById.has(String(outfit.id));
 
   // плавное появление картинки после загрузки
   modalImg.classList.remove('loaded');
   modalImg.onload = () => modalImg.classList.add('loaded');
-  const undressed = undressedMap.get(String(outfit.id));
-  modalImg.src = outfit._undressedActive && undressed ? undressed.img : outfit.img;
+  modalImg.src = data.img;
   if (modalImg.complete) modalImg.classList.add('loaded');
 
-  modalPrompt.textContent = 'Загрузка...';
+  const modalBtn = ensureModalUndressBtn();
+  modalBtn.style.display = hasUndressed ? '' : 'none';
+  updateUndressBtn(modalBtn, !!outfit._undressed);
 
+  modalPrompt.textContent = 'Загрузка...';
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
   const promptText = await getPromptText(outfit);
-  modalPrompt.textContent = promptText;
+  if (filteredOutfits[currentModalIndex] === outfit) {
+    modalPrompt.textContent = promptText;
+  }
 }
 
 function closeModal() {
