@@ -2,5 +2,7 @@
 { "id": 705, "img": "https://mooxsy72-oss.github.io/outfits-images/images/705a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/705a.txt" },
 { "id": 704, "img": "https://mooxsy72-oss.github.io/outfits-images/images/704a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/704a.txt" },
 { "id": 699, "img": "https://mooxsy72-oss.github.io/outfits-images/images/699a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/699a.txt" },
-{ "id": 702, "img": "https://mooxsy72-oss.github.io/outfits-images/images/702a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/702a.txt" }  
+{ "id": 702, "img": "https://mooxsy72-oss.github.io/outfits-images/images/702a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/702a.txt" },
+{"id":697,"img":"https://mooxsy72-oss.github.io/outfits-images/images/697a.png","prompt":"https://mooxsy72-oss.github.io/outfits-images/images/697a.txt"},
+{"id":696,"img":"https://mooxsy72-oss.github.io/outfits-images/images/696a.png","prompt":"https://mooxsy72-oss.github.io/outfits-images/images/696a.txt"}
 ]
