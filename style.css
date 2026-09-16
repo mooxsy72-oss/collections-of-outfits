@@ -202,11 +202,11 @@ header h1 {
 
 .card-wrap:hover::after { opacity: 1; }
 
-/* ── Кнопка альтернативной версии наряда ── */
+/* ── Кнопка альтернативной версии наряда (правый верхний угол) ── */
 .card-undress-btn {
   position: absolute;
   top: 0.6rem;
-  left: 0.6rem;
+  right: 0.6rem;
   width: 2.25rem;
   height: 2.25rem;
   padding: 0;
@@ -227,13 +227,10 @@ header h1 {
 }
 
 .card-undress-btn svg {
-  width: 1.15rem;
-  height: 1.15rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.35;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: currentColor;
+  stroke: none;
 }
 
 .card-wrap:hover .card-undress-btn,
@@ -251,8 +248,14 @@ header h1 {
   box-shadow: 0 0 16px var(--gold-glow);
 }
 
-.card-wrap.has-undressed .card-new-badge {
-  left: 3.2rem;
+.card-undress-btn.pulse {
+  animation: undressPop 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes undressPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.86); }
+  100% { transform: scale(1); }
 }
 
 @media (hover: none) {
@@ -852,7 +855,8 @@ header h1 {
 /* ── Кнопка «раздеть» в модальном окне ── */
 .modal-undress-btn.card-undress-btn {
   top: 1rem;
-  left: 1rem;
+  right: 1rem;
+  left: auto;
   z-index: 6;
   opacity: 1;
   visibility: visible;
@@ -868,9 +872,40 @@ header h1 {
   transform: translateY(0) scale(0.94);
 }
 
+/* ── Плавная смена картинки при переключении ── */
+.card-wrap img.img-fading,
+.modal-left img.img-fading {
+  opacity: 0.25;
+  transition: opacity 0.18s ease;
+}
+
+.card-wrap img.img-swap {
+  animation: imgSwapIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal-left img.img-swap {
+  animation: imgSwapIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes imgSwapIn {
+  0%   { opacity: 0; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* при зуме анимацию не запускаем, чтобы не спорила с масштабом */
+.modal-img-wrapper.zoomed img.img-swap { animation: none; }
+
+/* на планшетах и телефонах модалка складывается в столбик —
+   уводим кнопку левее крестика, чтобы не наезжали */
+@media (max-width: 900px) {
+  .modal-undress-btn.card-undress-btn {
+    right: 3.6rem;
+  }
+}
+
 @media (max-width: 600px) {
   .modal-undress-btn.card-undress-btn {
     top: 0.7rem;
-    left: 0.7rem;
+    right: 3.2rem;
   }
 }
