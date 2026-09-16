@@ -1,7 +1,4 @@
 [
-  {
-    "id": 705,
-    "img": "https://mooxsy72-oss.github.io/outfits-images/images/705a.png",
-    "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/705a.txt"
-  }
+{ "id": 705, "img": "https://mooxsy72-oss.github.io/outfits-images/images/705a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/705a.txt" },
+{ "id": 704, "img": "https://mooxsy72-oss.github.io/outfits-images/images/704a.png", "prompt": "https://mooxsy72-oss.github.io/outfits-images/images/704a.txt" }
 ]
