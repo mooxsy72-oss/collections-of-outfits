@@ -16,61 +16,105 @@ const UNDRESS_ICON = `
     <path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0c2.6 0 5.2 .5 7.6 1.5L620.5 79.4c15.9 6.8 22.4 25.8 13.6 40.7L568.5 232.5c-6.4 10.9-19.7 15.3-31.2 10.4L500 227v244c0 22.1-17.9 40-40 40H180c-22.1 0-40-17.9-40-40V227l-37.3 15.9c-11.5 4.9-24.8 .5-31.2-10.4L5.9 120.1C-2.9 105.2 3.6 86.2 19.5 79.4L204.2 1.5c2.4-1 5-1.5 7.6-1.5z"/>
   </svg>`;
 
-// ── Пути к файлам раздевалки ──
-// Все ступени раздевалки лежат в отдельном репозитории outfits-images.
-// Но в старых записях undressed.json остался префикс от прежнего репо
-// ("outfits/461a.png"). Нормализуем такие пути на лету, чтобы не править JSON руками.
-const UNDRESS_BASE = 'https://mooxsy72-oss.github.io/outfits-images/images/';
+// ── Откуда берутся данные ──
+// Картинки и JSON живут в отдельных репозиториях.
+// Чтобы подключить ещё один репо, когда место кончится, — допишите
+// сюда его адрес. Наряды из всех источников склеиваются в один список.
+const DATA_SOURCES = [
+  'https://mooxsy72-oss.github.io/outfits-images/'
+  // 'https://mooxsy72-oss.github.io/outfits-images-2/',
+];
 
-function normalizeStagePath(path) {
+const UNDRESS_BASE = DATA_SOURCES[0] + 'images/';
+
+// Тянем файл из всех источников по очереди и склеиваем.
+// Если удалённый недоступен — берём локальную копию рядом с index.html,
+// чтобы сайт не остался пустым.
+async function fetchAll(name) {
+  const results = [];
+
+  for (const base of DATA_SOURCES) {
+    try {
+      const res = await fetch(base + name, { cache: 'no-cache' });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) results.push({ base, data });
+      }
+    } catch { /* этот источник недоступен — идём дальше */ }
+  }
+
+  if (results.length) return results;
+
+  try {
+    const res = await fetch(name, { cache: 'no-cache' });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) return [{ base: DATA_SOURCES[0], data }];
+    }
+  } catch { /* локальной копии тоже нет */ }
+
+  return [];
+}
+
+// В старых записях остался префикс от прежнего репо ("outfits/461a.png").
+// Приводим такие пути к нужному репозиторию — подстраховка на случай,
+// если где-то осталась запись в старом формате.
+function normalizeStagePath(path, base) {
   if (!path) return path;
   // Уже абсолютный (или protocol-relative) — не трогаем
   if (/^(https?:)?\/\//i.test(path)) return path;
   // Отрезаем любой ведущий относительный префикс, оставляя только имя файла
   const file = String(path).replace(/^.*\//, '');
-  return UNDRESS_BASE + file;
+  return (base || DATA_SOURCES[0]) + 'images/' + file;
 }
 
 async function loadOutfits() {
-  try {
-    const res = await fetch('outfits.json');
-    outfits = await res.json();
-  } catch {
-    outfits = [];
+  // Наряды: склеиваем все источники, при совпадении id побеждает первый
+  const seen = new Set();
+  outfits = [];
+  for (const { data } of await fetchAll('outfits.json')) {
+    for (const o of data) {
+      const id = String(o.id);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      outfits.push(o);
+    }
   }
 
   try {
-    const res = await fetch('undressed.json');
-    if (!res.ok) throw new Error('undressed.json unavailable');
-    const undressed = await res.json();
+    const sources = await fetchAll('undressed.json');
+    if (!sources.length) throw new Error('undressed.json unavailable');
 
-    // Группируем по id. Старый формат с повторяющимися id автоматически объединяется в stages.
+    // Группируем по id. Старый формат с повторяющимися id объединяется в stages.
     const grouped = new Map();
-    undressed.forEach(item => {
-      const id = String(item.id);
 
-      // Новый формат с явным массивом stages
-      if (Array.isArray(item.stages)) {
-        const stages = item.stages
-          .filter(s => s && s.img)
-          .map(s => ({
-            ...s,
-            img: normalizeStagePath(s.img),
-            prompt: normalizeStagePath(s.prompt)
-          }));
-        if (stages.length) grouped.set(id, stages);
-        return;
-      }
+    for (const { base, data } of sources) {
+      data.forEach(item => {
+        const id = String(item.id);
 
-      // Старый плоский формат — собираем в массив
-      if (item.img) {
-        if (!grouped.has(id)) grouped.set(id, []);
-        grouped.get(id).push({
-          img: normalizeStagePath(item.img),
-          prompt: normalizeStagePath(item.prompt)
-        });
-      }
-    });
+        // Новый формат с явным массивом stages
+        if (Array.isArray(item.stages)) {
+          const stages = item.stages
+            .filter(s => s && s.img)
+            .map(s => ({
+              ...s,
+              img: normalizeStagePath(s.img, base),
+              prompt: normalizeStagePath(s.prompt, base)
+            }));
+          if (stages.length) grouped.set(id, stages);
+          return;
+        }
+
+        // Старый плоский формат — собираем в массив
+        if (item.img) {
+          if (!grouped.has(id)) grouped.set(id, []);
+          grouped.get(id).push({
+            img: normalizeStagePath(item.img, base),
+            prompt: normalizeStagePath(item.prompt, base)
+          });
+        }
+      });
+    }
 
     undressedById = grouped;
   } catch {
@@ -338,7 +382,8 @@ async function getPromptText(outfit, stage = outfit._stage || 0) {
   try {
     const res = await fetch(data.prompt);
     if (!res.ok) throw new Error('bad response');
-    outfit[cacheKey] = await res.text();
+    // Первая строка вида "#tags: ofis male" — служебная, в промпт не показываем
+    outfit[cacheKey] = (await res.text()).replace(/^\s*#\s*(?:tags?|теги)\s*:.*(?:\r?\n)?/i, '');
   } catch {
     outfit[cacheKey] = '(промпт недоступен)';
   }
