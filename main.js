@@ -104,14 +104,28 @@ function getStageData(outfit, stage = outfit._stage || 0) {
 
 // Заранее подгружаем картинки и промпты всех ступеней,
 // чтобы переключение было мгновенным и без ожидания.
+// Кэш промисов — не грузим одну и ту же картинку повторно,
+// и crossfade() может дождаться реальной готовности файла.
+const imgReadyCache = new Map();
+function preloadImage(src) {
+  if (!src) return Promise.resolve();
+  if (imgReadyCache.has(src)) return imgReadyCache.get(src);
+
+  const p = new Promise(resolve => {
+    const im = new Image();
+    im.decoding = 'async';
+    im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(resolve);
+    im.onerror = resolve; // не блокируем UI, если картинка не найдена
+    im.src = src;
+  });
+  imgReadyCache.set(src, p);
+  return p;
+}
+
 function preloadStageAssets(list) {
   list.forEach(outfit => {
     getStages(outfit).forEach((s, i) => {
-      if (s.img) {
-        const im = new Image();
-        im.decoding = 'async';
-        im.src = s.img;
-      }
+      if (s.img) preloadImage(s.img);
       getPromptText(outfit, i + 1);
     });
   });
@@ -155,6 +169,9 @@ function playPulse(btn) {
 
 // Настоящий кроссфейд: старая картинка живёт в слое-призраке,
 // новая проявляется поверх. Чёрных вспышек нет.
+// _swapToken защищает от гонки: если пользователь кликнул ещё раз
+// до того, как отработал предыдущий вызов, старый callback просто
+// игнорируется вместо того, чтобы дёргать картинку не в том порядке.
 function crossfade(imgEl, newSrc, fitMode) {
   if (!imgEl || !newSrc) return;
   const oldSrc = imgEl.currentSrc || imgEl.src;
@@ -173,7 +190,10 @@ function crossfade(imgEl, newSrc, fitMode) {
   ghost.style.backgroundSize = fitMode;
   ghost.classList.add('visible');
 
+  const token = (imgEl._swapToken = (imgEl._swapToken || 0) + 1);
   const start = () => {
+    if (imgEl._swapToken !== token) return; // это уже устаревший вызов
+    imgEl.src = newSrc;
     imgEl.classList.remove('img-swap');
     void imgEl.offsetWidth;
     imgEl.classList.add('img-swap', 'loaded');
@@ -181,12 +201,9 @@ function crossfade(imgEl, newSrc, fitMode) {
     ghost._hideTimer = setTimeout(() => ghost.classList.remove('visible'), 430);
   };
 
-  imgEl.src = newSrc;
-  if (imgEl.complete) start();
-  else {
-    imgEl.addEventListener('load', start, { once: true });
-    imgEl.addEventListener('error', start, { once: true });
-  }
+  // Картинка уже была предзагружена в preloadStageAssets — просто ждём
+  // готовый промис (обычно он уже resolved, тогда переход мгновенный).
+  preloadImage(newSrc).then(start);
 }
 
 // Единая точка переключения ступени: обновляет карточку и открытую модалку
