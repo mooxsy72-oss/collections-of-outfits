@@ -16,6 +16,21 @@ const UNDRESS_ICON = `
     <path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0c2.6 0 5.2 .5 7.6 1.5L620.5 79.4c15.9 6.8 22.4 25.8 13.6 40.7L568.5 232.5c-6.4 10.9-19.7 15.3-31.2 10.4L500 227v244c0 22.1-17.9 40-40 40H180c-22.1 0-40-17.9-40-40V227l-37.3 15.9c-11.5 4.9-24.8 .5-31.2-10.4L5.9 120.1C-2.9 105.2 3.6 86.2 19.5 79.4L204.2 1.5c2.4-1 5-1.5 7.6-1.5z"/>
   </svg>`;
 
+// ── Пути к файлам раздевалки ──
+// Все ступени раздевалки лежат в отдельном репозитории outfits-images.
+// Но в старых записях undressed.json остался префикс от прежнего репо
+// ("outfits/461a.png"). Нормализуем такие пути на лету, чтобы не править JSON руками.
+const UNDRESS_BASE = 'https://mooxsy72-oss.github.io/outfits-images/images/';
+
+function normalizeStagePath(path) {
+  if (!path) return path;
+  // Уже абсолютный (или protocol-relative) — не трогаем
+  if (/^(https?:)?\/\//i.test(path)) return path;
+  // Отрезаем любой ведущий относительный префикс, оставляя только имя файла
+  const file = String(path).replace(/^.*\//, '');
+  return UNDRESS_BASE + file;
+}
+
 async function loadOutfits() {
   try {
     const res = await fetch('outfits.json');
@@ -36,7 +51,13 @@ async function loadOutfits() {
 
       // Новый формат с явным массивом stages
       if (Array.isArray(item.stages)) {
-        const stages = item.stages.filter(s => s && s.img);
+        const stages = item.stages
+          .filter(s => s && s.img)
+          .map(s => ({
+            ...s,
+            img: normalizeStagePath(s.img),
+            prompt: normalizeStagePath(s.prompt)
+          }));
         if (stages.length) grouped.set(id, stages);
         return;
       }
@@ -44,7 +65,10 @@ async function loadOutfits() {
       // Старый плоский формат — собираем в массив
       if (item.img) {
         if (!grouped.has(id)) grouped.set(id, []);
-        grouped.get(id).push({ img: item.img, prompt: item.prompt });
+        grouped.get(id).push({
+          img: normalizeStagePath(item.img),
+          prompt: normalizeStagePath(item.prompt)
+        });
       }
     });
 
