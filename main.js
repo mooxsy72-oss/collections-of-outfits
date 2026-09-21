@@ -143,8 +143,9 @@ function renderGallery() {
   }
 
   const toShow = filteredOutfits.slice(0, displayedCount);
+  resetLoadQueue();
   toShow.forEach((outfit, i) => createCard(outfit, i));
-  preloadStageAssets(toShow);
+  queueOutfitLoads(toShow);
 
   const loadMoreBtn = document.getElementById('loadMoreBtn');
   if (filteredOutfits.length > displayedCount) {
@@ -170,31 +171,99 @@ function getStageData(outfit, stage = outfit._stage || 0) {
   return getStages(outfit)[stage - 1] || outfit;
 }
 
-// Заранее подгружаем картинки и промпты всех ступеней,
-// чтобы переключение было мгновенным и без ожидания.
-// Кэш промисов — не грузим одну и ту же картинку повторно,
-// и crossfade() может дождаться реальной готовности файла.
+// ── Загрузка картинок ──
+// 1) Если файл с указанным расширением не найден, пробуем другие:
+//    в JSON записано 27.jpg, а в папке лежит 27.png — всё равно покажется.
+// 2) Кэш промисов: одна и та же картинка не грузится дважды,
+//    а crossfade() может дождаться её реальной готовности.
+const IMG_EXTS = ['png', 'jpg', 'jpeg', 'webp'];
 const imgReadyCache = new Map();
-function preloadImage(src) {
-  if (!src) return Promise.resolve();
-  if (imgReadyCache.has(src)) return imgReadyCache.get(src);
 
-  const p = new Promise(resolve => {
+function extVariants(src) {
+  const m = String(src).match(/^(.*)\.(png|jpe?g|webp)(\?.*)?$/i);
+  if (!m) return [src];
+  const [, base, ext, query = ''] = m;
+  const current = ext.toLowerCase();
+  return [src, ...IMG_EXTS.filter(e => e !== current).map(e => `${base}.${e}${query}`)];
+}
+
+function tryLoad(url) {
+  return new Promise((resolve, reject) => {
     const im = new Image();
     im.decoding = 'async';
-    im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(resolve);
-    im.onerror = resolve; // не блокируем UI, если картинка не найдена
-    im.src = src;
+    im.onload = () =>
+      (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => resolve(url));
+    im.onerror = reject;
+    im.src = url;
   });
+}
+
+// Возвращает адрес, который реально загрузился (с тем расширением, что нашлось)
+function preloadImage(src) {
+  if (!src) return Promise.resolve(src);
+  if (imgReadyCache.has(src)) return imgReadyCache.get(src);
+
+  const p = (async () => {
+    for (const url of extVariants(src)) {
+      try { return await tryLoad(url); } catch { /* пробуем следующее расширение */ }
+    }
+    return src; // ни один вариант не нашёлся — оставляем как было
+  })();
   imgReadyCache.set(src, p);
   return p;
 }
 
-function preloadStageAssets(list) {
+// ── Очередь загрузки ──
+// Картинки грузятся строго по порядку: наряд → его ступени a, b, c →
+// следующий наряд. Одновременно идут несколько загрузок, чтобы не было
+// медленно, но каждая новая берётся из очереди по порядку.
+const LOAD_CONCURRENCY = 3;
+let loadQueue = [];
+let activeLoads = 0;
+let queueGeneration = 0;
+
+function enqueueLoad(task) {
+  loadQueue.push({ task, gen: queueGeneration });
+  pumpQueue();
+}
+
+// При смене фильтра старая очередь больше не нужна
+function resetLoadQueue() {
+  queueGeneration++;
+  loadQueue = [];
+}
+
+function pumpQueue() {
+  while (activeLoads < LOAD_CONCURRENCY && loadQueue.length) {
+    const { task, gen } = loadQueue.shift();
+    if (gen !== queueGeneration) continue;
+    activeLoads++;
+    Promise.resolve()
+      .then(task)
+      .catch(() => {})
+      .finally(() => { activeLoads--; pumpQueue(); });
+  }
+}
+
+function loadCardImage(img, outfit) {
+  return preloadImage(getStageData(outfit, 0).img).then(url => {
+    // Если пользователь уже успел переключить ступень — не перебиваем
+    if (!img.isConnected || img.getAttribute('src')) return;
+    img.src = url;
+    img.alt = outfit.title || 'outfit';
+  });
+}
+
+function queueOutfitLoads(list) {
   list.forEach(outfit => {
+    const ref = cardRefs.get(outfit);
+    if (ref) enqueueLoad(() => loadCardImage(ref.img, outfit));
+
     getStages(outfit).forEach((s, i) => {
-      if (s.img) preloadImage(s.img);
-      getPromptText(outfit, i + 1);
+      enqueueLoad(() => Promise.all([
+        s.img ? preloadImage(s.img) : null,
+        getPromptText(outfit, i + 1)
+      ]));
     });
   });
 }
@@ -259,9 +328,10 @@ function crossfade(imgEl, newSrc, fitMode) {
   ghost.classList.add('visible');
 
   const token = (imgEl._swapToken = (imgEl._swapToken || 0) + 1);
-  const start = () => {
+  imgEl._openToken = (imgEl._openToken || 0) + 1; // отменяем незавершённое открытие модалки
+  const start = (url) => {
     if (imgEl._swapToken !== token) return; // это уже устаревший вызов
-    imgEl.src = newSrc;
+    imgEl.src = url || newSrc;
     imgEl.classList.remove('img-swap');
     void imgEl.offsetWidth;
     imgEl.classList.add('img-swap', 'loaded');
@@ -269,8 +339,8 @@ function crossfade(imgEl, newSrc, fitMode) {
     ghost._hideTimer = setTimeout(() => ghost.classList.remove('visible'), 430);
   };
 
-  // Картинка уже была предзагружена в preloadStageAssets — просто ждём
-  // готовый промис (обычно он уже resolved, тогда переход мгновенный).
+  // Картинка обычно уже предзагружена очередью — тогда переход мгновенный.
+  // Если нет, клик пользователя грузит её вне очереди, без ожидания.
   preloadImage(newSrc).then(start);
 }
 
@@ -314,10 +384,9 @@ function createCard(outfit, i) {
   const hasUndressed = undressedById.has(String(outfit.id));
   wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '');
 
+  // src проставит очередь загрузки, когда до этой карточки дойдёт черёд
   const img = document.createElement('img');
-  img.src = getStageData(outfit).img;
-  img.alt = outfit.title || 'outfit';
-  img.loading = 'lazy';
+  img.alt = '';
 
   let undressBtn = null;
   let dots = null;
@@ -449,8 +518,12 @@ async function openModal(outfit) {
 
   modalImg.classList.remove('loaded', 'img-swap');
   modalImg.onload = () => modalImg.classList.add('loaded');
-  modalImg.src = data.img;
-  if (modalImg.complete) modalImg.classList.add('loaded');
+  const openToken = (modalImg._openToken = (modalImg._openToken || 0) + 1);
+  preloadImage(data.img).then(url => {
+    if (modalImg._openToken !== openToken) return; // успели открыть другой наряд
+    modalImg.src = url;
+    if (modalImg.complete) modalImg.classList.add('loaded');
+  });
 
   const modalBtn = ensureModalUndressBtn();
   const modalDots = document.getElementById('modalUndressDots');
