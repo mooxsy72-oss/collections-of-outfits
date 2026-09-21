@@ -203,7 +203,7 @@
 { "id": 202, "title": "", "img": "outfits/202.jpg", "prompt": "outfits/202.txt", "category": "fantasy", "gender": "male" },
 { "id": 203, "title": "", "img": "outfits/203.jpg", "prompt": "outfits/203.txt", "category": "modern", "gender": "male" },
 { "id": 204, "title": "", "img": "outfits/204.jpg", "prompt": "outfits/204.txt", "category": "modern", "gender": "male" },
-{ "id": 205, "title": "", "img": "outfits/205.jpg", "prompt": "outfits/205.txt", "category": "scifi", "gender": "female" },
+{ "id": 205, "title": "", "img": "outfits/205.png", "prompt": "outfits/205.txt", "category": "scifi", "gender": "female" },
 { "id": 206, "title": "", "img": "outfits/206.jpg", "prompt": "outfits/206.txt", "category": "fantasy", "gender": "female" },
 { "id": 207, "title": "", "img": "outfits/207.jpg", "prompt": "outfits/207.txt", "category": "fantasy", "gender": "female" },
 { "id": 208, "title": "", "img": "outfits/208.jpg", "prompt": "outfits/208.txt", "category": "pyjamas", "gender": "female" },
