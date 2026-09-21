@@ -21,8 +21,8 @@ const UNDRESS_ICON = `
 // Чтобы подключить ещё один репо, когда место кончится, — допишите
 // сюда его адрес. Наряды из всех источников склеиваются в один список.
 const DATA_SOURCES = [
-  'https://mooxsy72-oss.github.io/outfits-images/'
-  // 'https://mooxsy72-oss.github.io/outfits-images-2/',
+  'https://mooxsy72-oss.github.io/outfits-images/',
+  'https://mooxsy72-oss.github.io/outfit-again/'
 ];
 
 const UNDRESS_BASE = DATA_SOURCES[0] + 'images/';
