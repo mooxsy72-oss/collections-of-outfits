@@ -372,7 +372,7 @@
 { "id": 372, "title": "", "img": "outfits/372.jpg", "prompt": "outfits/372.txt", "category": "folk", "gender": "male" },
 { "id": 373, "title": "", "img": "outfits/373.jpg", "prompt": "outfits/373.txt", "category": "folk", "gender": "male" },
 { "id": 374, "title": "", "img": "outfits/374.jpg", "prompt": "outfits/374.txt", "category": "folk", "gender": "male" },
-{ "id": 375, "title": "", "img": "outfits/375.jpg", "prompt": "outfits/375.txt", "category": "fantasy", "gender": "male" },
+{ "id": 375, "title": "", "img": "outfits/375.jpg", "prompt": "outfits/375.txt", "category": "ofis", "gender": "male" },
 { "id": 376, "title": "", "img": "outfits/376.jpg", "prompt": "outfits/376.txt", "category": "fantasy", "gender": "male" },
 { "id": 377, "title": "", "img": "outfits/377.png", "prompt": "outfits/377.txt", "category": "elegant", "gender": "female" },
 { "id": 378, "title": "", "img": "outfits/378.png", "prompt": "outfits/378.txt", "category": "fantasy", "gender": "female" },
