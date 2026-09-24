@@ -22,7 +22,9 @@ const UNDRESS_ICON = `
 // сюда его адрес. Наряды из всех источников склеиваются в один список.
 const DATA_SOURCES = [
   'https://mooxsy72-oss.github.io/outfits-images/',
-  'https://mooxsy72-oss.github.io/outfit-again/'
+  'https://mooxsy72-oss.github.io/outfit-again/',
+  'https://mooxsy72-oss.github.io/hahahahaagain/',
+  'https://mooxsy72-oss.github.io/not-funny-anymore/'
 ];
 
 const UNDRESS_BASE = DATA_SOURCES[0] + 'images/';
