@@ -306,8 +306,19 @@ function loadCardImage(img, outfit) {
 
 // Убирает карточку, у которой нет картинки, и подставляет на её место
 // следующую, чтобы на странице не было дырок и пустых карточек.
+// Номера, у которых не нашлась картинка, — чтобы их можно было
+// скопировать в deleted.txt. Список пишется в консоль браузера (F12).
+const brokenIds = new Set();
+let brokenLogTimer = null;
+
 function hideBrokenOutfit(outfit) {
   hiddenIds.add(String(outfit.id));
+  brokenIds.add(Number(outfit.id));
+  clearTimeout(brokenLogTimer);
+  brokenLogTimer = setTimeout(() => {
+    console.info('Скрыты наряды без картинки (можно вписать в deleted.txt): ' +
+      [...brokenIds].sort((a, b) => a - b).join(', '));
+  }, 1500);
 
   const ref = cardRefs.get(outfit);
   if (ref && ref.wrap) ref.wrap.remove();
@@ -327,6 +338,47 @@ function hideBrokenOutfit(outfit) {
   const loadMoreBtn = document.getElementById('loadMoreBtn');
   loadMoreBtn.classList.toggle('hidden', filteredOutfits.length <= displayedCount);
 }
+
+// Проверка всей коллекции разом: наберите в консоли браузера (F12)
+//     findMissingOutfits()
+// и получите номера всех нарядов, у которых нет картинки,
+// готовой строкой для deleted.txt. Качается не картинка целиком,
+// а только ответ «есть файл или нет», поэтому это быстро.
+async function imageExists(src) {
+  for (const url of extVariants(src)) {
+    try {
+      const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+      if (res.ok) return true;
+    } catch { /* пробуем следующее расширение */ }
+  }
+  return false;
+}
+
+window.findMissingOutfits = async function () {
+  const list = outfits.filter(o => !hiddenIds.has(String(o.id)) || brokenIds.has(Number(o.id)));
+  const missing = [];
+  let done = 0;
+  console.info(`Проверяю ${list.length} нарядов…`);
+
+  const queue = [...list];
+  const worker = async () => {
+    while (queue.length) {
+      const o = queue.shift();
+      const src = getStageData(o, 0).img;
+      if (!src || !(await imageExists(src))) missing.push(Number(o.id));
+      if (++done % 100 === 0) console.info(`  проверено ${done} из ${list.length}`);
+    }
+  };
+  await Promise.all(Array.from({ length: 8 }, worker));
+
+  missing.sort((a, b) => a - b);
+  if (missing.length) {
+    console.info(`Без картинки: ${missing.length}. Скопируйте в deleted.txt:\n\n${missing.join(', ')}`);
+  } else {
+    console.info('У всех нарядов картинки на месте ✓');
+  }
+  return missing;
+};
 
 function queueOutfitLoads(list) {
   list.forEach(outfit => {
