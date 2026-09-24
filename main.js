@@ -629,6 +629,14 @@ function ensureModalUndressBtn() {
   return btn;
 }
 
+// Рамка вокруг фото в окне принимает пропорции самого фото,
+// поэтому по краям не остаётся пустых полос.
+function fitModalFrame(img) {
+  if (!img.naturalWidth || !img.naturalHeight) return;
+  const modal = img.closest('.modal');
+  if (modal) modal.style.setProperty('--r', (img.naturalWidth / img.naturalHeight).toFixed(4));
+}
+
 async function openModal(outfit) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modalImg');
@@ -645,12 +653,18 @@ async function openModal(outfit) {
   if (ghost) ghost.classList.remove('visible');
 
   modalImg.classList.remove('loaded', 'img-swap');
-  modalImg.onload = () => modalImg.classList.add('loaded');
+  modalImg.onload = () => {
+    modalImg.classList.add('loaded');
+    fitModalFrame(modalImg);
+  };
   const openToken = (modalImg._openToken = (modalImg._openToken || 0) + 1);
   preloadImage(data.img).then(url => {
     if (modalImg._openToken !== openToken) return; // успели открыть другой наряд
     modalImg.src = url;
-    if (modalImg.complete) modalImg.classList.add('loaded');
+    if (modalImg.complete) {
+      modalImg.classList.add('loaded');
+      fitModalFrame(modalImg);
+    }
   });
 
   const modalBtn = ensureModalUndressBtn();
@@ -806,6 +820,39 @@ if (sortNewBtn) {
   wrap.className = 'filters-scroll';
   filters.parentNode.insertBefore(wrap, filters);
   wrap.appendChild(filters);
+})();
+
+// ── Блёстки на фоне ──
+// Несколько крошечных звёздочек вспыхивают и гаснут в случайных местах.
+// Анимацию целиком делает CSS (только прозрачность и масштаб), а скрипт
+// лишь переставляет звёздочку в новое место, пока она невидима, —
+// раз в несколько секунд. Поэтому нагрузки нет ни на ПК, ни на телефоне.
+(function initSparkles() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'sparkles';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.prepend(layer);
+
+  const count = window.innerWidth < 700 ? 7 : 14;
+  const place = (s) => {
+    s.style.left = (Math.random() * 98).toFixed(2) + '%';
+    s.style.top = (Math.random() * 98).toFixed(2) + '%';
+  };
+
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('span');
+    const size = (3 + Math.random() * 5).toFixed(1) + 'px';
+    s.style.width = size;
+    s.style.height = size;
+    s.style.animationDuration = (3 + Math.random() * 3).toFixed(2) + 's';
+    s.style.animationDelay = (-Math.random() * 6).toFixed(2) + 's';
+    if (Math.random() < 0.3) s.classList.add('soft');
+    place(s);
+    s.addEventListener('animationiteration', () => place(s));
+    layer.appendChild(s);
+  }
 })();
 
 loadOutfits();
