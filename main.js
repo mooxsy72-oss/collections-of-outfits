@@ -68,14 +68,57 @@ function normalizeStagePath(path, base) {
   return (base || DATA_SOURCES[0]) + 'images/' + file;
 }
 
+// ── Скрытые наряды ──
+// hiddenIds: номера из deleted.txt + наряды, у которых картинка не нашлась.
+// Такие карточки на сайте не показываются.
+const hiddenIds = new Set();
+
+// Разбирает deleted.txt: номера через пробел, запятую или с новой строки,
+// диапазоны вида 100-120. Строки с # в начале — заметки, пропускаются.
+function parseDeletedList(text) {
+  const ids = new Set();
+  for (const raw of String(text).split(/\r?\n/)) {
+    const line = raw.replace(/#.*$/, '').trim();
+    if (!line) continue;
+    for (const m of line.matchAll(/(\d+)\s*[-–—]\s*(\d+)|(\d+)/g)) {
+      if (m[3]) { ids.add(m[3]); continue; }
+      const a = Number(m[1]), b = Number(m[2]);
+      const [lo, hi] = a <= b ? [a, b] : [b, a];
+      if (hi - lo > 2000) continue; // защита от опечатки вроде 1-99999
+      for (let n = lo; n <= hi; n++) ids.add(String(n));
+    }
+  }
+  return ids;
+}
+
+// deleted.txt читаем из всех репозиториев и с самого сайта:
+// номер можно записать в любой из них — наряд пропадёт отовсюду.
+async function fetchDeletedIds() {
+  const ids = new Set();
+  const urls = [...DATA_SOURCES.map(b => b + 'deleted.txt'), 'deleted.txt'];
+  await Promise.all(urls.map(async url => {
+    try {
+      const res = await fetch(url, { cache: 'no-cache' });
+      if (res.ok) parseDeletedList(await res.text()).forEach(id => ids.add(id));
+    } catch { /* файла нет — ничего страшного */ }
+  }));
+  return ids;
+}
+
 async function loadOutfits() {
+  const [outfitSources, deletedIds] = await Promise.all([
+    fetchAll('outfits.json'),
+    fetchDeletedIds()
+  ]);
+  deletedIds.forEach(id => hiddenIds.add(id));
+
   // Наряды: склеиваем все источники, при совпадении id побеждает первый
   const seen = new Set();
   outfits = [];
-  for (const { data } of await fetchAll('outfits.json')) {
+  for (const { data } of outfitSources) {
     for (const o of data) {
       const id = String(o.id);
-      if (seen.has(id)) continue;
+      if (seen.has(id) || hiddenIds.has(id)) continue;
       seen.add(id);
       outfits.push(o);
     }
@@ -133,6 +176,7 @@ function renderGallery() {
   cardRefs.clear();
 
   filteredOutfits = outfits.filter(o => {
+    if (hiddenIds.has(String(o.id))) return false;
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
     return catOk && genderOk;
@@ -178,6 +222,7 @@ function getStageData(outfit, stage = outfit._stage || 0) {
 //    а crossfade() может дождаться её реальной готовности.
 const IMG_EXTS = ['png', 'jpg', 'jpeg', 'webp'];
 const imgReadyCache = new Map();
+const brokenImages = new Set(); // адреса, для которых не нашлось ни одного файла
 
 function extVariants(src) {
   const m = String(src).match(/^(.*)\.(png|jpe?g|webp)(\?.*)?$/i);
@@ -207,7 +252,8 @@ function preloadImage(src) {
     for (const url of extVariants(src)) {
       try { return await tryLoad(url); } catch { /* пробуем следующее расширение */ }
     }
-    return src; // ни один вариант не нашёлся — оставляем как было
+    brokenImages.add(src); // ни один вариант не нашёлся
+    return src;
   })();
   imgReadyCache.set(src, p);
   return p;
@@ -246,12 +292,40 @@ function pumpQueue() {
 }
 
 function loadCardImage(img, outfit) {
-  return preloadImage(getStageData(outfit, 0).img).then(url => {
+  const src = getStageData(outfit, 0).img;
+  if (!src) { hideBrokenOutfit(outfit); return Promise.resolve(); }
+
+  return preloadImage(src).then(url => {
+    if (brokenImages.has(src)) { hideBrokenOutfit(outfit); return; }
     // Если пользователь уже успел переключить ступень — не перебиваем
     if (!img.isConnected || img.getAttribute('src')) return;
     img.src = url;
     img.alt = outfit.title || 'outfit';
   });
+}
+
+// Убирает карточку, у которой нет картинки, и подставляет на её место
+// следующую, чтобы на странице не было дырок и пустых карточек.
+function hideBrokenOutfit(outfit) {
+  hiddenIds.add(String(outfit.id));
+
+  const ref = cardRefs.get(outfit);
+  if (ref && ref.wrap) ref.wrap.remove();
+  cardRefs.delete(outfit);
+
+  const idx = filteredOutfits.indexOf(outfit);
+  if (idx === -1) return;
+  filteredOutfits.splice(idx, 1);
+
+  // Сдвинулся список — последняя видимая позиция освободилась, заполняем её
+  const next = filteredOutfits[displayedCount - 1];
+  if (next && !cardRefs.has(next)) {
+    createCard(next, displayedCount - 1);
+    queueOutfitLoads([next]);
+  }
+
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  loadMoreBtn.classList.toggle('hidden', filteredOutfits.length <= displayedCount);
 }
 
 function queueOutfitLoads(list) {
@@ -434,7 +508,7 @@ function createCard(outfit, i) {
     openModal(outfit);
   });
 
-  cardRefs.set(outfit, { img, btn: undressBtn, dots });
+  cardRefs.set(outfit, { img, btn: undressBtn, dots, wrap });
   gallery.appendChild(wrap);
 }
 
