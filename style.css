@@ -771,3 +771,61 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   }
   .sparkles { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   Подтеги «Разного» — маленькая строчка под тегами,
+   появляется только когда выбрана эта категория
+   ══════════════════════════════════════════════════════════ */
+.subfilters {
+  display: none;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0 2rem 1.1rem;
+  margin-top: -0.35rem;
+}
+
+.subfilters.open {
+  display: flex;
+  animation: subIn 0.3s var(--ease);
+}
+
+@keyframes subIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.subfilter-btn {
+  padding: 0.26rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.subfilter-btn:hover { border-color: var(--line-strong); background: var(--tint); }
+
+/* активный подтег тише активной категории: подсветка вместо заливки */
+.subfilter-btn.active {
+  border-color: var(--accent);
+  background: rgba(238, 89, 127, 0.18);
+}
+
+@media (max-width: 760px) {
+  .subfilters {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 1.4rem 0.9rem;
+    margin-top: -0.4rem;
+  }
+  .subfilters::-webkit-scrollbar { display: none; }
+  .subfilter-btn { flex: 0 0 auto; }
+}
