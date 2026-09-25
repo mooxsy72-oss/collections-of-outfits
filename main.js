@@ -2,6 +2,20 @@ let outfits = [];
 let currentFilter = 'all';
 let currentGender = 'all';
 let currentSort = 'new';
+let currentSub = 'all';   // подтег внутри «Разного»
+
+// Подтеги категории «Разное» — в том порядке, в каком они стоят на сайте
+const SUBTAGS = [
+  ['haute',     'Высокая мода'],
+  ['baroque',   'Барокко'],
+  ['witch',     'Ведьмы'],
+  ['knight',    'Рыцарство'],
+  ['angel',     'Ангелы'],
+  ['barbarian', 'Варвары'],
+  ['england',   'Англия'],
+  ['apoc',      'Постапок']
+];
+const SUB_CATEGORY = 'fantasy';
 let displayedCount = 40;
 let currentModalIndex = 0;
 let filteredOutfits = [];
@@ -177,11 +191,17 @@ function renderGallery() {
   gallery.innerHTML = '';
   cardRefs.clear();
 
+  const subs = availableSubs();
+  if (currentSub !== 'all' && !subs.includes(currentSub)) currentSub = 'all';
+  renderSubfilters(subs);
+
   filteredOutfits = outfits.filter(o => {
     if (hiddenIds.has(String(o.id))) return false;
     const catOk = currentFilter === 'all' || o.category === currentFilter;
     const genderOk = currentGender === 'all' || (o.gender || 'female') === currentGender;
-    return catOk && genderOk;
+    const subOk = currentFilter !== SUB_CATEGORY || currentSub === 'all' ||
+      (Array.isArray(o.subs) && o.subs.includes(currentSub));
+    return catOk && genderOk && subOk;
   });
 
   if (currentSort === 'new') {
@@ -780,6 +800,7 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
     document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
+    currentSub = 'all';
     displayedCount = 40;
     renderGallery();
   });
@@ -809,6 +830,49 @@ if (sortNewBtn) {
     renderGallery();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+}
+
+// ── Подтеги «Разного» ──
+// Показываем только те подтеги, у которых есть хотя бы один наряд
+// (с учётом выбранного пола). Пока ничего не подписано — строки нет.
+function availableSubs() {
+  if (currentFilter !== SUB_CATEGORY) return [];
+  const used = new Set();
+  for (const o of outfits) {
+    if (o.category !== SUB_CATEGORY || !Array.isArray(o.subs)) continue;
+    if (hiddenIds.has(String(o.id))) continue;
+    if (currentGender !== 'all' && (o.gender || 'female') !== currentGender) continue;
+    o.subs.forEach(k => used.add(k));
+  }
+  return SUBTAGS.map(([k]) => k).filter(k => used.has(k));
+}
+
+function renderSubfilters(subs) {
+  let row = document.getElementById('subfilters');
+  if (!row) {
+    row = document.createElement('div');
+    row.id = 'subfilters';
+    row.className = 'subfilters';
+    const anchor = document.querySelector('.filters-scroll') || document.querySelector('.filters');
+    anchor.after(row);
+    row.addEventListener('click', (e) => {
+      const btn = e.target.closest('.subfilter-btn');
+      if (!btn) return;
+      currentSub = btn.dataset.sub;
+      displayedCount = 40;
+      renderGallery();
+    });
+  }
+
+  const show = subs.length > 0;
+  row.classList.toggle('open', show);
+  if (!show) { row.innerHTML = ''; return; }
+
+  const labels = Object.fromEntries(SUBTAGS);
+  row.innerHTML = [['all', 'Все'], ...subs.map(k => [k, labels[k]])]
+    .map(([k, label]) =>
+      `<button type="button" class="subfilter-btn${k === currentSub ? ' active' : ''}" data-sub="${k}">${label}</button>`)
+    .join('');
 }
 
 // ── Теги: обёртка для затемнений ──
