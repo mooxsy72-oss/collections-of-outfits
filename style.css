@@ -918,43 +918,51 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 }
 
 /* «Бот» и «Exclusive» — две плашки в одном стиле на верхней рамке.
-   Заливка — чуть более глубокий оттенок акцента, чтобы белый текст
-   хорошо читался. Одинаковая высота — обе сидят ровно на линии рамки. */
+   Заливка — акцент, как у кнопки «Новинки». Белый текст с мягкой
+   розовой тенью, чтобы читался на светлом фоне. */
 .card-bot-btn,
 .ballet-badge {
   position: absolute;
-  top: -0.6rem;
   z-index: 6;
-  padding: 0.16rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: linear-gradient(135deg, #d94a73, #ec6d90);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--accent);
   color: #fff;
-  font-size: 0.64rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
   line-height: 1.3;
   white-space: nowrap;
-  text-shadow: 0 1px 1px rgba(110, 20, 50, 0.35);
-  box-shadow: 0 1px 5px rgba(29, 28, 26, 0.35);
+  text-shadow: 0 1px 2px rgba(150, 30, 65, 0.55);
+  box-shadow: 0 1px 5px rgba(29, 28, 26, 0.3);
 }
 
-/* «Exclusive» — на левом углу, чуть выходит за край */
-.ballet-badge {
-  left: -0.3rem;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-/* «Бот» — по центру */
+/* «Бот» — по центру рамки */
 .card-bot-btn {
+  top: -0.62rem;
   left: 50%;
   transform: translateX(-50%);
+  padding: 0.16rem 0.6rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: filter 0.25s;
 }
 
-.card-bot-btn:hover { filter: brightness(1.1); }
+.card-bot-btn:hover { filter: brightness(1.08); }
+
+/* «Exclusive» (потом — имя) — на левом углу, мельче «Бота».
+   Ширина ограничена половиной карточки минус место под «Бота»:
+   длинная надпись не доедет до него, а в крайнем случае
+   аккуратно оборвётся многоточием. */
+.ballet-badge {
+  top: -0.56rem;
+  left: -0.3rem;
+  max-width: calc(50% - 1.25rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.13rem 0.42rem;
+  font-size: 0.56rem;
+  pointer-events: none;
+}
 
 /* вокруг «Бота» мягко расходится тонкое кольцо */
 .card-bot-btn::after {
@@ -962,12 +970,14 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  border: 1px solid #ec6d90;
+  border: 1px solid var(--accent);
   opacity: 0;
   pointer-events: none;
   animation: botRing 2.8s ease-out infinite;
   animation-play-state: paused;
 }
+
+.card-wrap.on-screen .card-bot-btn::after { animation-play-state: running; }
 
 @keyframes botRing {
   0%   { opacity: 0.8; transform: scale(1); }
@@ -975,49 +985,15 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   100% { opacity: 0;   transform: scale(1.3, 1.7); }
 }
 
-/* по «Exclusive» время от времени пробегает блик */
-.ballet-badge::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 55%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-  transform: translateX(-120%);
-  animation: badgeShine 3.6s ease-in-out infinite;
-  animation-play-state: paused;
-}
-
-@keyframes badgeShine {
-  0%, 55%   { transform: translateX(-120%); }
-  85%, 100% { transform: translateX(280%); }
-}
-
-/* анимации идут только у карточек на экране */
-.card-wrap.on-screen .card-bot-btn::after,
-.card-wrap.on-screen .ballet-badge::after { animation-play-state: running; }
-
-/* на узких телефонах плашки компактнее, чтобы не встретились */
+/* на узких телефонах — компактнее */
 @media (max-width: 400px) {
-  .card-bot-btn,
-  .ballet-badge {
-    top: -0.55rem;
-    padding: 0.14rem 0.45rem;
-    font-size: 0.58rem;
-    letter-spacing: 0;
-  }
-  .ballet-badge { left: -0.2rem; }
+  .card-bot-btn { top: -0.56rem; padding: 0.14rem 0.45rem; font-size: 0.58rem; letter-spacing: 0; }
+  .ballet-badge { top: -0.5rem; left: -0.2rem; padding: 0.12rem 0.34rem; font-size: 0.52rem; max-width: calc(50% - 1rem); }
 }
 
-/* самые маленькие телефоны (320 пикселей) */
 @media (max-width: 340px) {
-  .card-bot-btn,
-  .ballet-badge {
-    padding: 0.12rem 0.36rem;
-    font-size: 0.55rem;
-  }
-  .ballet-badge { left: -0.12rem; }
+  .card-bot-btn { padding: 0.12rem 0.36rem; font-size: 0.55rem; }
+  .ballet-badge { left: -0.12rem; font-size: 0.5rem; max-width: calc(50% - 0.95rem); }
 }
 
 /* в окне наряда — та же светлая рамка */
