@@ -16,6 +16,9 @@
   --line-strong:   rgba(246, 163, 185, 0.80);  /* обводка при наведении */
   --tint:          rgba(238, 89, 127, 0.10);   /* лёгкая розовая подсветка */
 
+  --ballet:        #f9c9d6;                    /* балетный розовый — нежнее акцента */
+  --ballet-line:   rgba(249, 201, 214, 0.85);
+
   --font: 'Onest', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --radius: 14px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -829,3 +832,69 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   .subfilters::-webkit-scrollbar { display: none; }
   .subfilter-btn { flex: 0 0 auto; }
 }
+
+
+/* ══════════════════════════════════════════════════════════
+   Балетная коллекция: светлая «балетная» обводка, мягкое
+   свечение и значок балерины. Без анимации — ничего не грузит.
+   ══════════════════════════════════════════════════════════ */
+.card-wrap.is-ballet {
+  border-color: var(--ballet);
+  box-shadow: 0 0 0 1px rgba(249, 201, 214, 0.30), 0 0 24px rgba(249, 201, 214, 0.22);
+}
+
+.card-wrap.is-ballet:hover {
+  border-color: #fde3ea;
+  box-shadow: 0 0 0 1px rgba(253, 227, 234, 0.7), 0 0 32px rgba(249, 201, 214, 0.32);
+}
+
+.ballet-chip {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 3;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--ballet);
+  color: var(--bg);
+  box-shadow: 0 1px 6px rgba(29, 28, 26, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ballet-chip svg { width: 1.45rem; height: 1.45rem; }
+
+/* метка «New» встаёт рядом со значком, а не поверх */
+.card-wrap.is-ballet .card-new-badge { left: 2.95rem; top: 0.98rem; }
+
+/* в окне наряда — та же светлая рамка */
+.modal-left.is-ballet {
+  border-color: var(--ballet-line);
+  box-shadow: 0 0 34px rgba(249, 201, 214, 0.14);
+}
+
+.ballet-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--ballet-line);
+  background: rgba(249, 201, 214, 0.06);
+  color: var(--ballet);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.ballet-link[hidden] { display: none; }
+.ballet-link:hover { background: rgba(249, 201, 214, 0.15); border-color: #fde3ea; }
+.ballet-link svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
+.ballet-link .ballet-arrow { opacity: 0.7; }

@@ -16,6 +16,28 @@ const SUBTAGS = [
   ['apoc',      'Постапок']
 ];
 const SUB_CATEGORY = 'fantasy';
+
+// ══ Балетная коллекция — всё, что можно менять, здесь ══
+
+// Показывать ли кнопку бота в окне наряда: true — да, false — скрыть
+const BALLET_BOT_SHOW = true;
+
+// Текст на кнопке
+const BALLET_BOT_LABEL = 'Бот';
+
+// Ссылка на бота — между кавычками. Пока пусто, кнопка пишет
+// «Ссылка появится, когда бот выйдет».
+const BALLET_BOT_URL = '';
+
+// Пробный показ: эти номера подсвечиваются как балетные без тегов.
+// Чтобы убрать — оставьте пустые скобки: []
+const BALLET_PREVIEW = [129];
+
+const BALLET_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="1.8" stroke="none"/><path d="M12 6.3 L12 12" stroke-width="1.9" fill="none"/><path d="M12 7.2 C9.5 6.5 7.8 4.8 7.4 2.8 M12 7.2 C14.5 6.5 16.2 4.8 16.6 2.8" stroke-width="1.5" fill="none"/><path d="M5 12.6 C8 11.2 16 11.2 19 12.6 C16 14 8 14 5 12.6 Z" stroke-width="1" fill-opacity=".9"/><path d="M11.2 13.6 L10.6 21 M12.8 13.6 L15.8 17.4 L13.6 20.6" stroke-width="1.5" fill="none"/></g></svg>`;
+
+function isBallet(o) {
+  return o.ballet === true || BALLET_PREVIEW.includes(Number(o.id));
+}
 let displayedCount = 40;
 let currentModalIndex = 0;
 let filteredOutfits = [];
@@ -530,7 +552,8 @@ function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
   const wrap = document.createElement('div');
   const hasUndressed = undressedById.has(String(outfit.id));
-  wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '');
+  wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '') +
+    (isBallet(outfit) ? ' is-ballet' : '');
 
   // src проставит очередь загрузки, когда до этой карточки дойдёт черёд
   const img = document.createElement('img');
@@ -569,6 +592,14 @@ function createCard(outfit, i) {
 
   wrap.appendChild(img);
   wrap.appendChild(copyBtn);
+
+  if (isBallet(outfit)) {
+    const chip = document.createElement('span');
+    chip.className = 'ballet-chip';
+    chip.title = 'Коллекция для балета';
+    chip.innerHTML = BALLET_ICON;
+    wrap.appendChild(chip);
+  }
 
   if ((Number(outfit.id) || 0) >= newThreshold) {
     const badge = document.createElement('span');
@@ -657,6 +688,32 @@ function fitModalFrame(img) {
   if (modal) modal.style.setProperty('--r', (img.naturalWidth / img.naturalHeight).toFixed(4));
 }
 
+// Кнопка бота в окне наряда — только у балетных нарядов
+function updateBalletUI(outfit) {
+  const ballet = isBallet(outfit);
+  document.querySelector('.modal-left')?.classList.toggle('is-ballet', ballet);
+
+  let link = document.getElementById('balletLink');
+  if (!link) {
+    link = document.createElement('a');
+    link.id = 'balletLink';
+    link.className = 'ballet-link';
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.innerHTML = `${BALLET_ICON}<span>${BALLET_BOT_LABEL}</span><span class="ballet-arrow">↗</span>`;
+    link.addEventListener('click', (e) => {
+      if (!BALLET_BOT_URL) {
+        e.preventDefault();
+        showToast('Ссылка появится, когда бот выйдет');
+      }
+    });
+    const footer = document.querySelector('.modal-footer');
+    footer.insertBefore(link, footer.firstChild);
+  }
+  link.href = BALLET_BOT_URL || '#';
+  link.hidden = !ballet || !BALLET_BOT_SHOW;
+}
+
 async function openModal(outfit) {
   const modal = document.getElementById('modal');
   const modalImg = document.getElementById('modalImg');
@@ -693,6 +750,8 @@ async function openModal(outfit) {
   modalDots.style.visibility = hasUndressed ? '' : 'hidden';
   updateUndressBtn(modalBtn, outfit);
   renderDots(modalDots, outfit);
+
+  updateBalletUI(outfit);
 
   modalPrompt.textContent = 'Загрузка...';
   modal.classList.add('open');
