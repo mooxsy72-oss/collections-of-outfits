@@ -732,30 +732,38 @@ function fitModalFrame(img) {
   if (modal) modal.style.setProperty('--r', (img.naturalWidth / img.naturalHeight).toFixed(4));
 }
 
-// Кнопка бота в окне наряда — только у балетных нарядов
+// В окне наряда у балетных — «Бот» плавающей плашкой на верхней
+// рамке фото и пуанты на нижнем левом углу, как на карточке.
 function updateBalletUI(outfit) {
   const ballet = isBallet(outfit);
-  document.querySelector('.modal-left')?.classList.toggle('is-ballet', ballet);
+  const frame = document.querySelector('.modal-left');
+  if (!frame) return;
+  frame.classList.toggle('is-ballet', ballet);
 
-  let link = document.getElementById('balletLink');
-  if (!link) {
-    link = document.createElement('a');
-    link.id = 'balletLink';
-    link.className = 'ballet-link';
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.innerHTML = `<span>${BALLET_BOT_LABEL}</span><span class="ballet-arrow">↗</span>`;
-    link.addEventListener('click', (e) => {
-      if (!BALLET_BOT_URL) {
-        e.preventDefault();
-        openBalletBot();
-      }
+  let bot = document.getElementById('modalBotBtn');
+  if (!bot) {
+    bot = document.createElement('button');
+    bot.id = 'modalBotBtn';
+    bot.type = 'button';
+    bot.className = 'card-bot-btn modal-bot-btn';
+    bot.textContent = BALLET_BOT_LABEL;
+    bot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openBalletBot();
     });
-    const footer = document.querySelector('.modal-footer');
-    footer.insertBefore(link, footer.firstChild);
+    frame.appendChild(bot);
   }
-  link.href = BALLET_BOT_URL || '#';
-  link.hidden = !ballet || !BALLET_BOT_SHOW;
+  bot.hidden = !ballet || !BALLET_BOT_SHOW;
+
+  let mark = document.getElementById('modalBalletMark');
+  if (!mark) {
+    mark = document.createElement('span');
+    mark.id = 'modalBalletMark';
+    mark.className = 'ballet-mark modal-ballet-mark';
+    mark.title = 'Коллекция для балета';
+    frame.appendChild(mark);
+  }
+  mark.hidden = !ballet;
 }
 
 async function openModal(outfit) {
