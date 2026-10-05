@@ -25,6 +25,9 @@ const BALLET_BOT_SHOW = true;
 // Текст на кнопке
 const BALLET_BOT_LABEL = 'Бот';
 
+// Метка у балетных нарядов (стоит вместо «New»)
+const BALLET_BADGE_LABEL = 'Exclusive';
+
 // Ссылка на бота — между кавычками. Пока пусто, кнопка пишет
 // «Ссылка появится, когда бот выйдет».
 const BALLET_BOT_URL = '';
@@ -637,7 +640,12 @@ function createCard(outfit, i) {
     }
   }
 
-  if (isNew) {
+  if (ballet) {
+    const badge = document.createElement('span');
+    badge.className = 'ballet-badge';
+    badge.textContent = BALLET_BADGE_LABEL;
+    wrap.appendChild(badge);
+  } else if (isNew) {
     const badge = document.createElement('span');
     badge.className = 'card-new-badge';
     badge.textContent = 'New';

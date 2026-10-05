@@ -917,39 +917,88 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   pointer-events: none;
 }
 
-/* кнопка бота — как «Скопировать промпт», только меньше, и стоит над ней */
+/* «Бот» — маленькая кнопка на верхней рамке, по центру.
+   Вокруг неё мягко расходится тонкое кольцо. */
 .card-bot-btn {
   position: absolute;
+  top: -0.68rem;
   left: 50%;
-  bottom: 3.05rem;
-  transform: translate(-50%, 10px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2;
-  padding: 0.36rem 0.85rem;
+  transform: translateX(-50%);
+  z-index: 6;
+  padding: 0.18rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: rgba(29, 28, 26, 0.82);
+  border: 1px solid var(--accent);
+  background: var(--bg);              /* фон сайта — кнопка как бы прорезает рамку */
   color: var(--accent);
-  font-size: 0.74rem;
-  font-weight: 500;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.3;
   white-space: nowrap;
   cursor: pointer;
-  transition: opacity 0.25s ease, transform 0.25s ease, background 0.25s, color 0.25s;
+  transition: background 0.25s, color 0.25s;
 }
 
-.card-wrap:hover .card-bot-btn {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
+.card-bot-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  animation: botRing 2.8s ease-out infinite;
+  animation-play-state: paused;
+}
+
+.card-wrap.on-screen .card-bot-btn::after { animation-play-state: running; }
+
+@keyframes botRing {
+  0%   { opacity: 0.7; transform: scale(1); }
+  70%  { opacity: 0;   transform: scale(1.35, 1.7); }
+  100% { opacity: 0;   transform: scale(1.35, 1.7); }
 }
 
 .card-bot-btn:hover { background: var(--accent); color: var(--on-accent); }
 
-.card-wrap.has-bot::after { height: 42%; }
+/* «Exclusive» — вместо «New» у балетных нарядов.
+   Стоит ниже кнопки «Бот», поэтому они не пересекаются
+   даже на узких карточках телефона. По ней пробегает блик. */
+.ballet-badge {
+  position: absolute;
+  top: 0.95rem;
+  left: 0.6rem;
+  z-index: 3;
+  overflow: hidden;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #f9c9d6);
+  color: var(--on-accent);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  pointer-events: none;
+  box-shadow: 0 1px 6px rgba(29, 28, 26, 0.3);
+}
 
-@media (hover: none) {
-  .card-bot-btn { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+.ballet-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 60%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  transform: translateX(-120%);
+  animation: badgeShine 3.6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.card-wrap.on-screen .ballet-badge::after { animation-play-state: running; }
+
+@keyframes badgeShine {
+  0%, 55% { transform: translateX(-120%); }
+  85%, 100% { transform: translateX(260%); }
 }
 
 /* в окне наряда — та же светлая рамка */
