@@ -33,7 +33,20 @@ const BALLET_BOT_URL = '';
 // Чтобы убрать — оставьте пустые скобки: []
 const BALLET_PREVIEW = [129];
 
-const BALLET_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="1.8" stroke="none"/><path d="M12 6.3 L12 12" stroke-width="1.9" fill="none"/><path d="M12 7.2 C9.5 6.5 7.8 4.8 7.4 2.8 M12 7.2 C14.5 6.5 16.2 4.8 16.6 2.8" stroke-width="1.5" fill="none"/><path d="M5 12.6 C8 11.2 16 11.2 19 12.6 C16 14 8 14 5 12.6 Z" stroke-width="1" fill-opacity=".9"/><path d="M11.2 13.6 L10.6 21 M12.8 13.6 L15.8 17.4 L13.6 20.6" stroke-width="1.5" fill="none"/></g></svg>`;
+const BALLET_ICON = `<svg viewBox="0 0 32 32" aria-hidden="true"><defs><path id="balletShoe" d="M5.5 20.6C9 20.3 11.6 19.8 13.4 18.9 15.6 20.6 18.8 20.4 21.2 18.6 22.7 18.3 23.6 19.7 23.6 21.4V23.8C23.6 25 22.7 25.9 21.5 25.9H5.4C4 25.9 3 24.9 3 23.4 3 21.9 4 20.7 5.5 20.6Z"/></defs><use href="#balletShoe" transform="translate(5.2 -5.4) scale(.94)" fill="currentColor"/><use href="#balletShoe" fill="currentColor" stroke="rgba(29,28,26,.55)" stroke-width="1" paint-order="stroke"/><g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M19.6 19.3C17.8 14.6 19.4 10.6 23.2 9.2 25.4 8.4 27 9.8 26.2 11.4"/><path d="M21.6 18.8C23 15.4 25.6 13.6 29 14.2"/></g></svg>`;
+
+function openBalletBot() {
+  if (BALLET_BOT_URL) window.open(BALLET_BOT_URL, '_blank', 'noopener');
+  else showToast('Ссылка появится, когда бот выйдет');
+}
+
+// Блик на рамке крутится только у карточек на экране —
+// ушедшие за край встают на паузу и не тратят ресурсы.
+const balletObserver = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entries => {
+      for (const e of entries) e.target.classList.toggle('on-screen', e.isIntersecting);
+    }, { rootMargin: '100px' })
+  : null;
 
 function isBallet(o) {
   return o.ballet === true || BALLET_PREVIEW.includes(Number(o.id));
@@ -552,8 +565,12 @@ function createCard(outfit, i) {
   const gallery = document.getElementById('gallery');
   const wrap = document.createElement('div');
   const hasUndressed = undressedById.has(String(outfit.id));
+  const ballet = isBallet(outfit);
+  const isNew = (Number(outfit.id) || 0) >= newThreshold;
   wrap.className = 'card-wrap' + (hasUndressed ? ' has-undressed' : '') +
-    (isBallet(outfit) ? ' is-ballet' : '');
+    (ballet ? ' is-ballet' : '') +
+    (ballet && BALLET_BOT_SHOW ? ' has-bot' : '') +
+    (isNew ? ' is-new' : '');
 
   // src проставит очередь загрузки, когда до этой карточки дойдёт черёд
   const img = document.createElement('img');
@@ -593,15 +610,30 @@ function createCard(outfit, i) {
   wrap.appendChild(img);
   wrap.appendChild(copyBtn);
 
-  if (isBallet(outfit)) {
-    const chip = document.createElement('span');
-    chip.className = 'ballet-chip';
-    chip.title = 'Коллекция для балета';
-    chip.innerHTML = BALLET_ICON;
-    wrap.appendChild(chip);
+  if (ballet) {
+    if (balletObserver) balletObserver.observe(wrap);
+    else wrap.classList.add('on-screen');
+
+    const mark = document.createElement('span');
+    mark.className = 'ballet-mark';
+    mark.title = 'Коллекция для балета';
+    mark.innerHTML = BALLET_ICON;
+    wrap.appendChild(mark);
+
+    if (BALLET_BOT_SHOW) {
+      const botBtn = document.createElement('button');
+      botBtn.type = 'button';
+      botBtn.className = 'card-bot-btn';
+      botBtn.innerHTML = `${BALLET_ICON}<span>${BALLET_BOT_LABEL}</span>`;
+      botBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openBalletBot();
+      });
+      wrap.appendChild(botBtn);
+    }
   }
 
-  if ((Number(outfit.id) || 0) >= newThreshold) {
+  if (isNew) {
     const badge = document.createElement('span');
     badge.className = 'card-new-badge';
     badge.textContent = 'New';
@@ -704,7 +736,7 @@ function updateBalletUI(outfit) {
     link.addEventListener('click', (e) => {
       if (!BALLET_BOT_URL) {
         e.preventDefault();
-        showToast('Ссылка появится, когда бот выйдет');
+        openBalletBot();
       }
     });
     const footer = document.querySelector('.modal-footer');

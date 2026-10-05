@@ -835,40 +835,135 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 
 
 /* ══════════════════════════════════════════════════════════
-   Балетная коллекция: светлая «балетная» обводка, мягкое
-   свечение и значок балерины. Без анимации — ничего не грузит.
+   Балетная коллекция: светлая рамка с бегущим бликом,
+   ореол и белые пуанты в углу.
+   Блик — это градиент, который просто поворачивается: анимируется
+   только поворот, его считает видеокарта, страница не тормозит.
    ══════════════════════════════════════════════════════════ */
 .card-wrap.is-ballet {
-  border-color: var(--ballet);
-  box-shadow: 0 0 0 1px rgba(249, 201, 214, 0.30), 0 0 24px rgba(249, 201, 214, 0.22);
+  --ring: 2px;                                /* толщина рамки */
+  border: none;
+  padding: var(--ring);
+  background: rgba(249, 201, 214, 0.55);      /* сама рамка */
+  box-shadow:
+    0 0 0 1px rgba(249, 201, 214, 0.18),
+    0 0 26px rgba(249, 201, 214, 0.34),
+    0 0 60px rgba(241, 133, 160, 0.16);
+  isolation: isolate;
 }
+
+.card-wrap.is-ballet::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 210%;          /* ровно столько, чтобы при повороте закрыть углы */
+  aspect-ratio: 1;
+  z-index: 0;
+  pointer-events: none;
+  /* хвост блика — насыщенный розовый (виден на светлом краю фото),
+     головка — белая (видна на тёмном фоне сайта) */
+  background: conic-gradient(from 0deg,
+    transparent 0deg 250deg,
+    rgba(241, 133, 160, 0.35) 290deg,
+    #ee4f7a 322deg,
+    #fff 346deg,
+    transparent 360deg);
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: balletSweep 4.5s linear infinite;
+  animation-play-state: paused;   /* крутится, только пока карточка на экране */
+}
+
+.card-wrap.is-ballet.on-screen::before {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+@keyframes balletSweep {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.card-wrap.is-ballet img,
+.card-wrap.is-ballet .img-ghost { border-radius: calc(var(--radius) - var(--ring)); }
+.card-wrap.is-ballet .img-ghost { inset: var(--ring); }
+
+/* у балетной карточки фото не увеличиваем — иначе оно закрыло бы рамку */
+.card-wrap.is-ballet:hover img,
+.card-wrap.is-ballet:hover .img-ghost { transform: none; }
 
 .card-wrap.is-ballet:hover {
-  border-color: #fde3ea;
-  box-shadow: 0 0 0 1px rgba(253, 227, 234, 0.7), 0 0 32px rgba(249, 201, 214, 0.32);
+  background: rgba(253, 227, 234, 0.8);
+  box-shadow:
+    0 0 0 1px rgba(249, 201, 214, 0.3),
+    0 0 32px rgba(249, 201, 214, 0.48),
+    0 0 70px rgba(241, 133, 160, 0.22);
 }
 
-.ballet-chip {
+.card-wrap.is-ballet::after {
+  left: var(--ring);
+  right: var(--ring);
+  bottom: var(--ring);
+  border-radius: 0 0 calc(var(--radius) - var(--ring)) calc(var(--radius) - var(--ring));
+}
+
+/* значок: белые пуанты без подложки, с мягкой тенью — видно на любом фото */
+.ballet-mark {
   position: absolute;
-  top: 0.6rem;
-  left: 0.6rem;
+  top: 0.5rem;
+  left: 0.55rem;
   z-index: 3;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--ballet);
-  color: var(--bg);
-  box-shadow: 0 1px 6px rgba(29, 28, 26, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #fff;
+  filter: drop-shadow(0 1px 1px rgba(29, 28, 26, 0.7)) drop-shadow(0 0 1.5px rgba(29, 28, 26, 0.45));
   pointer-events: none;
 }
 
-.ballet-chip svg { width: 1.45rem; height: 1.45rem; }
+.ballet-mark svg { width: 100%; height: 100%; display: block; }
 
-/* метка «New» встаёт рядом со значком, а не поверх */
-.card-wrap.is-ballet .card-new-badge { left: 2.95rem; top: 0.98rem; }
+/* если есть «New», пуанты опускаются под неё */
+.card-wrap.is-new .ballet-mark { top: 2.05rem; }
+
+/* кнопка бота на карточке — под «Скопировать промпт» */
+.card-bot-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 0.85rem;
+  transform: translate(-50%, 10px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.9rem 0.32rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--ballet-line);
+  background: rgba(29, 28, 26, 0.82);
+  color: var(--ballet);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.25s, color 0.25s;
+}
+
+.card-bot-btn svg { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+
+.card-wrap:hover .card-bot-btn {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.card-bot-btn:hover { background: var(--ballet); color: var(--bg); }
+
+.card-wrap.has-bot .card-copy-btn { bottom: 3.05rem; }
+.card-wrap.has-bot::after { height: 42%; }
+
+@media (hover: none) {
+  .card-bot-btn { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+}
 
 /* в окне наряда — та же светлая рамка */
 .modal-left.is-ballet {
@@ -896,5 +991,5 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 
 .ballet-link[hidden] { display: none; }
 .ballet-link:hover { background: rgba(249, 201, 214, 0.15); border-color: #fde3ea; }
-.ballet-link svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
+.ballet-link svg { width: 1.35rem; height: 1.35rem; flex: 0 0 auto; }
 .ballet-link .ballet-arrow { opacity: 0.7; }
