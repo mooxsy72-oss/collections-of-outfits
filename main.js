@@ -20,7 +20,7 @@ const SUB_CATEGORY = 'fantasy';
 // ══ Балетная коллекция — всё, что можно менять, здесь ══
 
 // Показывать ли кнопку бота в окне наряда: true — да, false — скрыть
-const BALLET_BOT_SHOW = true;
+const BALLET_BOT_SHOW = false;
 
 // Текст на кнопке
 const BALLET_BOT_LABEL = 'Бот';
@@ -34,7 +34,7 @@ const BALLET_BOT_URL = '';
 
 // Пробный показ: эти номера подсвечиваются как балетные без тегов.
 // Чтобы убрать — оставьте пустые скобки: []
-const BALLET_PREVIEW = [129];
+const BALLET_PREVIEW = [];
 
 
 function openBalletBot() {
