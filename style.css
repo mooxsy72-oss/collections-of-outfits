@@ -835,46 +835,52 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 
 
 /* ══════════════════════════════════════════════════════════
-   Балетная коллекция: светлая рамка с бегущим бликом,
-   ореол и белые пуанты в углу.
-   Блик — это градиент, который просто поворачивается: анимируется
+   Балетная коллекция: насыщенная розовая рамка с бегущим бликом,
+   короткое свечение и пуанты на нижнем левом углу.
+   Блик — градиент, который просто поворачивается: анимируется
    только поворот, его считает видеокарта, страница не тормозит.
    ══════════════════════════════════════════════════════════ */
 .card-wrap.is-ballet {
-  --ring: 2px;                                /* толщина рамки */
+  --ring: 2px;                          /* толщина рамки */
   border: none;
   padding: var(--ring);
-  background: rgba(249, 201, 214, 0.55);      /* сама рамка */
-  box-shadow:
-    0 0 0 1px rgba(249, 201, 214, 0.18),
-    0 0 26px rgba(249, 201, 214, 0.34),
-    0 0 60px rgba(241, 133, 160, 0.16);
-  isolation: isolate;
+  overflow: visible;                    /* чтобы пуанты могли сесть на угол */
+  background: var(--accent);            /* сама рамка */
+  box-shadow: 0 0 8px rgba(241, 133, 160, 0.45);
 }
 
-.card-wrap.is-ballet::before {
-  content: '';
+.card-wrap.is-ballet:hover {
+  box-shadow: 0 0 12px rgba(241, 133, 160, 0.6);
+}
+
+/* слой с бликом — обрезан по скруглению карточки */
+.ballet-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ballet-sweep {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 210%;          /* ровно столько, чтобы при повороте закрыть углы */
+  width: 210%;                          /* ровно столько, чтобы закрыть углы при повороте */
   aspect-ratio: 1;
-  z-index: 0;
-  pointer-events: none;
-  /* хвост блика — насыщенный розовый (виден на светлом краю фото),
-     головка — белая (видна на тёмном фоне сайта) */
   background: conic-gradient(from 0deg,
-    transparent 0deg 250deg,
-    rgba(241, 133, 160, 0.35) 290deg,
-    #ee4f7a 322deg,
-    #fff 346deg,
+    transparent 0deg 260deg,
+    rgba(255, 255, 255, 0.25) 300deg,
+    rgba(255, 235, 242, 0.9) 335deg,
+    #fff 348deg,
     transparent 360deg);
   transform: translate(-50%, -50%) rotate(0deg);
   animation: balletSweep 4.5s linear infinite;
-  animation-play-state: paused;   /* крутится, только пока карточка на экране */
+  animation-play-state: paused;         /* крутится, только пока карточка на экране */
 }
 
-.card-wrap.is-ballet.on-screen::before {
+.card-wrap.is-ballet.on-screen .ballet-sweep {
   animation-play-state: running;
   will-change: transform;
 }
@@ -887,17 +893,9 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 .card-wrap.is-ballet .img-ghost { border-radius: calc(var(--radius) - var(--ring)); }
 .card-wrap.is-ballet .img-ghost { inset: var(--ring); }
 
-/* у балетной карточки фото не увеличиваем — иначе оно закрыло бы рамку */
+/* фото у балетной карточки не увеличиваем — иначе оно закрыло бы рамку */
 .card-wrap.is-ballet:hover img,
 .card-wrap.is-ballet:hover .img-ghost { transform: none; }
-
-.card-wrap.is-ballet:hover {
-  background: rgba(253, 227, 234, 0.8);
-  box-shadow:
-    0 0 0 1px rgba(249, 201, 214, 0.3),
-    0 0 32px rgba(249, 201, 214, 0.48),
-    0 0 70px rgba(241, 133, 160, 0.22);
-}
 
 .card-wrap.is-ballet::after {
   left: var(--ring);
@@ -906,49 +904,39 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   border-radius: 0 0 calc(var(--radius) - var(--ring)) calc(var(--radius) - var(--ring));
 }
 
-/* значок: белые пуанты без подложки, с мягкой тенью — видно на любом фото */
+/* пуанты сидят на нижнем левом углу, наполовину за краем */
 .ballet-mark {
   position: absolute;
-  top: 0.5rem;
-  left: 0.55rem;
-  z-index: 3;
-  width: 2.2rem;
-  height: 2.2rem;
-  color: #fff;
-  filter: drop-shadow(0 1px 1px rgba(29, 28, 26, 0.7)) drop-shadow(0 0 1.5px rgba(29, 28, 26, 0.45));
+  left: -0.7rem;
+  bottom: -0.7rem;
+  z-index: 5;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: url("data:image/png;base64,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") center / contain no-repeat;
+  filter: drop-shadow(0 1px 1.5px rgba(29, 28, 26, 0.55));
   pointer-events: none;
 }
 
-.ballet-mark svg { width: 100%; height: 100%; display: block; }
-
-/* если есть «New», пуанты опускаются под неё */
-.card-wrap.is-new .ballet-mark { top: 2.05rem; }
-
-/* кнопка бота на карточке — под «Скопировать промпт» */
+/* кнопка бота — как «Скопировать промпт», только меньше, и стоит над ней */
 .card-bot-btn {
   position: absolute;
   left: 50%;
-  bottom: 0.85rem;
+  bottom: 3.05rem;
   transform: translate(-50%, 10px);
   opacity: 0;
   pointer-events: none;
   z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.32rem 0.9rem 0.32rem 0.7rem;
+  padding: 0.36rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid var(--ballet-line);
+  border: 1px solid var(--line-strong);
   background: rgba(29, 28, 26, 0.82);
-  color: var(--ballet);
-  font-size: 0.8rem;
+  color: var(--accent);
+  font-size: 0.74rem;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
   transition: opacity 0.25s ease, transform 0.25s ease, background 0.25s, color 0.25s;
 }
-
-.card-bot-btn svg { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
 
 .card-wrap:hover .card-bot-btn {
   opacity: 1;
@@ -956,9 +944,8 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
   pointer-events: auto;
 }
 
-.card-bot-btn:hover { background: var(--ballet); color: var(--bg); }
+.card-bot-btn:hover { background: var(--accent); color: var(--on-accent); }
 
-.card-wrap.has-bot .card-copy-btn { bottom: 3.05rem; }
 .card-wrap.has-bot::after { height: 42%; }
 
 @media (hover: none) {
@@ -991,5 +978,4 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 
 .ballet-link[hidden] { display: none; }
 .ballet-link:hover { background: rgba(249, 201, 214, 0.15); border-color: #fde3ea; }
-.ballet-link svg { width: 1.35rem; height: 1.35rem; flex: 0 0 auto; }
 .ballet-link .ballet-arrow { opacity: 0.7; }

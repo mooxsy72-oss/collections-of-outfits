@@ -33,7 +33,6 @@ const BALLET_BOT_URL = '';
 // Чтобы убрать — оставьте пустые скобки: []
 const BALLET_PREVIEW = [129];
 
-const BALLET_ICON = `<svg viewBox="0 0 32 32" aria-hidden="true"><defs><path id="balletShoe" d="M5.5 20.6C9 20.3 11.6 19.8 13.4 18.9 15.6 20.6 18.8 20.4 21.2 18.6 22.7 18.3 23.6 19.7 23.6 21.4V23.8C23.6 25 22.7 25.9 21.5 25.9H5.4C4 25.9 3 24.9 3 23.4 3 21.9 4 20.7 5.5 20.6Z"/></defs><use href="#balletShoe" transform="translate(5.2 -5.4) scale(.94)" fill="currentColor"/><use href="#balletShoe" fill="currentColor" stroke="rgba(29,28,26,.55)" stroke-width="1" paint-order="stroke"/><g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><path d="M19.6 19.3C17.8 14.6 19.4 10.6 23.2 9.2 25.4 8.4 27 9.8 26.2 11.4"/><path d="M21.6 18.8C23 15.4 25.6 13.6 29 14.2"/></g></svg>`;
 
 function openBalletBot() {
   if (BALLET_BOT_URL) window.open(BALLET_BOT_URL, '_blank', 'noopener');
@@ -614,17 +613,22 @@ function createCard(outfit, i) {
     if (balletObserver) balletObserver.observe(wrap);
     else wrap.classList.add('on-screen');
 
+    // слой с бегущим бликом — первым, под фото
+    const ring = document.createElement('span');
+    ring.className = 'ballet-ring';
+    ring.innerHTML = '<span class="ballet-sweep"></span>';
+    wrap.prepend(ring);
+
     const mark = document.createElement('span');
     mark.className = 'ballet-mark';
     mark.title = 'Коллекция для балета';
-    mark.innerHTML = BALLET_ICON;
     wrap.appendChild(mark);
 
     if (BALLET_BOT_SHOW) {
       const botBtn = document.createElement('button');
       botBtn.type = 'button';
       botBtn.className = 'card-bot-btn';
-      botBtn.innerHTML = `${BALLET_ICON}<span>${BALLET_BOT_LABEL}</span>`;
+      botBtn.textContent = BALLET_BOT_LABEL;
       botBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         openBalletBot();
@@ -732,7 +736,7 @@ function updateBalletUI(outfit) {
     link.className = 'ballet-link';
     link.target = '_blank';
     link.rel = 'noopener';
-    link.innerHTML = `${BALLET_ICON}<span>${BALLET_BOT_LABEL}</span><span class="ballet-arrow">↗</span>`;
+    link.innerHTML = `<span>${BALLET_BOT_LABEL}</span><span class="ballet-arrow">↗</span>`;
     link.addEventListener('click', (e) => {
       if (!BALLET_BOT_URL) {
         e.preventDefault();
