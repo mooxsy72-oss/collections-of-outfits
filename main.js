@@ -1030,6 +1030,43 @@ function renderSubfilters(subs) {
   }
 })();
 
+// ── Ники авторов: в среднем ряду или отдельной строкой ──
+// На телефоне ники стоят между кнопками пола и «Новинками». Если там
+// не хватает места (узкий экран или панель в таверне), они переходят
+// на отдельную строку под заголовком. Проверяется по реальным размерам,
+// поэтому подстраивается под любой экран, шрифт и масштаб.
+(function initAuthorsLayout() {
+  const header = document.querySelector('header');
+  const authors = header && header.querySelector('.authors');
+  const gender = header && header.querySelector('.gender-switch');
+  const sort = header && header.querySelector('.sort-btn');
+  if (!authors || !gender || !sort) return;
+
+  const check = () => {
+    if (!window.matchMedia('(max-width: 600px)').matches) {
+      header.classList.remove('authors-stacked');
+      return;
+    }
+    const cs = getComputedStyle(header);
+    const colGap = parseFloat(cs.columnGap) || 0;
+    const free = header.clientWidth
+      - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+      - gender.offsetWidth - sort.offsetWidth - colGap * 2;
+    const pills = [...authors.querySelectorAll('.author')];
+    const gap = parseFloat(getComputedStyle(authors).columnGap) || 0;
+    const need = pills.reduce((w, p) => w + p.offsetWidth, 0) + gap * (pills.length - 1);
+    // небольшой запас, чтобы плашки не прилипали к кнопкам
+    header.classList.toggle('authors-stacked', need + 8 > free);
+  };
+
+  let raf = 0;
+  const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(check); };
+  if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(header);
+  window.addEventListener('resize', schedule);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  schedule();
+})();
+
 // ── Шапка становится компактнее при прокрутке ──
 // Ники авторов остаются на виду, просто мельче.
 (function initCompactHeader() {
