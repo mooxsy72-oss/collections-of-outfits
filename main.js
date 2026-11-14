@@ -1042,11 +1042,9 @@ function renderSubfilters(subs) {
   const sort = header && header.querySelector('.sort-btn');
   if (!authors || !gender || !sort) return;
 
-  const check = () => {
-    if (!window.matchMedia('(max-width: 600px)').matches) {
-      header.classList.remove('authors-stacked');
-      return;
-    }
+  const LEVELS = ['fit-1', 'fit-2', 'fit-3'];
+
+  const fits = () => {
     const cs = getComputedStyle(header);
     const colGap = parseFloat(cs.columnGap) || 0;
     const free = header.clientWidth
@@ -1055,8 +1053,18 @@ function renderSubfilters(subs) {
     const pills = [...authors.querySelectorAll('.author')];
     const gap = parseFloat(getComputedStyle(authors).columnGap) || 0;
     const need = pills.reduce((w, p) => w + p.offsetWidth, 0) + gap * (pills.length - 1);
-    // небольшой запас, чтобы плашки не прилипали к кнопкам
-    header.classList.toggle('authors-stacked', need + 8 > free);
+    return need + 6 <= free;   // небольшой запас, чтобы не прилипали
+  };
+
+  const check = () => {
+    header.classList.remove('authors-stacked', ...LEVELS);
+    if (!window.matchMedia('(max-width: 600px)').matches) return;
+    // ужимаем по ступеням, пока ники не поместятся между кнопками
+    for (const level of LEVELS) {
+      if (fits()) return;
+      header.classList.add(level);
+    }
+    if (!fits()) header.classList.add('authors-stacked');
   };
 
   let raf = 0;

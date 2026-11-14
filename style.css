@@ -1129,6 +1129,29 @@ header.compact .author { font-size: 0.75rem; padding: 0.1rem 0.55rem 0.1rem 0.42
   header.compact .author { font-size: 0.68rem; padding: 0.12rem 0.42rem 0.12rem 0.32rem; }
 }
 
+/* Ступени ужатия шапки — их по очереди включает main.js,
+   пока ники не поместятся между кнопками пола и «Новинками». */
+header.fit-1 .author svg { display: none; }
+header.fit-1 .author { padding-left: 0.5rem; padding-right: 0.5rem; }
+
+header.fit-2 .sort-btn {           /* «Новинки» — круглая кнопка со звёздочкой */
+  font-size: 0;
+  gap: 0;
+  width: 1.95rem;
+  height: 1.95rem;
+  padding: 0;
+  justify-content: center;
+}
+header.fit-2 .sort-btn::before { font-size: 0.85rem; }
+
+header.fit-3 { column-gap: 0.3rem; padding-left: 0.6rem; padding-right: 0.6rem; }
+header.fit-3 .gender-switch { gap: 0.2rem; }
+header.fit-3 .gender-btn { width: 1.75rem; height: 1.75rem; font-size: 0.8rem; }
+header.fit-3.fit-2 .sort-btn { width: 1.75rem; height: 1.75rem; }
+header.fit-3.fit-2 .sort-btn::before { font-size: 0.78rem; }
+header.fit-3 .author { font-size: 0.66rem; padding: 0.12rem 0.42rem; }
+header.fit-3 .authors { gap: 0.22rem; }
+
 /* совсем узкие экраны — кнопки ещё чуть меньше */
 @media (max-width: 340px) {
   .gender-btn { width: 1.8rem; height: 1.8rem; font-size: 0.82rem; }
