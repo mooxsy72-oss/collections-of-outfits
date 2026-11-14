@@ -1030,4 +1030,23 @@ function renderSubfilters(subs) {
   }
 })();
 
+// ── Шапка становится компактнее при прокрутке ──
+// Ники авторов остаются на виду, просто мельче.
+(function initCompactHeader() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  let compact = false;
+  const update = () => {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    // разные пороги туда и обратно — чтобы шапка не дёргалась на границе
+    const next = compact ? y > 30 : y > 80;
+    if (next !== compact) {
+      compact = next;
+      header.classList.toggle('compact', compact);
+    }
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
 loadOutfits();

@@ -376,14 +376,14 @@ header h1 {
 /* ── Метка «New» ── */
 .card-new-badge {
   position: absolute;
-  top: 0.6rem;
-  left: 0.6rem;
+  top: 0.55rem;
+  left: 0.55rem;
   z-index: 3;
-  padding: 0.2rem 0.5rem;
+  padding: 0.12rem 0.4rem;
   border-radius: 999px;
   background: var(--accent);
   color: var(--on-accent);
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
   line-height: 1.2;
   pointer-events: none;
@@ -756,7 +756,8 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
     row-gap: 0.6rem;
     padding: 0.8rem 1rem 0.3rem;
   }
-  header h1 { grid-area: title; font-size: 1.2rem; }
+  .brand { grid-area: title; }
+  header h1 { font-size: 1.2rem; }
   .gender-switch { grid-area: gender; }
   .sort-btn { grid-area: sort; }
   .gender-switch { gap: 0.3rem; }
@@ -1030,3 +1031,91 @@ img.img-swap { animation: imgSwapIn 0.4s ease; }
 .ballet-mark[hidden] { display: none; }
 
 
+
+
+/* ══════════════════════════════════════════════════════════
+   Авторы под заголовком. Шапка закреплена, поэтому ники
+   видны всегда; при прокрутке шапка становится компактнее.
+   У каждого автора свой цвет, оба — из палитры сайта.
+   ══════════════════════════════════════════════════════════ */
+.brand { grid-column: 2; text-align: center; min-width: 0; }
+
+.authors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+  transition: margin 0.3s var(--ease);
+}
+
+.author {
+  --c: var(--accent);
+  --c-rgb: 241, 133, 160;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.16rem 0.65rem 0.16rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--c-rgb), 0.45);
+  background: rgba(var(--c-rgb), 0.1);
+  color: var(--c);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, padding 0.3s var(--ease), font-size 0.3s var(--ease);
+}
+
+.author svg { width: 0.9em; height: 0.9em; flex: 0 0 auto; }
+
+.author:hover {
+  background: var(--c);
+  border-color: var(--c);
+  color: var(--on-accent);
+}
+
+/* Mooxsy — розовый акцент сайта, DarkNet — сиреневый в пару к нему */
+.author-mooxsy  { --c: #f185a0; --c-rgb: 241, 133, 160; }
+.author-darknet { --c: #b9a0f2; --c-rgb: 185, 160, 242; }
+
+.authors .amp { color: var(--accent-soft); opacity: 0.55; font-size: 0.85rem; }
+
+/* компактная шапка после прокрутки */
+header h1 { transition: font-size 0.3s var(--ease); }
+header { transition: padding 0.3s var(--ease); }
+header.compact { padding-top: 0.55rem; padding-bottom: 0.45rem; }
+header.compact h1 { font-size: 1.3rem; }
+header.compact .authors { margin-top: 0.2rem; }
+header.compact .author { font-size: 0.75rem; padding: 0.1rem 0.55rem 0.1rem 0.42rem; }
+
+@media (max-width: 600px) {
+  /* на телефоне ники — в среднем ряду, между кнопками пола и «Новинками» */
+  header {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "title  title   title"
+      "gender authors sort";
+    column-gap: 0.4rem;
+  }
+  .brand { display: contents; }
+  header h1 { grid-area: title; }
+  .authors { grid-area: authors; margin-top: 0; gap: 0.25rem; min-width: 0; }
+  .authors .amp { display: none; }
+  .author { font-size: 0.72rem; padding: 0.14rem 0.45rem 0.14rem 0.36rem; gap: 0.22rem; }
+  .author svg { width: 0.8em; height: 0.8em; }
+
+  .card-new-badge { font-size: 0.55rem; padding: 0.1rem 0.36rem; top: 0.45rem; left: 0.45rem; }
+  header.compact { padding-top: 0.45rem; }
+  header.compact h1 { font-size: 1rem; }
+  header.compact .author { font-size: 0.68rem; padding: 0.12rem 0.4rem 0.12rem 0.32rem; }
+}
+
+/* совсем узкие телефоны — убираем значок Telegram, остаются ники */
+@media (max-width: 370px) {
+  .author svg { display: none; }
+  .author { padding: 0.14rem 0.42rem; }
+  .gender-btn { width: 1.9rem; height: 1.9rem; font-size: 0.9rem; }
+  .sort-btn { padding: 0.4rem 0.65rem; font-size: 0.74rem; }
+}
+}
