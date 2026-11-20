@@ -131,11 +131,34 @@
     setTimeout(function () { window.scrollTo(0, y); }, 400);
   }
 
+  // Когда вы сами листаете — колёсиком, пальцем, клавишами, кликом.
+  var lastInput = 0;
+  ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown', 'mousedown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { lastInput = Date.now(); }, { passive: true, capture: true });
+  });
+  function userActive() { return Date.now() - lastInput < 2500; }
+
+  // Страница прыгнула вверх сама, без вашего участия (так бывает, когда
+  // окно расширения закрыли и открыли) — это сброс, а не прокрутка.
+  function isReset(y) {
+    return !userActive() && lastY - y > 300;
+  }
+
   window.addEventListener('scroll', function () {
     if (!visible() || restoring) return;
-    lastY = window.scrollY || document.documentElement.scrollTop || 0;
+    var y = window.scrollY || document.documentElement.scrollTop || 0;
+    if (isReset(y)) { goTo(lastY); return; }
+    lastY = y;
     sendLater(300);
   }, { passive: true });
+
+  // Подстраховка: если сброс случился без события прокрутки,
+  // замечаем его при следующей проверке и возвращаемся на место.
+  setInterval(function () {
+    if (restoring || !visible()) return;
+    var y = window.scrollY || document.documentElement.scrollTop || 0;
+    if (isReset(y)) goTo(lastY);
+  }, 400);
 
   // окно расширения закрыли и открыли снова — возвращаемся на место
   window.addEventListener('resize', function () {
