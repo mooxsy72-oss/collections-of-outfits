@@ -32,6 +32,18 @@ const BALLET_BADGE_LABEL = 'Exclusive';
 // «Ссылка появится, когда бот выйдет».
 const BALLET_BOT_URL = '';
 
+// ══ Эксперимент с превью ══
+// У этих нарядов в галерее показывается лёгкое превью из папки thumbs/
+// рядом с images/ в том же репо. В открытом наряде — всегда оригинал.
+// Если превью не нашлось, карточка просто покажет оригинал, как раньше.
+// Чтобы выключить эксперимент — оставьте пустые скобки: []
+const THUMB_TEST_IDS = [1022, 1023, 1024, 1025, 1026];
+
+function thumbFor(outfit, src) {
+  if (!THUMB_TEST_IDS.includes(Number(outfit.id))) return src;
+  return String(src).replace(/\/images\/([^/?#]+)\.(png|jpe?g|webp)$/i, '/thumbs/$1.webp');
+}
+
 // Пробный показ: эти номера подсвечиваются как балетные без тегов.
 // Чтобы убрать — оставьте пустые скобки: []
 const BALLET_PREVIEW = [];
@@ -354,8 +366,14 @@ function loadCardImage(img, outfit) {
   const src = getStageData(outfit, 0).img;
   if (!src) { hideBrokenOutfit(outfit); return Promise.resolve(); }
 
-  return preloadImage(src).then(url => {
-    if (brokenImages.has(src)) { hideBrokenOutfit(outfit); return; }
+  // превью, если оно есть; если нет — оригинал
+  const thumb = thumbFor(outfit, src);
+  const load = thumb === src
+    ? preloadImage(src)
+    : preloadImage(thumb).then(u => brokenImages.has(thumb) ? preloadImage(src) : u);
+
+  return load.then(url => {
+    if (brokenImages.has(src) && url === src) { hideBrokenOutfit(outfit); return; }
     // Если пользователь уже успел переключить ступень — не перебиваем
     if (!img.isConnected || img.getAttribute('src')) return;
     img.src = url;
