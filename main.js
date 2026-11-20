@@ -1061,29 +1061,47 @@ function renderSubfilters(subs) {
   const sort = header && header.querySelector('.sort-btn');
   if (!authors || !gender || !sort) return;
 
-  const LEVELS = ['fit-1', 'fit-2', 'fit-3'];
+  const MIN_SCALE = 0.72;   // мельче — уже плохо читается, тогда отдельная строка
 
-  const fits = () => {
+  // ширина строки «пол + ники + Новинки» при текущем масштабе
+  const measure = () => {
     const cs = getComputedStyle(header);
     const colGap = parseFloat(cs.columnGap) || 0;
-    const free = header.clientWidth
-      - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
-      - gender.offsetWidth - sort.offsetWidth - colGap * 2;
+    const inner = header.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     const pills = [...authors.querySelectorAll('.author')];
     const gap = parseFloat(getComputedStyle(authors).columnGap) || 0;
-    const need = pills.reduce((w, p) => w + p.offsetWidth, 0) + gap * (pills.length - 1);
-    return need + 6 <= free;   // небольшой запас, чтобы не прилипали
+    const row = gender.offsetWidth + sort.offsetWidth
+      + pills.reduce((w, p) => w + p.offsetWidth, 0) + gap * (pills.length - 1);
+    return { free: inner - colGap * 2 - 6, row };   // 6 — небольшой запас
   };
 
   const check = () => {
-    header.classList.remove('authors-stacked', ...LEVELS);
-    if (!window.matchMedia('(max-width: 600px)').matches) return;
-    // ужимаем по ступеням, пока ники не поместятся между кнопками
-    for (const level of LEVELS) {
-      if (fits()) return;
-      header.classList.add(level);
+    header.classList.add('hs-measure');
+    try { fit(); } finally {
+      void header.offsetWidth;
+      header.classList.remove('hs-measure');
     }
-    if (!fits()) header.classList.add('authors-stacked');
+  };
+
+  const fit = () => {
+    header.classList.remove('authors-stacked');
+    header.style.setProperty('--hs', '1');
+    if (!window.matchMedia('(max-width: 600px)').matches) return;
+
+    let { free, row } = measure();
+    if (row <= free) return;                          // и так помещается
+
+    // уменьшаем всю строку пропорционально, а потом подправляем точно
+    let k = Math.max(MIN_SCALE, Math.floor((free / row) * 1000) / 1000);
+    header.style.setProperty('--hs', String(k));
+    for (let i = 0; i < 6 && measure().row > measure().free && k > MIN_SCALE; i++) {
+      k = Math.max(MIN_SCALE, k - 0.02);
+      header.style.setProperty('--hs', String(k));
+    }
+    if (measure().row > measure().free) {             // даже мелко не влезает
+      header.style.setProperty('--hs', '1');
+      header.classList.add('authors-stacked');
+    }
   };
 
   let raf = 0;

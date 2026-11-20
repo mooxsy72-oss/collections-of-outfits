@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- После обновления style.css или main.js увеличьте число после ?v= на 1,
        чтобы браузеры посетителей сразу взяли новую версию, а не старую из кэша -->
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -81,24 +81,39 @@
     </div>
   </div>
 
-  <script src="main.js?v=6"></script>
+  <script src="main.js?v=7"></script>
 <script>
+/* ── Связь с расширением таверны ──
+   Сайт сообщает расширению, где вы остановились (категория, пол,
+   сколько нарядов открыто, прокрутка), а расширение при следующем
+   открытии присылает это обратно, и сайт возвращается на то же место. */
 (function () {
   if (window.parent === window) return; // открыт напрямую — молчим
 
-  var restoring = false;
+  // Пока ждём, не пришлёт ли расширение сохранённое место, ничего
+  // не отправляем — иначе «я наверху» затрёт сохранённую прокрутку.
+  var restoring = true;
+  var waitRestore = setTimeout(function () { restoring = false; }, 2500);
+
+  var lastY = 0;          // последняя настоящая прокрутка
+  var wasHidden = false;  // окно расширения было закрыто
+
+  // Когда окно расширения закрыто, сайт «схлопывается» до нуля
+  // и браузер сбрасывает прокрутку — такие моменты не считаем.
+  function visible() {
+    return window.innerWidth > 0 && window.innerHeight > 0;
+  }
 
   function readState() {
-    var s = { filter: 'all', gender: 'all', count: 40, scroll: 0 };
+    var s = { filter: 'all', gender: 'all', count: 40, scroll: lastY };
     try { s.filter = currentFilter; } catch (e) {}
     try { s.gender = currentGender; } catch (e) {}
     try { s.count  = displayedCount; } catch (e) {}
-    s.scroll = window.scrollY || document.documentElement.scrollTop || 0;
     return s;
   }
 
   function send() {
-    if (restoring) return;
+    if (restoring || !visible()) return;
     var s = readState();
     s.nwOutfits = true;
     try { window.parent.postMessage(s, '*'); } catch (e) {}
@@ -110,12 +125,35 @@
     t = setTimeout(send, ms || 260);
   }
 
-  window.addEventListener('scroll', function () { sendLater(300); }, { passive: true });
+  function goTo(y) {
+    window.scrollTo(0, y);
+    setTimeout(function () { window.scrollTo(0, y); }, 90);
+    setTimeout(function () { window.scrollTo(0, y); }, 400);
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!visible() || restoring) return;
+    lastY = window.scrollY || document.documentElement.scrollTop || 0;
+    sendLater(300);
+  }, { passive: true });
+
+  // окно расширения закрыли и открыли снова — возвращаемся на место
+  window.addEventListener('resize', function () {
+    if (!visible()) { wasHidden = true; return; }
+    if (wasHidden) {
+      wasHidden = false;
+      restoring = true;
+      goTo(lastY);
+      setTimeout(function () { restoring = false; }, 500);
+    }
+  });
 
   document.addEventListener('click', function (e) {
     if (!e.target.closest) return;
     if (e.target.closest('[data-nw-skip]')) return;
-    if (e.target.closest('.filter-btn, .gender-btn, #loadMoreBtn')) sendLater(220);
+    if (e.target.closest('.filter-btn, .gender-btn, #loadMoreBtn')) {
+      setTimeout(function () { lastY = window.scrollY || 0; sendLater(0); }, 220);
+    }
   }, true);
 
   function syncButtons(state) {
@@ -133,6 +171,7 @@
     var d = e.data;
     if (!d || d.nwOutfitsRestore !== true) return;
 
+    clearTimeout(waitRestore);
     restoring = true;
 
     var apply = function () {
@@ -144,25 +183,21 @@
         syncButtons(d);
       } catch (err) { /* глобалы недоступны — просто вернём скролл */ }
 
-      var y = typeof d.scroll === 'number' ? d.scroll : 0;
-      // высота документа уже верная: у карточек задан aspect-ratio
-      window.scrollTo(0, y);
-      setTimeout(function () { window.scrollTo(0, y); }, 90);
-      setTimeout(function () { window.scrollTo(0, y); }, 400);
+      lastY = typeof d.scroll === 'number' ? d.scroll : 0;
+      // высота страницы уже верная: у карточек задан aspect-ratio
+      goTo(lastY);
       setTimeout(function () { restoring = false; }, 700);
     };
 
-    // ждём, пока outfits.json подгрузится
+    // ждём, пока список нарядов подгрузится
     var tries = 0;
     (function wait() {
       var ready = false;
       try { ready = Array.isArray(outfits) && outfits.length > 0; } catch (err) { ready = true; }
-      if (ready || ++tries > 40) apply();
+      if (ready || ++tries > 60) apply();
       else setTimeout(wait, 100);
     })();
   });
-
-  send();
 })();
 </script>
 </body>

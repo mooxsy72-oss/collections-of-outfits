@@ -1092,10 +1092,12 @@ header.compact .author { font-size: 0.75rem; padding: 0.1rem 0.55rem 0.1rem 0.42
 
 @media (max-width: 600px) {
   /* Телефон: ники в среднем ряду, между кнопками пола и «Новинками».
-     Если места не хватает (узкий экран, панель в таверне), main.js
-     добавляет шапке класс authors-stacked — и ники встают отдельной
-     строкой под заголовком. Так они никогда не наезжают на кнопки. */
+     Вся эта строка плавно уменьшается целиком, чтобы влезть: main.js
+     подбирает коэффициент --hs (от 1 до 0.72). Значки Telegram и надпись
+     «Новинки» при этом остаются. Только если и так не влезает (очень
+     узкий экран), ники встают отдельной строкой под заголовком. */
   header {
+    --hs: 1;
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
       "title  title   title"
@@ -1112,53 +1114,40 @@ header.compact .author { font-size: 0.75rem; padding: 0.1rem 0.55rem 0.1rem 0.42
   }
   .brand { display: contents; }
   header h1 { grid-area: title; }
-  .authors { grid-area: authors; margin-top: 0; gap: 0.3rem; min-width: 0; flex-wrap: nowrap; }
+
+  .authors { grid-area: authors; margin-top: 0; gap: calc(0.3rem * var(--hs)); min-width: 0; flex-wrap: nowrap; }
   .authors .amp { display: none; }
-  .author { font-size: 0.72rem; padding: 0.14rem 0.5rem 0.14rem 0.38rem; gap: 0.22rem; white-space: nowrap; }
+  .author {
+    font-size: calc(0.72rem * var(--hs));
+    padding: calc(0.14rem * var(--hs)) calc(0.5rem * var(--hs)) calc(0.14rem * var(--hs)) calc(0.38rem * var(--hs));
+    gap: calc(0.22rem * var(--hs));
+    white-space: nowrap;
+  }
   .author svg { width: 0.8em; height: 0.8em; }
 
-  /* кнопки шапки на телефоне — компактнее */
-  .gender-switch { gap: 0.28rem; }
-  .gender-btn { width: 1.95rem; height: 1.95rem; font-size: 0.9rem; }
-  .sort-btn { padding: 0.38rem 0.75rem; font-size: 0.76rem; gap: 0.3rem; }
-  .sort-btn::before { font-size: 0.7rem; }
+  .gender-switch { gap: calc(0.28rem * var(--hs)); }
+  .gender-btn {
+    width: calc(1.95rem * var(--hs));
+    height: calc(1.95rem * var(--hs));
+    font-size: calc(0.9rem * var(--hs));
+  }
+  .sort-btn {
+    padding: calc(0.38rem * var(--hs)) calc(0.75rem * var(--hs));
+    font-size: calc(0.76rem * var(--hs));
+    gap: calc(0.3rem * var(--hs));
+  }
+  .sort-btn::before { font-size: calc(0.7rem * var(--hs)); }
 
   .card-new-badge { font-size: 0.55rem; padding: 0.1rem 0.36rem; top: 0.45rem; left: 0.45rem; }
   header.compact { padding-top: 0.45rem; }
   header.compact h1 { font-size: 1rem; }
-  header.compact .author { font-size: 0.68rem; padding: 0.12rem 0.42rem 0.12rem 0.32rem; }
-}
+  /* во время замера размеры меняются мгновенно, без анимации */
+  header.hs-measure .author,
+  header.hs-measure .gender-btn,
+  header.hs-measure .sort-btn { transition: none !important; }
 
-/* Ступени ужатия шапки — их по очереди включает main.js,
-   пока ники не поместятся между кнопками пола и «Новинками». */
-header.fit-1 .author svg { display: none; }
-header.fit-1 .author { padding-left: 0.5rem; padding-right: 0.5rem; }
-
-header.fit-2 .sort-btn {           /* «Новинки» — круглая кнопка со звёздочкой */
-  font-size: 0;
-  gap: 0;
-  width: 1.95rem;
-  height: 1.95rem;
-  padding: 0;
-  justify-content: center;
-}
-header.fit-2 .sort-btn::before { font-size: 0.85rem; }
-
-header.fit-3 { column-gap: 0.3rem; padding-left: 0.6rem; padding-right: 0.6rem; }
-header.fit-3 .gender-switch { gap: 0.2rem; }
-header.fit-3 .gender-btn { width: 1.75rem; height: 1.75rem; font-size: 0.8rem; }
-header.fit-3.fit-2 .sort-btn { width: 1.75rem; height: 1.75rem; }
-header.fit-3.fit-2 .sort-btn::before { font-size: 0.78rem; }
-header.fit-3 .author { font-size: 0.66rem; padding: 0.12rem 0.42rem; }
-header.fit-3 .authors { gap: 0.22rem; }
-
-/* совсем узкие экраны — кнопки ещё чуть меньше */
-@media (max-width: 340px) {
-  .gender-btn { width: 1.8rem; height: 1.8rem; font-size: 0.82rem; }
-  .sort-btn { padding: 0.34rem 0.6rem; font-size: 0.72rem; }
-}
-  .author { padding: 0.14rem 0.42rem; }
-  .gender-btn { width: 1.9rem; height: 1.9rem; font-size: 0.9rem; }
-  .sort-btn { padding: 0.4rem 0.65rem; font-size: 0.74rem; }
-}
+  header.compact .author {
+    font-size: calc(0.68rem * var(--hs));
+    padding: calc(0.12rem * var(--hs)) calc(0.42rem * var(--hs)) calc(0.12rem * var(--hs)) calc(0.32rem * var(--hs));
+  }
 }
