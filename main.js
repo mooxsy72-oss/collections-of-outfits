@@ -87,7 +87,8 @@ const DATA_SOURCES = [
   'https://mooxsy72-oss.github.io/outfits-images/',
   'https://mooxsy72-oss.github.io/outfit-again/',
   'https://mooxsy72-oss.github.io/hahahahaagain/',
-  'https://mooxsy72-oss.github.io/not-funny-anymore/'
+  'https://mooxsy72-oss.github.io/not-funny-anymore/',
+  'https://mooxsy72-oss.github.io/2323r/'
 ];
 
 const UNDRESS_BASE = DATA_SOURCES[0] + 'images/';
